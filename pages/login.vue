@@ -5,7 +5,7 @@
         <ValidationObserver ref="loginForm" v-slot="{ handleSubmit }" tag="form" @submit.prevent>
           <v-card
             :loading="loading"
-            :min-width="300"
+            :width="300"
             :style="{ opacity: $vuetify.theme.dark ? 0.7 : 1.0 }"
             outlined
             raised

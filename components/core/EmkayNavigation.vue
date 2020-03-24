@@ -2,6 +2,7 @@
   <nav>
     <client-only>
       <v-navigation-drawer
+        v-if="$auth.loggedIn"
         v-model="sidebar"
         clipped
         fixed
@@ -26,6 +27,7 @@
         </v-list>
 
         <template v-if="$auth.loggedIn" #append>
+          <v-divider />
           <v-list-item @click="logout">
             <v-list-item-action>
               <v-icon v-text="'mdi-logout'" />
@@ -55,15 +57,21 @@
       </v-toolbar-items>
 
       <v-divider vertical inset class="mx-4" />
-      dark mode toggle
-      language picker
+      <dark-mode-toggle class="mx-1" />
+      <language-picker class="mx-1" />
     </v-app-bar>
   </nav>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
+import DarkModeToggle from '@/components/core/DarkModeToggle'
+import LanguagePicker from '@/components/core/LanguagePicker'
 export default {
+  components: {
+    DarkModeToggle,
+    LanguagePicker
+  },
   computed: {
     sidebar: {
       get () {
