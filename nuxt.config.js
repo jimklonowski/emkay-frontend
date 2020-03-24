@@ -1,5 +1,7 @@
+import { en, fr, en as ca } from 'vuetify/lib/locale'
 import colors from 'vuetify/es5/util/colors'
-
+import locales from './plugins/i18n/locales'
+require('dotenv').config()
 export default {
   mode: 'universal',
   /*
@@ -30,13 +32,19 @@ export default {
   ** Plugins to load before mounting the App
   */
   plugins: [
+    { src: '~/plugins/i18n/nuxt-i18n' }
   ],
   /*
   ** Nuxt.js dev-modules
   */
   buildModules: [
+    // Doc: https://github.com/nuxt-community/dotenv-module
+    '@nuxtjs/dotenv',
     // Doc: https://github.com/nuxt-community/eslint-module
     '@nuxtjs/eslint-module',
+    // Doc: https://github.com/nuxt-community/moment-module
+    '@nuxtjs/moment',
+    // Doc: https://github.com/nuxt-community/vuetify-module
     '@nuxtjs/vuetify'
   ],
   /*
@@ -46,7 +54,9 @@ export default {
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     // Doc: https://github.com/nuxt-community/dotenv-module
-    '@nuxtjs/dotenv'
+    '@nuxtjs/dotenv',
+    // Doc: https://nuxt-community.github.io/nuxt-i18n/
+    'nuxt-i18n'
   ],
   /*
   ** Axios module configuration
@@ -58,18 +68,60 @@ export default {
     credentials: true
   },
   /*
+  ** dotenv configuration
+  */
+  env: {
+    BASE_URL: process.env.BASE_URL
+  },
+  /*
+  ** i18n module configuration
+  ** See https://nuxt-community.github.io/nuxt-i18n/
+  */
+  i18n: {
+    locales,
+    defaultLocale: 'en',
+    langDir: 'lang/',
+    lazy: true,
+    strategy: 'prefix_except_default',
+    vueI18n: {
+      fallbackLocale: 'en',
+      silentFallbackWarn: true
+    }
+  },
+  /*
+  ** moment module configuration
+  ** See https://github.com/nuxt-community/moment-module
+  */
+  moment: {
+    defaultLocale: 'en',
+    locales: ['fr-ca', 'en-ca'],
+    // This doesn't work.  Setting $nuxt.$moment.suppressDeprecationWarnings = true does work.
+    suppressDeprecationWarnings: true
+  },
+  /*
   ** vuetify module configuration
   ** https://github.com/nuxt-community/vuetify-module
   */
   vuetify: {
+    lang: {
+      locales: { en, fr, ca },
+      current: 'en'
+    },
     customVariables: ['~/assets/variables.scss'],
+    treeShake: true,
     theme: {
       dark: true,
       themes: {
-        dark: {
-          primary: colors.blue.darken2,
-          accent: colors.grey.darken3,
+        light: {
+          primary: colors.deepPurple,
+          accent: colors.amber.darken3,
           secondary: colors.amber.darken3,
+          info: colors.teal.lighten2
+        },
+        dark: {
+          primary: colors.deepPurple.lighten2,
+          secondary: colors.grey.darken3,
+          accent: colors.amber.darken3,
           info: colors.teal.lighten1,
           warning: colors.amber.base,
           error: colors.deepOrange.accent4,
