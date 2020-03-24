@@ -13,6 +13,10 @@ module.exports = {
   ],
   // add your custom rules here
   rules: {
+    'arrow-parens': 'off',
+    'camelcase': 'off',
+    'vue/name-property-casing': 'off',
+    'nuxt/no-cjs-in-config': 'off',
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
   }

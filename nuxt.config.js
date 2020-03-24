@@ -57,7 +57,8 @@ export default {
   */
   plugins: [
     { src: '~/plugins/auth/axios-interceptors' },
-    { src: '~/plugins/i18n/nuxt-i18n' }
+    { src: '~/plugins/i18n/nuxt-i18n' },
+    { src: '~/plugins/vee-validate' }
   ],
   /*
   ** Nuxt.js dev-modules
@@ -83,7 +84,9 @@ export default {
     // Doc: https://github.com/nuxt-community/dotenv-module
     '@nuxtjs/dotenv',
     // Doc: https://nuxt-community.github.io/nuxt-i18n/
-    'nuxt-i18n'
+    'nuxt-i18n',
+    // Doc: https://github.com/microcipcip/cookie-universal/tree/master/packages/cookie-universal-nuxt#readme
+    'cookie-universal-nuxt'
   ],
   /*
   ** Axios module configuration
@@ -187,6 +190,7 @@ export default {
   ** Build configuration
   */
   build: {
+    transpile: ['vee-validate/dist/rules'],
     /*
     ** You can extend webpack config here
     */
