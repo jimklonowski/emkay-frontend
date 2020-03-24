@@ -32,6 +32,7 @@ export default {
   ** Plugins to load before mounting the App
   */
   plugins: [
+    { src: '~/plugins/auth/axios-interceptors' },
     { src: '~/plugins/i18n/nuxt-i18n' }
   ],
   /*
@@ -53,6 +54,8 @@ export default {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
+    // Doc: https://auth.nuxtjs.org/
+    '@nuxtjs/auth',
     // Doc: https://github.com/nuxt-community/dotenv-module
     '@nuxtjs/dotenv',
     // Doc: https://nuxt-community.github.io/nuxt-i18n/
@@ -66,6 +69,32 @@ export default {
     baseURL: process.env.BASE_URL,
     browserBaseURL: process.env.BASE_URL,
     credentials: true
+  },
+  /*
+  ** Auth module configuration
+  ** See https://auth.nuxtjs.org/api/options.html#redirect
+  */
+  auth: {
+    plugins: [
+      { src: '~/plugins/auth/locale-redirects', mode: 'client' }
+    ],
+    strategies: {
+      local: {
+        endpoints: {
+          login: { url: '/login', method: 'post' },
+          logout: { url: '/logout', method: 'post' },
+          user: { url: '/user', method: 'get', propertyName: false }
+        },
+        tokenRequired: false,
+        tokenType: false
+      }
+    },
+    redirect: {
+      login: '/login',
+      logout: '/login',
+      home: '/',
+      callback: false
+    }
   },
   /*
   ** dotenv configuration
