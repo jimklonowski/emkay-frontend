@@ -18,7 +18,7 @@
           gradient="to top right, rgba(100,115,201,.7), rgba(25,32,72,.7)"
         />
       </template>
-      <v-toolbar-title id="title">
+      <v-toolbar-title>
         <nuxt-link :to="localePath({ path: '/reporting' })" class="text-decoration-none white--text">
           {{ $t('reporting') }}
         </nuxt-link>
