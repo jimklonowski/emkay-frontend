@@ -59,7 +59,10 @@ export default {
     { src: '~/plugins/auth/axios-interceptors' },
     { src: '~/plugins/i18n/nuxt-i18n' },
     { src: '~/plugins/vee-validate' },
-    { src: '~/plugins/custom-filters' }
+    { src: '~/plugins/custom-filters' },
+    { src: '~/plugins/vue-json-excel', mode: 'client' },
+    { src: '~/plugins/vue-chart.js', mode: 'client' },
+    { src: '~/plugins/vue-snotify', mode: 'client' }
   ],
   /*
   ** Nuxt.js dev-modules
@@ -87,7 +90,9 @@ export default {
     // Doc: https://nuxt-community.github.io/nuxt-i18n/
     'nuxt-i18n',
     // Doc: https://github.com/microcipcip/cookie-universal/tree/master/packages/cookie-universal-nuxt#readme
-    'cookie-universal-nuxt'
+    'cookie-universal-nuxt',
+    // Doc: https://github.com/Developmint/nuxt-webfontloader
+    'nuxt-webfontloader'
   ],
   /*
   ** Axios module configuration
@@ -185,6 +190,17 @@ export default {
           success: colors.green.accent3
         }
       }
+    }
+  },
+  /*
+  ** webfontloader configuration
+  ** See: https://github.com/Developmint/nuxt-webfontloader
+  ** Also: https://github.com/nuxt-community/vuetify-module
+  ** Note: https://github.com/nuxt-community/vuetify-module#defaultassets
+  */
+  webfontloader: {
+    google: {
+      families: ['Roboto', 'Roboto+Condensed', 'Lato']
     }
   },
   /*

@@ -5,6 +5,9 @@
       <nuxt />
     </v-content>
     <emkay-footer />
+    <client-only>
+      <vue-snotify />
+    </client-only>
   </v-app>
 </template>
 

@@ -19,6 +19,7 @@ export default {
   components: {
     'vehicle-widget': () => import(/* webpackChunkName: "VehicleDashboardWidgets" */ '@/components/vehicle-dashboard/widgets/VehicleWidget.vue'),
     'driver-widget': () => import(/* webpackChunkName: "VehicleDashboardWidgets" */ '@/components/vehicle-dashboard/widgets/DriverWidget.vue'),
+    'expense-summary-widget': () => import(/* webpackChunkName: "VehicleDashboardWidgets" */ '@/components/vehicle-dashboard/widgets/ExpenseSummaryWidget.vue'),
     'fuel-widget': () => import(/* webpackChunkName: "VehicleDashboardWidgets" */ '@/components/vehicle-dashboard/widgets/FuelWidget.vue'),
     'maintenance-widget': () => import(/* webpackChunkName: "VehicleDashboardWidgets" */ '@/components/vehicle-dashboard/widgets/MaintenanceWidget.vue'),
     'billing-widget': () => import(/* webpackChunkName: "VehicleDashboardWidgets" */ '@/components/vehicle-dashboard/widgets/BillingWidget.vue'),
@@ -37,6 +38,7 @@ export default {
     widgets: [
       { cols: 12, lg: 6, component: 'vehicle-widget' },
       { cols: 12, lg: 6, component: 'driver-widget' },
+      { cols: 12, component: 'expense-summary-widget' },
       { cols: 12, xl: 6, component: 'fuel-widget' },
       { cols: 12, xl: 6, component: 'maintenance-widget' },
       { cols: 12, xl: 6, component: 'billing-widget' },
