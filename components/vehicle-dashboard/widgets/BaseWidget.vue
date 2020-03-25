@@ -1,12 +1,10 @@
 <template>
   <v-card class="vehicle-dashboard-widget" outlined>
-    <slot name="top">
-      <widget-toolbar
-        :title="title"
-        :icon="icon"
-        :actions="actions"
-      />
-    </slot>
+    <widget-toolbar
+      :title="title"
+      :icon="icon"
+      :actions="actions"
+    />
 
     <v-divider />
 
@@ -19,7 +17,6 @@ import WidgetToolbar from '@/components/vehicle-dashboard/widgets/WidgetToolbar'
 export default {
   components: {
     WidgetToolbar
-    // 'widget-toolbar': () => import(/* webpackChunkName: "WidgetToolbar" */ '@/components/vehicle-dashboard/widgets/WidgetToolbar.vue')
   },
   props: {
     title: {

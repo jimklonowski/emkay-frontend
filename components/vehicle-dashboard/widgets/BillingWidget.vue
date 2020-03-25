@@ -4,7 +4,7 @@
     :icon="icon"
     :actions="actions"
   >
-    <!-- Maintenance Datatable with Pagination -->
+    <!-- Billing Datatable with Pagination -->
     <template #main>
       <v-skeleton-loader v-if="!initialized" :loading="!initialized" :types="{ 'table-tbody': 'table-row-divider@3' }" type="table-thead, table-tbody, table-tfoot" />
       <base-data-table
@@ -14,7 +14,7 @@
         :loading="loading"
         :headers="headers"
         :items="items"
-        :sort-by="['service_date']"
+        :sort-by="['invoice_number']"
         @days-changed="days = $event"
       />
     </template>
@@ -32,7 +32,7 @@ export default {
   },
   data: () => ({
     days: 60,
-    icon: 'mdi-tools',
+    icon: 'mdi-cash-usd-outline',
     initialized: false
   }),
   computed: {
@@ -40,8 +40,8 @@ export default {
      * Vuex Getters
      */
     ...mapGetters({
-      items: 'vehicle-dashboard/getMaintenanceHistory',
-      loading: 'vehicle-dashboard/getMaintenanceLoading',
+      items: 'vehicle-dashboard/getBillingHistory',
+      loading: 'vehicle-dashboard/getBillingLoading',
       vehicle_number: 'vehicle-dashboard/getVehicleNumber'
     }),
     /**
@@ -50,24 +50,9 @@ export default {
     actions () {
       return [
         {
-          text: this.$i18n.t('maintenance_history'),
-          icon: 'mdi-tools',
-          to: this.maintenanceRoute
-        },
-        {
-          text: this.$i18n.t('cpm'),
-          icon: 'mdi-cash',
-          to: this.maintenanceCpmRoute
-        },
-        {
-          text: this.$i18n.t('cost_containment'),
-          icon: 'mdi-cash',
-          to: this.maintenanceCostContainmentRoute
-        },
-        {
-          text: this.$i18n.t('evoucher'),
-          icon: 'mdi-ticket-confirmation',
-          to: this.evoucherRoute
+          text: this.$i18n.t('billing_history'),
+          icon: this.icon,
+          to: this.billingRoute
         }
       ]
     },
@@ -76,10 +61,10 @@ export default {
      */
     columns () {
       return [
-        'service_date',
-        'odometer',
-        'vendor_name',
+        'invoice_number',
         'description',
+        'bill_date',
+        'bill_for_date',
         'amount'
       ]
     },
@@ -89,20 +74,8 @@ export default {
     headers () {
       return [
         {
-          text: this.$i18n.t('service_date'),
-          value: 'service_date',
-          class: 'report-column',
-          divider: true
-        },
-        {
-          text: this.$i18n.t('odometer'),
-          value: 'odometer',
-          class: 'report-column',
-          divider: true
-        },
-        {
-          text: this.$i18n.t('vendor_name'),
-          value: 'vendor_name',
+          text: this.$i18n.t('invoice_number'),
+          value: 'invoice_number',
           class: 'report-column',
           divider: true
         },
@@ -113,19 +86,28 @@ export default {
           divider: true
         },
         {
+          text: this.$i18n.t('bill_date'),
+          value: 'bill_date',
+          class: 'report-column',
+          divider: true
+        },
+        {
+          text: this.$i18n.t('bill_for_date'),
+          value: 'bill_for_date',
+          class: 'report-column',
+          divider: true
+        },
+        {
           text: this.$i18n.t('amount'),
           value: 'amount',
           class: 'report-column'
         }
       ]
     },
-    title: vm => vm.$i18n.t('maintenance'),
+    title: vm => vm.$i18n.t('billing'),
     start: vm => vm.$moment().subtract(vm.days, 'days').format('YYYY-MM-DD'),
     end: vm => vm.$moment().format('YYYY-MM-DD'),
-    evoucherRoute: vm => vm.localePath({ path: `/vehicle/${vm.vehicle_number}/maintenance/evoucher` }),
-    maintenanceRoute: vm => vm.localePath({ path: `/vehicle/${vm.vehicle_number}/maintenance`, query: { start: vm.start, end: vm.end } }),
-    maintenanceCpmRoute: vm => vm.localePath({ path: `/vehicle/${vm.vehicle_number}/maintenance/cpm` }),
-    maintenanceCostContainmentRoute: vm => vm.localePath({ path: `/vehicle/${vm.vehicle_number}/maintenance/cost-containment` })
+    billingRoute: vm => vm.localePath({ path: `/vehicle/${vm.vehicle_number}/billing`, query: { start: vm.start, end: vm.end } })
   },
   watch: {
     /**
@@ -136,7 +118,7 @@ export default {
     }
   },
   /**
-   * Fetch Maintenance Data when widget is mounted.
+   * Fetch Billing Data when widget is mounted.
    */
   async mounted () {
     await this.populateWidget()
@@ -146,15 +128,29 @@ export default {
      * Vuex Actions
      */
     ...mapActions({
-      populate: 'vehicle-dashboard/fetchMaintenanceHistory'
+      populate: 'vehicle-dashboard/fetchBillingHistory'
     }),
+    /**
+     * Drilldown into billing history and select a given invoice.
+     */
+    invoiceRoute (invoice) {
+      return this.localePath({
+        path: `/vehicle/${this.vehicle_number}/billing`,
+        query: {
+          start: this.start_date,
+          end: this.end_date,
+          invoice
+        }
+      })
+    },
     /**
      * Populate widget and toggle initialized status while data is fetched.
      */
     async populateWidget () {
+      // this.initialized = false
       await this.populate({
-        start: this.start,
-        end: this.end,
+        start: this.start_date,
+        end: this.end_date,
         use_bill_date: false,
         vehicle: this.vehicle_number
       })

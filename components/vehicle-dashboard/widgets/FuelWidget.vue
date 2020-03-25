@@ -4,94 +4,36 @@
     :icon="icon"
     :actions="actions"
   >
-    <!-- Fuel Datatable -->
+    <!-- Fuel Datatable with Pagination -->
     <template #main>
-      <v-fade-transition hide-on-leave>
-        <v-skeleton-loader v-if="!initialized" :loading="!initialized" :types="{ 'table-tbody': 'table-row-divider@3' }" type="table-thead, table-tbody, table-tfoot" />
-        <v-data-table
-          v-else
-          :dense="items && !!items.length"
-          :headers="headers"
-          :hide-default-footer="true"
-          :items="items"
-          :items-per-page="pagination.itemsPerPage"
-          :loading="loading"
-          :mobile-breakpoint="0"
-          :page.sync="pagination.page"
-          :sort-by="['service_date']"
-          :sort-desc="[true]"
-          class="striped"
-          @page-count="pagination.pageCount = $event"
-        >
-          <!-- Configure formatting of column data -->
-          <template #item.service_date="{ item }">
-            {{ item.service_date | date }}
-          </template>
-          <template #item.product_type="{ item }">
-            <v-chip :outlined="!$vuetify.theme.dark" x-small v-text="item.product_type" />
-          </template>
-          <template #item.unit_price="{ item }">
-            {{ item.unit_price | currency(3, 3) }}
-          </template>
-          <template #item.amount="{ item }">
-            {{ item.amount | currency }}
-          </template>
-        </v-data-table>
-      </v-fade-transition>
-      <v-divider />
-
-      <!-- Report Length & Pagination -->
-      <v-card-actions v-show="initialized" class="pager">
-        <v-btn-toggle
-          v-model="days"
-          background-color="transparent"
-          color="primary"
-          mandatory
-          rounded
-          dense
-        >
-          <v-btn
-            v-for="period in periods"
-            :key="period"
-            :value="period"
-            small
-            text
-          >
-            {{ period }}
-          </v-btn>
-        </v-btn-toggle>
-        <span class="caption mx-2" v-text="$t('days')" />
-        <v-spacer />
-        <v-pagination
-          v-show="items && !!items.length"
-          v-model="pagination.page"
-          :length="pagination.pageCount"
-          :total-visible="pagination.totalVisible"
-          circle
-          style="width:auto;"
-        />
-      </v-card-actions>
+      <v-skeleton-loader v-if="!initialized" :loading="!initialized" :types="{ 'table-tbody': 'table-row-divider@3' }" type="table-thead, table-tbody, table-tfoot" />
+      <base-data-table
+        v-else
+        :days="days"
+        :initialized="initialized"
+        :loading="loading"
+        :headers="headers"
+        :items="items"
+        :sort-by="['service_date']"
+        @days-changed="days = $event"
+      />
     </template>
   </base-widget>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import BaseDataTable from '@/components/vehicle-dashboard/widgets/BaseDataTable'
+import BaseWidget from '@/components/vehicle-dashboard/widgets/BaseWidget'
 export default {
   components: {
-    'base-widget': () => import(/* webpackChunkName: "BaseWidget" */ '@/components/vehicle-dashboard/widgets/BaseWidget.vue')
+    BaseDataTable,
+    BaseWidget
   },
   data: () => ({
     days: 60,
     icon: 'mdi-gas-station',
-    initialized: false,
-    pagination: {
-      itemsPerPage: 5,
-      page: 1,
-      pageCount: 0,
-      totalVisible: 5
-    },
-    periods: [30, 60, 90]
+    initialized: false
   }),
   computed: {
     /**
