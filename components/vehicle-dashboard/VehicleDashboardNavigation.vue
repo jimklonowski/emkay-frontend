@@ -9,6 +9,7 @@
     hide-on-scroll
     elevation="1"
     scroll-threshold="60"
+    class="emkay-image-nav"
   >
     <template #img="{ props }">
       <v-img

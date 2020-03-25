@@ -1,5 +1,5 @@
 <template>
-  <v-sheet>
+  <span>
     <v-app-bar
       :src="require('@/assets/images/reports.jpg')"
       :elevate-on-scroll="false"
@@ -10,6 +10,7 @@
       hide-on-scroll
       elevation="1"
       scroll-threshold="60"
+      class="emkay-image-nav"
     >
       <template #img="{ props }">
         <v-img
@@ -17,7 +18,7 @@
           gradient="to top right, rgba(100,115,201,.7), rgba(25,32,72,.7)"
         />
       </template>
-      <v-toolbar-title>
+      <v-toolbar-title id="title">
         <nuxt-link :to="localePath({ path: '/reporting' })" class="text-decoration-none white--text">
           {{ $t('reporting') }}
         </nuxt-link>
@@ -66,7 +67,7 @@
         </v-row>
       </v-container>
     </v-card>
-  </v-sheet>
+  </span>
 </template>
 
 <script>

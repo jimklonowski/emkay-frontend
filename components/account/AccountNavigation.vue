@@ -1,5 +1,5 @@
 <template>
-  <v-sheet>
+  <span>
     <v-app-bar
       :src="require('@/assets/images/blurrycar.jpg')"
       :elevate-on-scroll="false"
@@ -10,6 +10,7 @@
       hide-on-scroll
       elevation="1"
       scroll-threshold="60"
+      class="emkay-image-nav"
     >
       <template #img="{ props }">
         <v-img
@@ -66,7 +67,7 @@
         </v-row>
       </v-container>
     </v-card>
-  </v-sheet>
+  </span>
 </template>
 
 <script>
