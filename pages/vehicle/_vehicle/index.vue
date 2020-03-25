@@ -26,7 +26,11 @@ export default {
     'odometer-widget': () => import(/* webpackChunkName: "VehicleDashboardWidgets" */ '@/components/vehicle-dashboard/widgets/OdometerWidget.vue'),
     'toll-widget': () => import(/* webpackChunkName: "VehicleDashboardWidgets" */ '@/components/vehicle-dashboard/widgets/TollWidget.vue'),
     'accident-widget': () => import(/* webpackChunkName: "VehicleDashboardWidgets" */ '@/components/vehicle-dashboard/widgets/AccidentWidget.vue'),
-    'rental-widget': () => import(/* webpackChunkName: "VehicleDashboardWidgets" */ '@/components/vehicle-dashboard/widgets/RentalWidget.vue')
+    'rental-widget': () => import(/* webpackChunkName: "VehicleDashboardWidgets" */ '@/components/vehicle-dashboard/widgets/RentalWidget.vue'),
+    'violation-widget': () => import(/* webpackChunkName: "VehicleDashboardWidgets" */ '@/components/vehicle-dashboard/widgets/ViolationWidget.vue'),
+    'inspection-widget': () => import(/* webpackChunkName: "VehicleDashboardWidgets" */ '@/components/vehicle-dashboard/widgets/InspectionWidget.vue'),
+    'order-status-widget': () => import(/* webpackChunkName: "VehicleDashboardWidgets" */ '@/components/vehicle-dashboard/widgets/OrderStatusWidget.vue'),
+    'sale-info-widget': () => import(/* webpackChunkName: "VehicleDashboardWidgets" */ '@/components/vehicle-dashboard/widgets/SaleInfoWidget.vue')
   },
   layout: 'vehicle-dashboard',
   data: () => ({
@@ -40,7 +44,11 @@ export default {
       { cols: 12, xl: 6, component: 'odometer-widget' },
       { cols: 12, xl: 6, component: 'toll-widget' },
       { cols: 12, xl: 6, component: 'accident-widget' },
-      { cols: 12, xl: 6, component: 'rental-widget' }
+      { cols: 12, xl: 6, component: 'rental-widget' },
+      { cols: 12, xl: 6, component: 'violation-widget' },
+      { cols: 12, xl: 6, component: 'inspection-widget' },
+      { cols: 12, xl: 6, component: 'order-status-widget' },
+      { cols: 12, xl: 6, component: 'sale-info-widget' }
     ]
   })
 }

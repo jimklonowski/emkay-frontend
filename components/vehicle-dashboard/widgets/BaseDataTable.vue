@@ -23,6 +23,9 @@
       <template #item.date="{ item }">
         {{ item.date | date }}
       </template>
+      <template #item.paid_date="{ item }">
+        {{ item.paid_date | date }}
+      </template>
       <template #item.loss_date="{ item }">
         {{ item.loss_date | date }}
       </template>
