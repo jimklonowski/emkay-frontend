@@ -105,6 +105,7 @@ export default {
     BaseWidget
   },
   data: () => ({
+    expanded: false,
     icon: 'mdi-timeline-clock'
   }),
   computed: {

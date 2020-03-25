@@ -75,7 +75,9 @@ export default {
     // Doc: https://github.com/nuxt-community/moment-module
     '@nuxtjs/moment',
     // Doc: https://github.com/nuxt-community/vuetify-module
-    '@nuxtjs/vuetify'
+    '@nuxtjs/vuetify',
+    // Doc: https://github.com/nuxt-community/analytics-module
+    '@nuxtjs/google-analytics'
   ],
   /*
   ** Nuxt.js modules
@@ -148,6 +150,18 @@ export default {
     vueI18n: {
       fallbackLocale: 'en',
       silentFallbackWarn: true
+    }
+  },
+  /*
+   ** google analytics module configuration
+   ** See: https://github.com/nuxt-community/analytics-module
+   */
+  googleAnalytics: {
+    id: process.env.GA_ID || '',
+    dev: true,
+    debug: {
+      enabled: false, // disable debug console.logs
+      sendHitTask: true
     }
   },
   /*

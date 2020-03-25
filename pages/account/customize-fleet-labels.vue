@@ -1,14 +1,18 @@
 <template>
   <ValidationObserver ref="labelsForm" v-slot="{ handleSubmit }" tag="form" @submit.prevent>
     <v-card :loading="loading" outlined>
-      <v-card-title>{{ $t('customize_fleet_labels') }}</v-card-title>
+      <v-card-title class="font-lato">
+        {{ $t('customize_fleet_labels') }}
+      </v-card-title>
       <v-card-subtitle>{{ $t('custom_labels_warning') }}</v-card-subtitle>
       <v-divider />
       <v-card-text>
         <v-container>
           <v-row>
-            <v-col cols="12" lg="6">
-              <v-subheader>{{ $t('custom_labels') }}</v-subheader>
+            <v-col cols="12" md="6">
+              <v-subheader class="px-0">
+                {{ $t('custom_labels') }}
+              </v-subheader>
               <ValidationProvider v-for="item in client_labels" :key="item.key" v-slot="{ errors }" :name="$t(item.key)" rules="max:40">
                 <v-text-field
                   v-model="model[item.key]"
@@ -19,7 +23,7 @@
                 />
               </ValidationProvider>
             </v-col>
-            <v-col cols="12" lg="6">
+            <v-col cols="12" md="6">
               <v-subheader>{{ $t('driver_labels') }}</v-subheader>
               <ValidationProvider v-for="item in driver_labels" :key="item.key" v-slot="{ errors }" :name="$t(item.key)" rules="max:40">
                 <v-text-field
@@ -37,7 +41,10 @@
       <v-divider />
       <v-card-actions>
         <v-spacer />
-        <v-btn :loading="loading" @click="handleSubmit(submitLabels)">
+        <v-fade-transition>
+          <span v-show="hasChanges" class="font-italic text--disabled body-2 px-4">{{ $t('unsaved_changes') }}</span>
+        </v-fade-transition>
+        <v-btn :loading="loading" :disabled="!hasChanges" color="primary" depressed @click="handleSubmit(submitLabels)">
           {{ $t('submit') }}
         </v-btn>
       </v-card-actions>
@@ -46,6 +53,8 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import { SnotifyPosition } from 'vue-snotify'
+import isEqual from 'lodash.isequal'
 // import { sleep } from '@/utility/helpers'
 export default {
   name: 'CustomizeFleetLabels',
@@ -53,7 +62,6 @@ export default {
     // copy existing labels into model
     const loadedLabels = store.getters['account/getCustomLabels']
     const model = { ...loadedLabels }
-    console.log(model)
     return { model }
   },
   data: () => ({
@@ -62,9 +70,14 @@ export default {
   }),
   computed: {
     ...mapGetters({
+      custom_labels: 'account/getCustomLabels',
       client_labels: 'account/getClientLabels',
       driver_labels: 'account/getDriverLabels'
-    })
+    }),
+    /**
+     * I wanted to keep the save button disabled unless there had been changes made to the form.  Easy to use Lodash's isEqual to compare objects
+     */
+    hasChanges: vm => !isEqual(vm.model, vm.custom_labels)
   },
   methods: {
     ...mapActions({
@@ -74,7 +87,7 @@ export default {
       try {
         this.loading = true
         await this.updateLabels(this.model)
-        this.$snotify.success('ok')
+        this.$snotify.success(this.$i18n.t('labels_updated'), this.$i18n.t('success'), { position: SnotifyPosition.centerBottom })
       } catch (error) {
         debugger
       } finally {

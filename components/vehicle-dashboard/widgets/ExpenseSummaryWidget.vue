@@ -6,46 +6,46 @@
   >
     <template #main>
       <v-skeleton-loader v-if="!initialized" :loading="!initialized" :types="{ 'table-tbody': 'table-row-divider@3' }" type="table-thead, table-tbody, table-tfoot" />
-      <v-container v-else class="pa-0">
+      <v-container v-else>
         <v-row dense no-gutters>
           <v-col cols="12" lg="4">
-            <v-list subheader>
-              <v-subheader class="justify-center subtitle-2 mx-4">
+            <v-list dense subheader>
+              <v-subheader class="justify-end overline">
                 {{ $t('fixed_costs') }} / {{ $t('cpm') }}
               </v-subheader>
               <v-list-item>
                 <v-list-item-title>{{ $t('depreciation') }}</v-list-item-title>
-                <v-list-item-subtitle class="text-right">
+                <v-list-item-subtitle class="text-right font-roboto-condensed">
                   {{ expense_summary.depreciation | currency }}
                 </v-list-item-subtitle>
-                <v-list-item-subtitle class="text-right">
+                <v-list-item-subtitle class="text-right font-roboto-condensed">
                   {{ expense_summary.depreciation_cpm | currency(3, 3) }}
                 </v-list-item-subtitle>
               </v-list-item>
               <v-list-item>
                 <v-list-item-title>{{ $t('interest') }}</v-list-item-title>
-                <v-list-item-subtitle class="text-right">
+                <v-list-item-subtitle class="text-right font-roboto-condensed">
                   {{ expense_summary.interest | currency }}
                 </v-list-item-subtitle>
-                <v-list-item-subtitle class="text-right">
+                <v-list-item-subtitle class="text-right font-roboto-condensed">
                   {{ expense_summary.interest_cpm | currency(3, 3) }}
                 </v-list-item-subtitle>
               </v-list-item>
               <v-list-item>
                 <v-list-item-title>{{ $t('licensing') }}</v-list-item-title>
-                <v-list-item-subtitle class="text-right">
+                <v-list-item-subtitle class="text-right font-roboto-condensed">
                   {{ expense_summary.licensing | currency }}
                 </v-list-item-subtitle>
-                <v-list-item-subtitle class="text-right">
+                <v-list-item-subtitle class="text-right font-roboto-condensed">
                   {{ expense_summary.licensing_cpm | currency(3, 3) }}
                 </v-list-item-subtitle>
               </v-list-item>
               <v-list-item>
                 <v-list-item-title>{{ $t('tax') }}</v-list-item-title>
-                <v-list-item-subtitle class="text-right">
+                <v-list-item-subtitle class="text-right font-roboto-condensed">
                   {{ expense_summary.tax | currency }}
                 </v-list-item-subtitle>
-                <v-list-item-subtitle class="text-right">
+                <v-list-item-subtitle class="text-right font-roboto-condensed">
                   {{ expense_summary.tax_cpm | currency(3, 3) }}
                 </v-list-item-subtitle>
               </v-list-item>
@@ -53,10 +53,10 @@
                 <v-list-item-title class="font-weight-bold">
                   {{ $t('total_fixed') }}
                 </v-list-item-title>
-                <v-list-item-subtitle class="text-right font-weight-bold">
+                <v-list-item-subtitle class="text-right font-weight-bold font-roboto-condensed">
                   {{ total_fixed | currency }}
                 </v-list-item-subtitle>
-                <v-list-item-subtitle class="text-right font-weight-bold">
+                <v-list-item-subtitle class="text-right font-weight-bold font-roboto-condensed">
                   {{ total_fixed_cpm | currency(3, 3) }}
                 </v-list-item-subtitle>
               </v-list-item>
@@ -109,34 +109,34 @@
             </v-card>
           </v-col>
           <v-col cols="12" lg="4">
-            <v-list subheader>
-              <v-subheader class="justify-center subtitle-2 mx-4">
+            <v-list dense subheader>
+              <v-subheader class="justify-end overline">
                 {{ $t('variable_costs') }} / {{ $t('cpm') }}
               </v-subheader>
               <v-list-item>
                 <v-list-item-title>{{ $t('maintenance') }}</v-list-item-title>
-                <v-list-item-subtitle class="text-right">
+                <v-list-item-subtitle class="text-right font-roboto-condensed">
                   {{ expense_summary.maintenance | currency }}
                 </v-list-item-subtitle>
-                <v-list-item-subtitle class="text-right">
+                <v-list-item-subtitle class="text-right font-roboto-condensed">
                   {{ expense_summary.maintenance_cpm | currency(3, 3) }}
                 </v-list-item-subtitle>
               </v-list-item>
               <v-list-item>
                 <v-list-item-title>{{ $t('accident') }}</v-list-item-title>
-                <v-list-item-subtitle class="text-right">
+                <v-list-item-subtitle class="text-right font-roboto-condensed">
                   {{ expense_summary.accident | currency }}
                 </v-list-item-subtitle>
-                <v-list-item-subtitle class="text-right">
+                <v-list-item-subtitle class="text-right font-roboto-condensed">
                   {{ expense_summary.accident_cpm | currency(3, 3) }}
                 </v-list-item-subtitle>
               </v-list-item>
               <v-list-item>
                 <v-list-item-title>{{ $t('fuel') }}</v-list-item-title>
-                <v-list-item-subtitle class="text-right">
+                <v-list-item-subtitle class="text-right font-roboto-condensed">
                   {{ expense_summary.fuel | currency }}
                 </v-list-item-subtitle>
-                <v-list-item-subtitle class="text-right">
+                <v-list-item-subtitle class="text-right font-roboto-condensed">
                   {{ expense_summary.fuel_cpm | currency(3, 3) }}
                 </v-list-item-subtitle>
               </v-list-item>
@@ -149,10 +149,10 @@
                 <v-list-item-title class="font-weight-bold">
                   {{ $t('total_variable') }}
                 </v-list-item-title>
-                <v-list-item-subtitle class="text-right font-weight-bold">
+                <v-list-item-subtitle class="text-right font-weight-bold font-roboto-condensed">
                   {{ total_variable | currency }}
                 </v-list-item-subtitle>
-                <v-list-item-subtitle class="text-right font-weight-bold">
+                <v-list-item-subtitle class="text-right font-weight-bold font-roboto-condensed">
                   {{ total_variable_cpm | currency(3, 3) }}
                 </v-list-item-subtitle>
               </v-list-item>

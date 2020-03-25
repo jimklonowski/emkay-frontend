@@ -1,5 +1,11 @@
 <template>
-  <h1>{{ $t('test') }}</h1>
+  <v-container class="welcome" fill-height>
+    <v-row justify="center">
+      <v-col cols="auto">
+        <h1 class="display-3 font-weight-thin" v-text="$t('welcome_to_emkay')" />
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
@@ -8,3 +14,19 @@ export default {
   middleware: 'auth'
 }
 </script>
+<style>
+.welcome::before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url(~@/assets/images/road.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  opacity: 0.3;
+}
+</style>
