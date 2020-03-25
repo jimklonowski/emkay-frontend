@@ -172,7 +172,7 @@ export default {
           icon: 'mdi-file-chart-outline',
           to: {},
           children: [
-            { key: 'fleet_reports', icon: '', to: { path: '/fleet-reports' } },
+            { key: 'fleet_reports', icon: '', to: { path: '/reporting' } },
             { key: 'my_reports', icon: '', to: { path: '/my-reports' } }
           ]
         },
