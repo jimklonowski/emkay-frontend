@@ -53,6 +53,7 @@ export const actions = {
    * Set custom labels, centers, etc.
    */
   async init ({ commit, dispatch }) {
+    console.log('[vuex][account]: called init')
     await Promise.all([
       dispatch('fetchCustomLabels'),
       dispatch('fetchCenterHierarchy'),
@@ -71,6 +72,19 @@ export const actions = {
       commit('setCustomLabels', data)
     } catch (error) {
       console.error(`[vuex error][fetchCustomLabels]: ${error}`)
+    }
+  },
+  /**
+   * Update Custom Labels Action
+   */
+  async updateCustomLabels ({ commit, dispatch }, payload) {
+    try {
+      const { data: { success, message } } = await this.$axios.post('/account/update-labels', payload)
+      if (!success) { throw new Error(message) }
+      await dispatch('fetchCustomLabels')
+    } catch (error) {
+      console.error(`[vuex error]: ${error.message}`)
+      throw new Error(error.message)
     }
   },
   /**

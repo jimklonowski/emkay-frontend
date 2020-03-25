@@ -2,7 +2,7 @@
   <v-app>
     <emkay-navigation />
     <v-content>
-      <reporting-navigation />
+      <account-navigation />
       <v-container>
         <nuxt />
       </v-container>
@@ -16,12 +16,12 @@
 
 <script>
 import EmkayNavigation from '@/components/core/EmkayNavigation'
-import ReportingNavigation from '@/components/reporting/ReportingNavigation'
+import AccountNavigation from '@/components/account/AccountNavigation'
 import EmkayFooter from '@/components/core/EmkayFooter'
 export default {
   components: {
     EmkayNavigation,
-    ReportingNavigation,
+    AccountNavigation,
     EmkayFooter
   },
   middleware: ['account']

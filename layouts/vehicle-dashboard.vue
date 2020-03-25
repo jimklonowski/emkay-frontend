@@ -27,6 +27,6 @@ export default {
     VehicleDashboardNavigation,
     EmkayFooter
   },
-  middleware: ['vehicle-dashboard']
+  middleware: ['account', 'vehicle-dashboard']
 }
 </script>
