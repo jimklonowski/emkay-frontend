@@ -20,6 +20,9 @@
       <template #item.bill_for_date="{ item }">
         {{ item.bill_for_date | date('YYYY-MM', 'MM/YYYY') }}
       </template>
+      <template #item.date="{ item }">
+        {{ item.date | date }}
+      </template>
       <template #item.service_date="{ item }">
         {{ item.service_date | date }}
       </template>
