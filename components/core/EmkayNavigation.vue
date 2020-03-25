@@ -3,7 +3,7 @@
     <client-only>
       <v-navigation-drawer
         v-if="$auth.loggedIn"
-        v-model="sidebar"
+        :value="sidebar"
         clipped
         fixed
         disable-route-watcher
@@ -105,7 +105,7 @@
       fixed
       app
     >
-      <v-app-bar-nav-icon @click.stop="toggleSidebar" />
+      <v-app-bar-nav-icon @click="toggleSidebar" />
       <v-toolbar-title v-text="$t('emkay')" />
 
       <v-spacer />
@@ -145,6 +145,7 @@ export default {
     accountMenu: vm => vm.$options.menus.account,
     orderingMenu: vm => vm.$options.menus.ordering,
     reportingMenu: vm => vm.$options.menus.reporting,
+    // sidebar: vm => vm.$store.getters['account/getSidebar'],
     sidebar: {
       get () {
         return this.$store.getters['account/getSidebar']
