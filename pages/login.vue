@@ -1,5 +1,5 @@
 <template>
-  <v-container fill-height>
+  <v-container class="login" fill-height>
     <v-row justify="center">
       <v-col cols="auto">
         <ValidationObserver ref="loginForm" v-slot="{ handleSubmit }" tag="form" @submit.prevent>
@@ -112,3 +112,25 @@ export default {
   }
 }
 </script>
+<style scoped>
+.login::before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+}
+.theme--dark .login::before {
+  background-image: url(~@/assets/images/coveredcar--dark.jpg);
+  opacity: 0.5;
+}
+.theme--light .login::before {
+  background-image: url(~@/assets/images/coveredcar--light.jpg);
+  opacity: 1.0;
+}
+</style>

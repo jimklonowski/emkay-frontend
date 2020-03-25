@@ -14,7 +14,7 @@ export default {
   middleware: 'auth'
 }
 </script>
-<style>
+<style scoped>
 .welcome::before {
   content: "";
   display: block;

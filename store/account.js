@@ -149,5 +149,6 @@ export const getters = {
   getDriverLabels: state => Object.entries(state.custom_labels).map(([key, value]) => ({ key, value })).slice(5),
   getInitialized: state => state.initialized,
   getFlattenedCenters: state => flatten(state.centers),
-  getSidebar: state => state.sidebar
+  getSidebar: state => state.sidebar,
+  isInitialized: state => state.initialized
 }
