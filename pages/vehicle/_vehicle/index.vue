@@ -24,7 +24,9 @@ export default {
     'billing-widget': () => import(/* webpackChunkName: "VehicleDashboardWidgets" */ '@/components/vehicle-dashboard/widgets/BillingWidget.vue'),
     'licensing-widget': () => import(/* webpackChunkName: "VehicleDashboardWidgets" */ '@/components/vehicle-dashboard/widgets/LicensingWidget.vue'),
     'odometer-widget': () => import(/* webpackChunkName: "VehicleDashboardWidgets" */ '@/components/vehicle-dashboard/widgets/OdometerWidget.vue'),
-    'toll-widget': () => import(/* webpackChunkName: "VehicleDashboardWidgets" */ '@/components/vehicle-dashboard/widgets/TollWidget.vue')
+    'toll-widget': () => import(/* webpackChunkName: "VehicleDashboardWidgets" */ '@/components/vehicle-dashboard/widgets/TollWidget.vue'),
+    'accident-widget': () => import(/* webpackChunkName: "VehicleDashboardWidgets" */ '@/components/vehicle-dashboard/widgets/AccidentWidget.vue'),
+    'rental-widget': () => import(/* webpackChunkName: "VehicleDashboardWidgets" */ '@/components/vehicle-dashboard/widgets/RentalWidget.vue')
   },
   layout: 'vehicle-dashboard',
   data: () => ({
@@ -36,7 +38,9 @@ export default {
       { cols: 12, xl: 6, component: 'billing-widget' },
       { cols: 12, xl: 6, component: 'licensing-widget' },
       { cols: 12, xl: 6, component: 'odometer-widget' },
-      { cols: 12, xl: 6, component: 'toll-widget' }
+      { cols: 12, xl: 6, component: 'toll-widget' },
+      { cols: 12, xl: 6, component: 'accident-widget' },
+      { cols: 12, xl: 6, component: 'rental-widget' }
     ]
   })
 }

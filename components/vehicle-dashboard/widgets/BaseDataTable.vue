@@ -23,6 +23,12 @@
       <template #item.date="{ item }">
         {{ item.date | date }}
       </template>
+      <template #item.loss_date="{ item }">
+        {{ item.loss_date | date }}
+      </template>
+      <template #item.subrogation_amount="{ item }">
+        {{ item.subrogation_amount | currency }}
+      </template>
       <template #item.service_date="{ item }">
         {{ item.service_date | date }}
       </template>
@@ -34,6 +40,12 @@
       </template>
       <template #item.odometer="{ item }">
         {{ item.odometer | number }}
+      </template>
+      <template #item.rental_rate="{ item }">
+        {{ item.rental_rate | currency }}
+      </template>
+      <template #item.total_amount="{ item }">
+        {{ item.total_amount | currency }}
       </template>
       <template #item.amount="{ item }">
         {{ item.amount | currency }}
