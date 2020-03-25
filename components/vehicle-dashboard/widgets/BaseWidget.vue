@@ -1,5 +1,5 @@
 <template>
-  <v-card class="vehicle-dashboard-widget">
+  <v-card class="vehicle-dashboard-widget" outlined>
     <slot name="top">
       <widget-toolbar
         :title="title"
@@ -15,9 +15,11 @@
 </template>
 
 <script>
+import WidgetToolbar from '@/components/vehicle-dashboard/widgets/WidgetToolbar'
 export default {
   components: {
-    'widget-toolbar': () => import(/* webpackChunkName: "WidgetToolbar" */ '@/components/vehicle-dashboard/widgets/WidgetToolbar.vue')
+    WidgetToolbar
+    // 'widget-toolbar': () => import(/* webpackChunkName: "WidgetToolbar" */ '@/components/vehicle-dashboard/widgets/WidgetToolbar.vue')
   },
   props: {
     title: {
