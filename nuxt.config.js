@@ -135,7 +135,9 @@ export default {
   ** dotenv configuration
   */
   env: {
-    BASE_URL: process.env.BASE_URL
+    BASE_URL: process.env.BASE_URL,
+    FLEET_DASHBOARD_URL: process.env.FLEET_DASHBOARD_URL,
+    GA_ID: process.env.GA_ID
   },
   /*
   ** i18n module configuration
