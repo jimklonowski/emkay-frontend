@@ -1,18 +1,30 @@
 <template>
-  <v-container>
-    <v-row>
-      <v-col cols="12" lg="6">
-        widget 1
-      </v-col>
-      <v-col cols="12" lg="6">
-        widget 2
-      </v-col>
-    </v-row>
-  </v-container>
+  <v-row>
+    <v-col
+      v-for="(widget, w) in widgets"
+      :key="`widget-${w}`"
+      :cols="widget.cols"
+      :sm="widget.sm"
+      :md="widget.md"
+      :lg="widget.lg"
+    >
+      <component :is="widget.component" />
+    </v-col>
+  </v-row>
 </template>
 <script>
 export default {
   name: 'VehicleDashboard',
-  layout: 'vehicle-dashboard'
+  components: {
+    'vehicle-widget': () => import(/* webpackChunkName: "VehicleDashboardWidgets" */ '@/components/vehicle-dashboard/widgets/VehicleWidget.vue'),
+    'driver-widget': () => import(/* webpackChunkName: "VehicleDashboardWidgets" */ '@/components/vehicle-dashboard/widgets/DriverWidget.vue')
+  },
+  layout: 'vehicle-dashboard',
+  data: () => ({
+    widgets: [
+      { cols: 12, lg: 6, component: 'vehicle-widget' },
+      { cols: 12, lg: 6, component: 'driver-widget' }
+    ]
+  })
 }
 </script>

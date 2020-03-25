@@ -58,7 +58,8 @@ export default {
   plugins: [
     { src: '~/plugins/auth/axios-interceptors' },
     { src: '~/plugins/i18n/nuxt-i18n' },
-    { src: '~/plugins/vee-validate' }
+    { src: '~/plugins/vee-validate' },
+    { src: '~/plugins/custom-filters' }
   ],
   /*
   ** Nuxt.js dev-modules
