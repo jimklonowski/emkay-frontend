@@ -57,17 +57,15 @@
 import { mapActions, mapGetters } from 'vuex'
 import { SnotifyPosition } from 'vue-snotify'
 import isEqual from 'lodash.isequal'
-// import { sleep } from '@/utility/helpers'
+/**
+ * The customize-fleet-labels page populates a form using the custom labels in vuex:account.
+ */
 export default {
   name: 'CustomizeFleetLabels',
-  asyncData ({ store }) {
-    // copy existing labels into model
-    const loadedLabels = store.getters['account/getCustomLabels']
-    const model = { ...loadedLabels }
-    return { model }
-  },
   data: () => ({
     loading: false,
+
+    // form model
     model: {}
   }),
   computed: {
@@ -81,6 +79,12 @@ export default {
      */
     hasChanges: vm => !isEqual(vm.model, vm.custom_labels)
   },
+  /**
+   * When this page component is mounted, copy custom labels from vuex getter into the model object.
+   */
+  mounted () {
+    this.model = { ...this.custom_labels }
+  },
   methods: {
     ...mapActions({
       updateLabels: 'account/updateCustomLabels'
@@ -88,10 +92,11 @@ export default {
     async submitLabels () {
       try {
         this.loading = true
+        // call the vuex action to update labels using the form model
         await this.updateLabels(this.model)
         this.$snotify.success(this.$i18n.t('labels_updated'), this.$i18n.t('success'), { position: SnotifyPosition.centerBottom })
       } catch (error) {
-        debugger
+        this.$snotify.error(error, this.$i18n.t('error'), { position: SnotifyPosition.centerBottom })
       } finally {
         this.loading = false
       }
