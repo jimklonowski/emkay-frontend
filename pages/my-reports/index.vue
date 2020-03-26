@@ -450,6 +450,15 @@ export default {
         this.save_loading = false
       }
     }
+  },
+  head () {
+    const title = this.$i18n.t('my_reports')
+    return {
+      title,
+      meta: [
+        { hid: 'og:description', property: 'og:description', content: title }
+      ]
+    }
   }
 }
 </script>

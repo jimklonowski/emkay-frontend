@@ -119,6 +119,15 @@ export default {
       { cols: 12, xl: 6, component: 'order-status-widget' },
       { cols: 12, xl: 6, component: 'sale-info-widget' }
     ]
-  })
+  }),
+  head () {
+    const title = `${this.$route.params.vehicle} :: ${this.$t('vehicle_dashboard')}`
+    return {
+      title,
+      meta: [
+        { hid: 'og:description', property: 'og:description', content: title }
+      ]
+    }
+  }
 }
 </script>

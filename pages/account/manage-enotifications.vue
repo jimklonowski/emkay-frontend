@@ -431,7 +431,7 @@ export default {
     }
   },
   head () {
-    const title = this.$t('manage_your_enotifications')
+    const title = this.$t('manage_enotifications')
     return {
       title,
       meta: [

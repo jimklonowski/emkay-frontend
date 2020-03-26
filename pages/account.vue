@@ -4,6 +4,15 @@
 <script>
 export default {
   name: 'Account',
-  layout: 'account'
+  layout: 'account',
+  head () {
+    const title = this.$i18n.t('account_management')
+    return {
+      title,
+      meta: [
+        { hid: 'og:description', property: 'og:description', content: title }
+      ]
+    }
+  }
 }
 </script>

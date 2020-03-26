@@ -17,6 +17,15 @@ export default {
   name: 'VehicleDashboardWrapper',
   components: {
     'vehicle-search': () => import(/* webpackChunkName: 'VehicleSearch' */ '@/components/vehicle-dashboard/VehicleSearch')
+  },
+  head () {
+    const title = this.$i18n.t('vehicle_search')
+    return {
+      title,
+      meta: [
+        { hid: 'og:description', property: 'og:description', content: title }
+      ]
+    }
   }
 }
 </script>

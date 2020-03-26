@@ -11,6 +11,15 @@ export default {
   components: {
     'report-expenses-form': () => import(/* webpackChunkName: "ReportExpensesForm" */ '@/components/vehicle-dashboard/forms/ReportExpensesForm.vue')
   },
-  layout: 'vehicle-dashboard'
+  layout: 'vehicle-dashboard',
+  head () {
+    const title = this.$i18n.t('report_expenses')
+    return {
+      title,
+      meta: [
+        { hid: 'og:description', property: 'og:description', content: title }
+      ]
+    }
+  }
 }
 </script>

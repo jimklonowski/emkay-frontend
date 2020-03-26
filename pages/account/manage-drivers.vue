@@ -301,7 +301,7 @@ export default {
     }
   },
   head () {
-    const title = this.$t('manage_your_drivers')
+    const title = this.$t('manage_drivers')
     return {
       title,
       meta: [

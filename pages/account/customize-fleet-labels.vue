@@ -101,6 +101,15 @@ export default {
         this.loading = false
       }
     }
+  },
+  head () {
+    const title = this.$i18n.t('customize_fleet_labels')
+    return {
+      title,
+      meta: [
+        { hid: 'og:description', property: 'og:description', content: title }
+      ]
+    }
   }
 }
 </script>

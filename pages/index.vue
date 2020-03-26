@@ -11,7 +11,16 @@
 <script>
 export default {
   name: 'Home',
-  middleware: 'auth'
+  middleware: 'auth',
+  head () {
+    const title = this.$i18n.t('home')
+    return {
+      title,
+      meta: [
+        { hid: 'og:description', property: 'og:description', content: title }
+      ]
+    }
+  }
 }
 </script>
 <style scoped>
