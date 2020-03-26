@@ -37,6 +37,17 @@ export default {
       cert: fs.readFileSync(path.resolve(__dirname, 'localhost.crt'))
     }
   },
+  vue: {
+    config: {
+      devtools: true, // turn this off for production
+      performance: true,
+      productionTip: true,
+      silent: false
+    }
+  },
+  router: {
+    base: process.env.NODE_ENV === 'production' ? '/nuxt/' : '/'
+  },
   /*
   ** Customize the progress-bar color
   */

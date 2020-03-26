@@ -1,6 +1,8 @@
 <template>
-  <v-card>
-    <v-card-title>{{ $t('report_expenses') }}</v-card-title>
+  <v-card outlined>
+    <v-card-title class="font-lato">
+      {{ $t('report_expenses') }}
+    </v-card-title>
     <v-card-subtitle>{{ vehicle_number }}</v-card-subtitle>
     <v-divider />
     <v-card-text>
@@ -10,7 +12,9 @@
             <ValidationObserver ref="addExpenseForm" v-slot="{ handleSubmit: handleSubmitExpense }">
               <v-form @submit.prevent="handleSubmitExpense(addExpense)">
                 <v-card flat>
-                  <v-card-title>Add expenses as needed and then submit.</v-card-title>
+                  <v-card-title class="font-lato">
+                    Add expenses as needed and then submit.
+                  </v-card-title>
                   <v-card-text class="pa-0">
                     <v-container>
                       <v-row dense>

@@ -2,7 +2,7 @@
   <v-list class="pa-4" subheader>
     <v-subheader v-text="$t('vehicle_details')" />
     <v-list-item v-for="(row, r) in rows" :key="`row-${r}`">
-      <v-list-item-title v-text="row.text" />
+      <v-list-item-title class="font-lato" v-text="row.text" />
       <v-list-item-subtitle v-text="row.value" />
     </v-list-item>
   </v-list>

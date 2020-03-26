@@ -24,6 +24,6 @@ export default {
     ReportingNavigation,
     EmkayFooter
   },
-  middleware: ['account']
+  middleware: ['check-auth', 'account']
 }
 </script>
