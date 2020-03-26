@@ -5,8 +5,7 @@
     :actions="actions"
   >
     <template #main>
-      <v-skeleton-loader v-if="!initialized" :loading="!initialized" :types="{ 'table-tbody': 'table-row-divider@3' }" type="table-thead, table-tbody, table-tfoot" />
-      <v-container v-else>
+      <v-container>
         <v-row dense no-gutters>
           <v-col cols="12" lg="4">
             <v-list dense subheader>
@@ -172,7 +171,6 @@ export default {
   },
   data: () => ({
     icon: 'mdi-cash-usd',
-    initialized: false,
     mode: 'total'
   }),
   computed: {
@@ -249,28 +247,24 @@ export default {
         }
       ]
     },
+    query () {
+      return {
+        vehicle: this.vehicle_number
+      }
+    },
     reportExpensesRoute: vm => vm.localePath({ path: `/vehicle/${vm.vehicle_number}/report-expenses` }),
     title: vm => vm.$i18n.t('expense_summary')
   },
   async mounted () {
-    await this.populateWidget()
+    await this.populateWidget(this.query)
   },
   methods: {
     /**
      * Vuex Actions
      */
     ...mapActions({
-      populate: 'vehicle-dashboard/fetchExpenseSummary'
+      populateWidget: 'vehicle-dashboard/fetchExpenseSummary'
     }),
-    /**
-     * Populate widget and toggle initialized status while data is fetched
-     */
-    async populateWidget () {
-      await this.populate({
-        vehicle: this.vehicle_number
-      })
-      this.initialized = true
-    },
     getChartData (mode) {
       switch (mode) {
         case 'fixed': return this.fixedExpensesPieChartData

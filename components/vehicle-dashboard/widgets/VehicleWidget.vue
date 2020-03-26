@@ -64,9 +64,10 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import BaseWidget from '@/components/vehicle-dashboard/widgets/BaseWidget'
 export default {
   components: {
-    'base-widget': () => import(/* webpackChunkName: "BaseWidget" */ '@/components/vehicle-dashboard/widgets/BaseWidget.vue')
+    BaseWidget
   },
   data: () => ({
     expanded: false,

@@ -55,7 +55,7 @@
       </template>
     </v-data-table>
     <v-divider />
-    <v-card-actions v-show="initialized" class="pager">
+    <v-card-actions class="pager">
       <v-btn-toggle
         :value="days"
         background-color="transparent"
@@ -94,10 +94,6 @@ export default {
     days: {
       type: Number,
       default: 60
-    },
-    initialized: {
-      type: Boolean,
-      required: true
     },
     loading: {
       type: Boolean,

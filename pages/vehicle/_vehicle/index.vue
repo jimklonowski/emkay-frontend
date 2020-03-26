@@ -13,25 +13,92 @@
     </v-col>
   </v-row>
 </template>
+
 <script>
+import WidgetLoading from '@/components/vehicle-dashboard/widgets/WidgetLoading'
 export default {
   name: 'VehicleDashboard',
+  /**
+   * Vehicle Dashboard widgets are loaded asyncronously, showing a loading component while loading
+   * See: https://vuejs.org/v2/guide/components-dynamic-async.html
+   * Also: https://alligator.io/vuejs/vue-async-components-load-error/
+   */
   components: {
-    'vehicle-widget': () => import(/* webpackChunkName: "VehicleDashboardWidgets" */ '@/components/vehicle-dashboard/widgets/VehicleWidget.vue'),
-    'driver-widget': () => import(/* webpackChunkName: "VehicleDashboardWidgets" */ '@/components/vehicle-dashboard/widgets/DriverWidget.vue'),
-    'expense-summary-widget': () => import(/* webpackChunkName: "VehicleDashboardWidgets" */ '@/components/vehicle-dashboard/widgets/ExpenseSummaryWidget.vue'),
-    'fuel-widget': () => import(/* webpackChunkName: "VehicleDashboardWidgets" */ '@/components/vehicle-dashboard/widgets/FuelWidget.vue'),
-    'maintenance-widget': () => import(/* webpackChunkName: "VehicleDashboardWidgets" */ '@/components/vehicle-dashboard/widgets/MaintenanceWidget.vue'),
-    'billing-widget': () => import(/* webpackChunkName: "VehicleDashboardWidgets" */ '@/components/vehicle-dashboard/widgets/BillingWidget.vue'),
-    'licensing-widget': () => import(/* webpackChunkName: "VehicleDashboardWidgets" */ '@/components/vehicle-dashboard/widgets/LicensingWidget.vue'),
-    'odometer-widget': () => import(/* webpackChunkName: "VehicleDashboardWidgets" */ '@/components/vehicle-dashboard/widgets/OdometerWidget.vue'),
-    'toll-widget': () => import(/* webpackChunkName: "VehicleDashboardWidgets" */ '@/components/vehicle-dashboard/widgets/TollWidget.vue'),
-    'accident-widget': () => import(/* webpackChunkName: "VehicleDashboardWidgets" */ '@/components/vehicle-dashboard/widgets/AccidentWidget.vue'),
-    'rental-widget': () => import(/* webpackChunkName: "VehicleDashboardWidgets" */ '@/components/vehicle-dashboard/widgets/RentalWidget.vue'),
-    'violation-widget': () => import(/* webpackChunkName: "VehicleDashboardWidgets" */ '@/components/vehicle-dashboard/widgets/ViolationWidget.vue'),
-    'inspection-widget': () => import(/* webpackChunkName: "VehicleDashboardWidgets" */ '@/components/vehicle-dashboard/widgets/InspectionWidget.vue'),
-    'order-status-widget': () => import(/* webpackChunkName: "VehicleDashboardWidgets" */ '@/components/vehicle-dashboard/widgets/OrderStatusWidget.vue'),
-    'sale-info-widget': () => import(/* webpackChunkName: "VehicleDashboardWidgets" */ '@/components/vehicle-dashboard/widgets/SaleInfoWidget.vue')
+    'vehicle-widget': () => ({
+      component: import(/* webpackChunkName: "VehicleWidget" */'@/components/vehicle-dashboard/widgets/VehicleWidget.vue'),
+      loading: WidgetLoading,
+      delay: 0
+    }),
+    'driver-widget': () => ({
+      component: import(/* webpackChunkName: "DriverWidget" */'@/components/vehicle-dashboard/widgets/DriverWidget.vue'),
+      loading: WidgetLoading,
+      delay: 0
+    }),
+    'expense-summary-widget': () => ({
+      component: import(/* webpackChunkName: "ExpenseSummaryWidget" */'@/components/vehicle-dashboard/widgets/ExpenseSummaryWidget.vue'),
+      loading: WidgetLoading,
+      delay: 0
+    }),
+    'fuel-widget': () => ({
+      component: import(/* webpackChunkName: "FuelWidget" */'@/components/vehicle-dashboard/widgets/FuelWidget.vue'),
+      loading: WidgetLoading,
+      delay: 0
+    }),
+    'maintenance-widget': () => ({
+      component: import(/* webpackChunkName: "MaintenanceWidget" */'@/components/vehicle-dashboard/widgets/MaintenanceWidget.vue'),
+      loading: WidgetLoading,
+      delay: 0
+    }),
+    'billing-widget': () => ({
+      component: import(/* webpackChunkName: "BillingWidget" */'@/components/vehicle-dashboard/widgets/BillingWidget.vue'),
+      loading: WidgetLoading,
+      delay: 0
+    }),
+    'licensing-widget': () => ({
+      component: import(/* webpackChunkName: "LicensingWidget" */'@/components/vehicle-dashboard/widgets/LicensingWidget.vue'),
+      loading: WidgetLoading,
+      delay: 0
+    }),
+    'odometer-widget': () => ({
+      component: import(/* webpackChunkName: "OdometerWidget" */'@/components/vehicle-dashboard/widgets/OdometerWidget.vue'),
+      loading: WidgetLoading,
+      delay: 0
+    }),
+    'toll-widget': () => ({
+      component: import(/* webpackChunkName: "TollWidget" */'@/components/vehicle-dashboard/widgets/TollWidget.vue'),
+      loading: WidgetLoading,
+      delay: 0
+    }),
+    'accident-widget': () => ({
+      component: import(/* webpackChunkName: "AccidentWidget" */'@/components/vehicle-dashboard/widgets/AccidentWidget.vue'),
+      loading: WidgetLoading,
+      delay: 0
+    }),
+    'rental-widget': () => ({
+      component: import(/* webpackChunkName: "RentalWidget" */'@/components/vehicle-dashboard/widgets/RentalWidget.vue'),
+      loading: WidgetLoading,
+      delay: 0
+    }),
+    'violation-widget': () => ({
+      component: import(/* webpackChunkName: "ViolationWidget" */'@/components/vehicle-dashboard/widgets/ViolationWidget.vue'),
+      loading: WidgetLoading,
+      delay: 0
+    }),
+    'inspection-widget': () => ({
+      component: import(/* webpackChunkName: "InspectionWidget" */'@/components/vehicle-dashboard/widgets/InspectionWidget.vue'),
+      loading: WidgetLoading,
+      delay: 0
+    }),
+    'order-status-widget': () => ({
+      component: import(/* webpackChunkName: "OrderStatusWidget" */'@/components/vehicle-dashboard/widgets/OrderStatusWidget.vue'),
+      loading: WidgetLoading,
+      delay: 0
+    }),
+    'sale-info-widget': () => ({
+      component: import(/* webpackChunkName: "SaleInfoWidget" */'@/components/vehicle-dashboard/widgets/SaleInfoWidget.vue'),
+      loading: WidgetLoading,
+      delay: 0
+    })
   },
   layout: 'vehicle-dashboard',
   data: () => ({

@@ -6,11 +6,8 @@
   >
     <!-- Toll Datatable with Pagination -->
     <template #main>
-      <v-skeleton-loader v-if="!initialized" :loading="!initialized" :types="{ 'table-tbody': 'table-row-divider@3' }" type="table-thead, table-tbody, table-tfoot" />
       <base-data-table
-        v-else
         :days="days"
-        :initialized="initialized"
         :loading="loading"
         :headers="headers"
         :items="items"
@@ -32,8 +29,7 @@ export default {
   },
   data: () => ({
     days: 60,
-    icon: 'mdi-highway',
-    initialized: false
+    icon: 'mdi-highway'
   }),
   computed: {
     /**
@@ -90,6 +86,13 @@ export default {
         }
       ]
     },
+    query () {
+      return {
+        start: this.start,
+        end: this.end,
+        vehicle: this.vehicle_number
+      }
+    },
     title: vm => vm.$i18n.t('tolls'),
     start: vm => vm.$moment().subtract(vm.days, 'days').format('YYYY-MM-DD'),
     end: vm => vm.$moment().format('YYYY-MM-DD'),
@@ -100,34 +103,22 @@ export default {
      * Watch 'days' variable for changes, then re-fetch data.
      */
     async days () {
-      await this.populateWidget()
+      await this.populateWidget(this.query)
     }
   },
   /**
    * Fetch Toll Data when widget is mounted.
    */
   async mounted () {
-    await this.populateWidget()
+    await this.populateWidget(this.query)
   },
   methods: {
     /**
      * Vuex Actions
      */
     ...mapActions({
-      populate: 'vehicle-dashboard/fetchTollHistory'
-    }),
-    /**
-     * Populate widget and toggle initialized status while data is fetched.
-     */
-    async populateWidget () {
-      // this.initialized = false
-      await this.populate({
-        start: this.start,
-        end: this.end,
-        vehicle: this.vehicle_number
-      })
-      this.initialized = true
-    }
+      populateWidget: 'vehicle-dashboard/fetchTollHistory'
+    })
   }
 }
 </script>

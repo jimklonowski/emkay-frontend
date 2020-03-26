@@ -6,11 +6,8 @@
   >
     <!-- Fuel Datatable with Pagination -->
     <template #main>
-      <v-skeleton-loader v-if="!initialized" :loading="!initialized" :types="{ 'table-tbody': 'table-row-divider@3' }" type="table-thead, table-tbody, table-tfoot" />
       <base-data-table
-        v-else
         :days="days"
-        :initialized="initialized"
         :loading="loading"
         :headers="headers"
         :items="items"
@@ -32,8 +29,7 @@ export default {
   },
   data: () => ({
     days: 60,
-    icon: 'mdi-gas-station',
-    initialized: false
+    icon: 'mdi-gas-station'
   }),
   computed: {
     /**
@@ -121,6 +117,14 @@ export default {
         }
       ]
     },
+    query () {
+      return {
+        start: this.start,
+        end: this.end,
+        use_bill_date: false,
+        vehicle: this.vehicle_number
+      }
+    },
     fuelRoute: vm => vm.localePath({ path: `/vehicle/${vm.vehicle_number}/fuel`, query: { start: vm.start, end: vm.end } }),
     fuelCardRoute: vm => vm.localePath({ path: `/vehicle/${vm.vehicle_number}/fuel/fuel-cards` }),
     fuelProfilesRoute: vm => vm.localePath({ path: `/vehicle/${vm.vehicle_number}/fuel/fuel-authorization-profiles` }),
@@ -133,34 +137,22 @@ export default {
      * Watch 'days' variable for changes, then re-fetch data.
      */
     async days () {
-      await this.populateWidget()
+      await this.populateWidget(this.query)
     }
   },
   /**
    * Fetch Fuel Data when widget is mounted.
    */
   async mounted () {
-    await this.populateWidget()
+    await this.populateWidget(this.query)
   },
   methods: {
     /**
      * Vuex Actions
      */
     ...mapActions({
-      populate: 'vehicle-dashboard/fetchFuelHistory'
-    }),
-    /**
-     * Populate widget and toggle initialized status while data is fetched.
-     */
-    async populateWidget () {
-      await this.populate({
-        start: this.start,
-        end: this.end,
-        use_bill_date: false,
-        vehicle: this.vehicle_number
-      })
-      this.initialized = true
-    }
+      populateWidget: 'vehicle-dashboard/fetchFuelHistory'
+    })
   }
 }
 </script>
