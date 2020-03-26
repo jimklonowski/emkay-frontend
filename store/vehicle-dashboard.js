@@ -5,6 +5,8 @@ const getDefaultState = () => ({
   accident_loading: false,
   billing_history: [],
   billing_loading: false,
+  documents: [],
+  documents_loading: false,
   driver_details: {},
   driver_number: null,
   expense_summary: {},
@@ -17,6 +19,8 @@ const getDefaultState = () => ({
   licensing_loading: false,
   maintenance_history: [],
   maintenance_loading: false,
+  notes: [],
+  notes_loading: false,
   odometer_history: [],
   odometer_loading: false,
   order_status: {},
@@ -59,7 +63,7 @@ export const actions = {
       if (!success) { throw new Error(message) }
       commit('setVehicleDetails', data)
     } catch (error) {
-      console.error(`[vuex error]: ${error.message}`)
+      console.error(`[vuex error][fetchVehicleDetails]: ${error.message}`)
       commit('setVehicleDetails', {})
     }
   },
@@ -75,7 +79,7 @@ export const actions = {
       commit('setDriverDetails', data)
       commit('setDriverNumber', data.reference_number)
     } catch (error) {
-      console.error(`[vuex error]: ${error.message}`)
+      console.error(`[vuex error][fetchDriverDetails]: ${error.message}`)
       commit('setDriverDetails', {})
     }
   },
@@ -89,7 +93,7 @@ export const actions = {
       if (!success) { throw new Error(message) }
       commit('setOrderStatus', data)
     } catch (error) {
-      console.error(`[vuex error]: ${error.message}`)
+      console.error(`[vuex error][fetchOrderStatus]: ${error.message}`)
       commit('setOrderStatus', {})
     }
   },
@@ -103,7 +107,7 @@ export const actions = {
       if (!success) { throw new Error(message) }
       commit('setSaleInfo', data)
     } catch (error) {
-      console.error(`[vuex error]: ${error.message}`)
+      console.error(`[vuex error][fetchSaleInfo]: ${error.message}`)
       commit('setSaleInfo', {})
     }
   },
@@ -120,7 +124,7 @@ export const actions = {
       if (!success) { throw new Error(message) }
       commit('setBillingHistory', data)
     } catch (error) {
-      console.error(`[vuex error]: ${error.message}`)
+      console.error(`[vuex error][fetchBillingHistory]: ${error.message}`)
       commit('setBillingHistory', [])
     } finally {
       commit('setBillingLoading', false)
@@ -139,7 +143,7 @@ export const actions = {
       if (!success) { throw new Error(message) }
       commit('setLicensingHistory', data)
     } catch (error) {
-      console.error(`[vuex error]: ${error.message}`)
+      console.error(`[vuex error][fetchLicensingHistory]: ${error.message}`)
       commit('setLicensingHistory', [])
     } finally {
       commit('setLicensingLoading', false)
@@ -159,7 +163,7 @@ export const actions = {
       if (!success) { throw new Error(message) }
       commit('setFuelHistory', data)
     } catch (error) {
-      console.error(`[vuex error]: ${error.message}`)
+      console.error(`[vuex error][fetchFuelHistory]: ${error.message}`)
       commit('setFuelHistory', [])
     } finally {
       commit('setFuelLoading', false)
@@ -179,7 +183,7 @@ export const actions = {
       if (!success) { throw new Error(message) }
       commit('setMaintenanceHistory', data)
     } catch (error) {
-      console.error(`[vuex error]: ${error.message}`)
+      console.error(`[vuex error][fetchMaintenanceHistory]: ${error.message}`)
       commit('setMaintenanceHistory', [])
     } finally {
       commit('setMaintenanceLoading', false)
@@ -198,7 +202,7 @@ export const actions = {
       if (!success) { throw new Error(message) }
       commit('setOdometerHistory', data)
     } catch (error) {
-      console.error(`[vuex error]: ${error.message}`)
+      console.error(`[vuex error][fetchOdometerHistory]: ${error.message}`)
       commit('setOdometerHistory', [])
     } finally {
       commit('setOdometerLoading', false)
@@ -217,7 +221,7 @@ export const actions = {
       if (!success) { throw new Error(message) }
       commit('setTollHistory', data)
     } catch (error) {
-      console.error(`[vuex error]: ${error.message}`)
+      console.error(`[vuex error][fetchTollHistory]: ${error.message}`)
       commit('setTollHistory', [])
     } finally {
       commit('setTollLoading', false)
@@ -236,7 +240,7 @@ export const actions = {
       if (!success) { throw new Error(message) }
       commit('setAccidentHistory', data)
     } catch (error) {
-      console.error(`[vuex error]: ${error.message}`)
+      console.error(`[vuex error][fetchAccidentHistory]: ${error.message}`)
       commit('setAccidentHistory', [])
     } finally {
       commit('setAccidentLoading', false)
@@ -255,7 +259,7 @@ export const actions = {
       if (!success) { throw new Error(message) }
       commit('setRentalHistory', data)
     } catch (error) {
-      console.error(`[vuex error]: ${error.message}`)
+      console.error(`[vuex error][fetchRentalHistory]: ${error.message}`)
       commit('setRentalHistory', [])
     } finally {
       commit('setRentalLoading', false)
@@ -274,7 +278,7 @@ export const actions = {
       if (!success) { throw new Error(message) }
       commit('setViolationHistory', data)
     } catch (error) {
-      console.error(`[vuex error]: ${error.message}`)
+      console.error(`[vuex error][fetchViolationHistory]: ${error.message}`)
       commit('setViolationHistory', [])
     } finally {
       commit('setViolationLoading', false)
@@ -293,7 +297,7 @@ export const actions = {
       if (!success) { throw new Error(message) }
       commit('setInspectionHistory', data)
     } catch (error) {
-      console.error(`[vuex error]: ${error.message}`)
+      console.error(`[vuex error][fetchInspectionHistory]: ${error.message}`)
       commit('setInspectionHistory', [])
     } finally {
       commit('setInspectionLoading', false)
@@ -310,10 +314,74 @@ export const actions = {
       if (!success) { throw new Error(message) }
       commit('setExpenseSummary', data)
     } catch (error) {
-      console.error(`[vuex error]: ${error.message}`)
+      console.error(`[vuex error][fetchExpenseSummary]: ${error.message}`)
       commit('setExpenseSummary', {})
     } finally {
       commit('setExpenseSummaryLoading', false)
+    }
+  },
+  /**
+   * Fetch Vehicle Documents
+   * @param {*} vehicle Vehicle Number
+   */
+  async fetchDocuments ({ commit }, { vehicle }) {
+    try {
+      commit('setDocumentsLoading', true)
+      const { data: { success, message, data } } = await this.$axios.get('/vehicle/documents', { params: { vehicle } })
+      if (!success) { throw new Error(message) }
+      commit('setDocuments', data)
+    } catch (error) {
+      console.error(`[vuex error][fetchDocuments]: ${error.message}`)
+      commit('setDocuments', [])
+    } finally {
+      commit('setDocumentsLoading', false)
+    }
+  },
+  /**
+   * Upload Vehicle Documents
+   * @param {*} vehicle Vehicle Number
+   * @param {*} files Array of Files
+   */
+  async uploadDocuments ({ commit, dispatch }, { vehicle, files }) {
+    try {
+      const { data: { success, message } } = await this.$axios.post('/vehicle/upload-documents', { params: { vehicle, files } })
+      if (!success) { throw new Error(message) }
+      dispatch('fetchDocuments', { vehicle })
+    } catch (error) {
+      console.error(`[vuex error][uploadDocuments]: ${error.message}`)
+      throw new Error(error.message)
+    }
+  },
+  /**
+   * Fetch Vehicle Notes
+   * @param {*} vehicle Vehicle Number
+   */
+  async fetchNotes ({ commit }, { vehicle }) {
+    try {
+      commit('setNotesLoading', true)
+      const { data: { success, message, data } } = await this.$axios.get('/vehicle/notes', { params: { vehicle } })
+      if (!success) { throw new Error(message) }
+      commit('setNotes', data)
+    } catch (error) {
+      console.error(`[vuex error][fetchNotes]: ${error.message}`)
+      commit('setNotes', [])
+    } finally {
+      commit('setNotesLoading', false)
+    }
+  },
+  /**
+   * Add Vehicle Note
+   * @param {*} vehicle Vehicle Number
+   * @param {*} note Note Text
+   */
+  async addNote ({ commit, dispatch }, { vehicle, note }) {
+    try {
+      const { data: { success, message } } = await this.$axios.post('/vehicle/add-note', { params: { vehicle, note } })
+      if (!success) { throw new Error(message) }
+      dispatch('fetchNotes', { vehicle })
+    } catch (error) {
+      console.error(`[vuex error][addNote]: ${error.message}`)
+      throw new Error(error.message)
     }
   },
   /**
@@ -325,7 +393,7 @@ export const actions = {
       if (!success) { throw new Error(message) }
       // await dispatch('init', payl)
     } catch (error) {
-      console.error(`[vuex error]: ${error.message}`)
+      console.error(`[vuex error][addVehicle]: ${error.message}`)
       throw new Error(error.message)
     }
   },
@@ -335,7 +403,7 @@ export const actions = {
       if (!success) { throw new Error(message) }
       // await dispatch('init', payload.vehicle_number)
     } catch (error) {
-      console.error(`[vuex error]: ${error.message}`)
+      console.error(`[vuex error][updateVehicle]: ${error.message}`)
       throw new Error(error.message)
     }
   },
@@ -350,6 +418,8 @@ export const mutations = {
   setAccidentLoading: set('accident_loading'),
   setBillingHistory: set('billing_history'),
   setBillingLoading: set('billing_loading'),
+  setDocuments: set('documents'),
+  setDocumentsLoading: set('documents_loading'),
   setDriverDetails: set('driver_details'),
   setDriverNumber: set('driver_number'),
   setExpenseSummary: set('expense_summary'),
@@ -362,6 +432,8 @@ export const mutations = {
   setLicensingLoading: set('licensing_loading'),
   setMaintenanceHistory: set('maintenance_history'),
   setMaintenanceLoading: set('maintenance_loading'),
+  setNotes: set('notes'),
+  setNotesLoading: set('notes_loading'),
   setOdometerHistory: set('odometer_history'),
   setOdometerLoading: set('odometer_loading'),
   setOrderStatus: set('order_status'),
@@ -381,6 +453,8 @@ export const getters = {
   getAccidentLoading: state => state.accident_loading,
   getBillingHistory: state => state.billing_history,
   getBillingLoading: state => state.billing_loading,
+  getDocuments: state => state.documents,
+  getDocumentsLoading: state => state.documents_loading,
   getDriverCityStateZip: state => [[state.driver_details.city, state.driver_details.state_province].filter(Boolean).join(', '), state.driver_details.postal_code].filter(Boolean).join(' '),
   getDriverDetails: state => state.driver_details,
   getDriverName: state => [state.driver_details.first_name, state.driver_details.last_name].filter(Boolean).join(' '),
@@ -395,6 +469,8 @@ export const getters = {
   getLicensingLoading: state => state.licensing_loading,
   getMaintenanceHistory: state => state.maintenance_history,
   getMaintenanceLoading: state => state.maintenance_loading,
+  getNotes: state => state.notes,
+  getNotesLoading: state => state.notes_loading,
   getOdometerHistory: state => state.odometer_history,
   getOdometerLoading: state => state.odometer_loading,
   getOrderStatus: state => state.order_status,
