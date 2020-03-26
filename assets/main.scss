@@ -72,3 +72,12 @@
     }
   }
 }
+
+/* Report config */
+.report {
+  .v-card__title,
+  .v-toolbar__title {
+    @extend .font-lato;
+    font-size: 1.5rem;
+  }
+}

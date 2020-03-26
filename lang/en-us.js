@@ -547,6 +547,7 @@ export default {
   maintenance_type: "Maintenance Type",
   management: "Management",
   manage_driver_order_settings: "Manage Driver Order Settings",
+  manage_drivers: "Manage Drivers",
   manage_selectors: "Manage Selectors",
   manage_selector_groups: "Manage Selector Groups",
   manage_your_cases: "Manage Your Cases",

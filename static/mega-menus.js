@@ -12,7 +12,7 @@ const account = {
         { key: 'fleet_policies', icon: 'mdi-database-settings', to: { path: '/account/fleet-policies' }, disabled: true },
         { key: 'fuel_authorization_profiles', icon: '', to: { path: '/account/fuel-auth-profiles' } },
         { key: 'manage_your_online_users', icon: '', to: { path: '/account/online-users' } },
-        { key: 'manage_your_drivers', icon: 'mdi-account-settings', to: { path: '/account/manage-your-drivers' } },
+        { key: 'manage_drivers', icon: 'mdi-account-settings', to: { path: '/account/manage-drivers' } },
         { key: 'manage_your_driver_fuel_pins', icon: '', to: { path: '/account/driver-fuel-pins' } },
         { key: 'manage_your_enotifications', icon: 'mdi-bell-ring', to: { path: '/account/manage-your-enotifications' } },
         { key: 'manage_your_cases', icon: '', to: { path: '/account/cases' } }
