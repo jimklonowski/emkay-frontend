@@ -31,8 +31,8 @@
 </template>
 
 <script>
-import DocumentsTable from '@/components/vehicle-dashboard/tables/DocumentsTable'
-import NotesTable from '@/components/vehicle-dashboard/tables/NotesTable'
+import DocumentsTable from '@/components/vehicle-dashboard/datatables/DocumentsTable'
+import NotesTable from '@/components/vehicle-dashboard/datatables/NotesTable'
 export default {
   name: 'VehicleDocumentsAndNotes',
   components: {
