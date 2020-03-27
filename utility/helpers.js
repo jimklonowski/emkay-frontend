@@ -26,3 +26,17 @@ export const formatCurrency = (value, minDigits = 2, maxDigits = 2) => {
  * @param {*} m time in millis
  */
 export const sleep = m => new Promise(resolve => setTimeout(resolve, m))
+
+/**
+ * Compute total by key for an array of objects
+ * @param {*} items array of objects
+ * @param {*} key key of object to sum
+ */
+export const computeTotalByKey = (items, key) => {
+  const total = items.reduce((a, b) => {
+    return {
+      [key]: a[key] + b[key]
+    }
+  })
+  return total[key]
+}

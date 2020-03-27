@@ -528,6 +528,7 @@ export default {
   maintenance_amount: "Maintenance Amount",
   maintenance_amount_billed: "Maintenance Amount Billed",
   maintenance_billing_code: "Maintenance Billing Code",
+  maintenance_by_category: "Maintenance By Category",
   maintenance_category: "Maintenance Category",
   maintenance_customer_po: "Maintenance Customer PO",
   maintenance_code: "Maintenance Code",

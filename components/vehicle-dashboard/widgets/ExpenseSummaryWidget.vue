@@ -88,10 +88,7 @@
                   :data="chartData"
                   :chart-data="chartData"
                   :options="{
-                    legend: {
-                      position: 'bottom',
-                      align: 'center'
-                    },
+                    legend: { position: 'bottom', align: 'center' },
                     tooltips: {
                       callbacks: {
                         label: (tooltipItem, data) => {

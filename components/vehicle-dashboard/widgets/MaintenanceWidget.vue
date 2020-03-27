@@ -50,16 +50,16 @@ export default {
           icon: 'mdi-tools',
           to: this.maintenanceRoute
         },
-        {
-          text: this.$i18n.t('cpm'),
-          icon: 'mdi-cash',
-          to: this.maintenanceCpmRoute
-        },
-        {
-          text: this.$i18n.t('cost_containment'),
-          icon: 'mdi-cash',
-          to: this.maintenanceCostContainmentRoute
-        },
+        // {
+        //   text: this.$i18n.t('cpm'),
+        //   icon: 'mdi-cash',
+        //   to: this.maintenanceCpmRoute
+        // },
+        // {
+        //   text: this.$i18n.t('cost_containment'),
+        //   icon: 'mdi-cash',
+        //   to: this.maintenanceCostContainmentRoute
+        // },
         {
           text: this.$i18n.t('evoucher'),
           icon: 'mdi-ticket-confirmation',
@@ -127,9 +127,9 @@ export default {
     start: vm => vm.$moment().subtract(vm.days, 'days').format('YYYY-MM-DD'),
     end: vm => vm.$moment().format('YYYY-MM-DD'),
     evoucherRoute: vm => vm.localePath({ path: `/vehicle/${vm.vehicle_number}/maintenance/evoucher` }),
-    maintenanceRoute: vm => vm.localePath({ path: `/vehicle/${vm.vehicle_number}/maintenance`, query: { start: vm.start, end: vm.end } }),
-    maintenanceCpmRoute: vm => vm.localePath({ path: `/vehicle/${vm.vehicle_number}/maintenance/cpm` }),
-    maintenanceCostContainmentRoute: vm => vm.localePath({ path: `/vehicle/${vm.vehicle_number}/maintenance/cost-containment` })
+    maintenanceRoute: vm => vm.localePath({ path: `/vehicle/${vm.vehicle_number}/maintenance`, query: { start: vm.start, end: vm.end } })
+    // maintenanceCpmRoute: vm => vm.localePath({ path: `/vehicle/${vm.vehicle_number}/maintenance/cpm` }),
+    // maintenanceCostContainmentRoute: vm => vm.localePath({ path: `/vehicle/${vm.vehicle_number}/maintenance/cost-containment` })
   },
   watch: {
     /**
