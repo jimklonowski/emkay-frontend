@@ -18,6 +18,15 @@ export default {
       driver_number: 'vehicle-dashboard/getDriverNumber'
     })
   },
-  layout: 'vehicle-dashboard'
+  layout: 'vehicle-dashboard',
+  head () {
+    const title = this.$i18n.t('edit_driver')
+    return {
+      title,
+      meta: [
+        { hid: 'og:description', property: 'og:description', content: title }
+      ]
+    }
+  }
 }
 </script>

@@ -26,6 +26,7 @@ const getDefaultState = () => ({
     driver_use_label_3: '',
     driver_use_label_4: ''
   },
+  login_messages: [],
   initialized: false,
   sidebar: false
 })
@@ -58,6 +59,7 @@ export const actions = {
       dispatch('fetchCustomLabels'),
       dispatch('fetchCenterHierarchy'),
       dispatch('fetchCenterLevels')
+      // dispatch('fetchLoginMessages')
     ]).finally(() => {
       commit('setInitialized', true)
     })
@@ -109,6 +111,23 @@ export const actions = {
     }
   },
   /**
+   * Fetch Login Messages
+   */
+  async fetchLoginMessages ({ commit }) {
+    try {
+      // const { data: { data, success, message } } = await this.$axios.get('/account/login-messages')
+      // if (!success) { throw new Error(message) }
+      await console.log('TODO: mocked login message data')
+      const data = [
+        { title: 'COVID-19 Update', text: 'EMKAY Coronavirus (COVID-19) Update (March 20)', link: '/coronavirus' },
+        { title: 'COVID-20 Update', text: 'EMKAY Coronavirus (COVID-20) Update (March 25)', link: '/coronavirus2' }
+      ]
+      commit('setLoginMessages', data)
+    } catch (error) {
+      console.error(`[vuex error][fetchLoginMessages]: ${error}`)
+    }
+  },
+  /**
    * Logout Action
    */
   async logout ({ commit }) {
@@ -137,6 +156,7 @@ export const mutations = {
     state.custom_labels = { ...state.custom_labels, ...data }
   },
   setInitialized: set('initialized'),
+  setLoginMessages: set('login_messages'),
   setSidebar: set('sidebar'),
   toggleSidebar: toggle('sidebar')
 }
@@ -149,6 +169,7 @@ export const getters = {
   getDriverLabels: state => Object.entries(state.custom_labels).map(([key, value]) => ({ key, value })).slice(5),
   getInitialized: state => state.initialized,
   getFlattenedCenters: state => flatten(state.centers),
+  getLoginMessages: state => state.login_messages,
   getSidebar: state => state.sidebar,
   isInitialized: state => state.initialized
 }

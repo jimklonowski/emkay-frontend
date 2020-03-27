@@ -19,6 +19,6 @@ export default {
     EmkayNavigation,
     EmkayFooter
   },
-  middleware: ['check-auth']
+  middleware: ['check-auth', 'account']
 }
 </script>

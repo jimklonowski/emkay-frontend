@@ -23,6 +23,7 @@ export default {
   }
 }
 </script>
+
 <style scoped>
 .welcome::before {
   content: "";
