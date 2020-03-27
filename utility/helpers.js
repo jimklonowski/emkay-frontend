@@ -37,6 +37,6 @@ export const computeTotalByKey = (items, key) => {
     return {
       [key]: Number(a[key]) + Number(b[key])
     }
-  })
+  }, { [key]: 0 })
   return total[key]
 }
