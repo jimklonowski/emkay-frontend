@@ -27,7 +27,7 @@
           fontFamily: 'Lato, sans-serif',
           fontSize: 16,
           fontStyle: 'normal',
-          text: $t('maintenance_by_category')
+          text: $t('fuel_expenses')
         }
       }"
       :styles="{
@@ -44,19 +44,26 @@ import { computeTotalByKey } from '@/utility/helpers'
 export default {
   computed: {
     ...mapGetters({
-      maintenance_history: 'vehicle-dashboard/getMaintenanceHistory'
+      fuel_history: 'vehicle-dashboard/getFuelHistory'
     }),
     chartData () {
       const data = []
       const backgroundColor = ['#4F286C', '#752870', '#99286E', '#B92D67', '#D33B5B', '#E6504B', '#F26B38', '#F68820']
-      // extract an array of maintenance categories from vuex:vehicle maintenanceHistory (filter removes duplicates)
-      const labels = this.maintenance_history
-        .map(x => { return x.maintenance_category })
-        .filter((item, index, array) => { return array.indexOf(item) === index })
+
+      // extract an array of fuel expense types from vuex:vehicle fuelHistory (filter removes duplicates)
+      const labels = this.fuel_history
+        .map(x => {
+          switch (x.product_type) {
+            case 'F': return `${this.$i18n.t('fuel')}: ${x.product}`
+            case 'O': return `${this.$i18n.t('other')}: ${x.product}`
+            default: return `${this.$i18n.t('misc')}`
+          }
+        })
+        .filter((value, index, self) => self.indexOf(value) === index)
 
       // compute total of the 'amount' of each category and push to data array
       labels.forEach(label => {
-        const filteredData = this.maintenance_history.filter(x => x.maintenance_category === label)
+        const filteredData = this.fuel_history.filter(x => label.startsWith(x.product_type) && label.endsWith(x.product))
         data.push(computeTotalByKey(filteredData, 'amount'))
       })
       console.dir(data)

@@ -406,6 +406,7 @@ export default {
   fuel_detail: "Fuel Detail",
   fuel_detail_report: "Fuel Detail Report",
   fuel_expense: "Fuel Expense",
+  fuel_expenses: "Fuel Expenses",
   fuel_history: "Fuel History",
   fuel_information: "Fuel Information",
   fuel_merchant_address: "Fuel Merchant Address",

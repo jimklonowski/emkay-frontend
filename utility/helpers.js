@@ -35,7 +35,7 @@ export const sleep = m => new Promise(resolve => setTimeout(resolve, m))
 export const computeTotalByKey = (items, key) => {
   const total = items.reduce((a, b) => {
     return {
-      [key]: a[key] + b[key]
+      [key]: Number(a[key]) + Number(b[key])
     }
   })
   return total[key]
