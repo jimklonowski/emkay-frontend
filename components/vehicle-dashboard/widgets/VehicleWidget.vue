@@ -91,7 +91,7 @@ export default {
         {
           text: this.$i18n.t('assign_new_driver'),
           icon: 'mdi-smart-card',
-          to: this.reassignDriverRoute
+          to: this.reassignVehicleRoute
         }
       ]
     },
@@ -232,7 +232,9 @@ export default {
           ]
         }
       ]
-    }
+    },
+    editVehicleRoute: vm => vm.localePath({ path: `/vehicle/${vm.vehicle_number}/edit-vehicle` }),
+    reassignVehicleRoute: vm => vm.localePath({ path: `/vehicle/${vm.vehicle_number}/reassign-vehicle` })
   }
 }
 </script>

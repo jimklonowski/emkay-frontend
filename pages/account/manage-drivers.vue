@@ -118,10 +118,11 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import { dialTo, emailTo } from '@/utility/helpers'
+import DriverDetailsForm from '@/components/driver/forms/DriverDetailsForm'
 export default {
   name: 'ManageDrivers',
   components: {
-    'driver-details-form': () => import(/* webpackChunkName: "DriverDetailsForm" */ '@/components/driver/DriverDetailsForm.vue')
+    DriverDetailsForm
   },
   data: () => ({
     dialog: false,
