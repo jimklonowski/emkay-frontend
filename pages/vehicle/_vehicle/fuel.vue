@@ -25,15 +25,15 @@
     </v-toolbar>
     <v-divider />
     <v-tabs-items v-model="tab">
-      <v-tab-item>
+      <v-tab-item eager>
         <fuel-expenses-pie-chart />
         <v-divider />
         <fuel-history-table />
       </v-tab-item>
-      <v-tab-item>
+      <v-tab-item eager>
         <fuel-cards-table />
       </v-tab-item>
-      <v-tab-item>
+      <v-tab-item eager>
         <fuel-authorization-profile-table />
       </v-tab-item>
     </v-tabs-items>
@@ -54,29 +54,41 @@ export default {
     FuelAuthorizationProfileTable,
     FuelCardsTable,
     FuelHistoryTable,
-
     'fuel-expenses-pie-chart': () => ({
       component: import(/* webpackChunkName: "FuelExpensesPieChart" */'@/components/vehicle-dashboard/charts/FuelExpensesPieChart.vue'),
       loading: ChartLoading,
       delay: 0
     })
   },
-  data: () => ({
-    tab: 0
-  }),
+  /**
+   * When navigating to the fuel page, if #hash in url, preselect tab.
+   * Note: Using asyncdata because mounted causes chartjs rendering issues when selecting non-chart tab
+   */
+  asyncData ({ app, route }) {
+    switch (route.hash.substr(1)) {
+      case 'cards': return { tab: 1 }
+      case 'profiles': return { tab: 2 }
+      case 'history':
+      default: return { tab: 0 }
+    }
+  },
   computed: {
+    /**
+     * Vuex Getters
+     */
     ...mapGetters({
       vehicle_number: 'vehicle-dashboard/getVehicleNumber'
     })
   },
+  /**
+   * Clear the query and hash on mounted
+   */
   mounted () {
-    // If #hash in url, parse and pre-select associated tab
-    if (this.$route.hash) {
-      const hash = Number(this.$route.hash.substr(1)) || 0
-      this.tab = hash
-      this.$router.replace({ hash: undefined })
-    }
+    this.$router.replace({ query: undefined, hash: undefined })
   },
+  /**
+   * Page meta
+   */
   head () {
     return {
       title: `${this.vehicle_number} - ${this.$i18n.t('fuel')}`,

@@ -195,10 +195,7 @@ export default {
    * Fetch fuel history
    */
   async fetch () {
-    await this.fetchFuelHistory({
-      ...this.query,
-      vehicle: this.vehicle_number
-    })
+    await this.fetchFuelHistory(this.query)
   },
   data: vm => ({
     end_dialog: false,
@@ -211,13 +208,16 @@ export default {
     end: vm.$route.query.end || vm.$moment().format('YYYY-MM-DD')
   }),
   computed: {
-    // Vuex Getters
+    /**
+     * Vuex Getters
+     */
     ...mapGetters({
       items: 'vehicle-dashboard/getFuelHistory',
-      loading: 'vehicle-dashboard/getFuelLoading',
       vehicle_number: 'vehicle-dashboard/getVehicleNumber'
     }),
-    // Datatable columns
+    /**
+     * Datatable columns
+     */
     columns () {
       return [
         'service_date',
@@ -230,7 +230,9 @@ export default {
         'amount'
       ]
     },
-    // Datatable headers
+    /**
+     * Datatable headers
+     */
     headers () {
       return [
         {
@@ -282,23 +284,22 @@ export default {
         }
       ]
     },
-    // Route Query Parameters
+    /**
+     * Request Parameters
+     */
     query () {
       return {
         start: this.start,
         end: this.end,
-        use_bill_date: this.use_bill_date
+        use_bill_date: this.use_bill_date,
+        vehicle: this.vehicle_number
       }
     }
   },
-  mounted () {
-    // clear query on mount
-    if (this.$route.query) {
-      this.$router.push({ query: undefined })
-    }
-  },
   methods: {
-    // Vuex Actions
+    /**
+     * Vuex Actions
+     */
     ...mapActions({
       fetchFuelHistory: 'vehicle-dashboard/fetchFuelHistory'
     })

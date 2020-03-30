@@ -44,6 +44,7 @@ export const actions = {
    */
   async init ({ commit, dispatch }, { vehicle }) {
     console.log(`[vuex][vehicle-dashboard]: called init for #${vehicle}`)
+    commit('reset')
     await Promise.all([
       dispatch('fetchVehicleDetails', { vehicle }),
       dispatch('fetchDriverDetails', { vehicle }),

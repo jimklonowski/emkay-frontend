@@ -27,9 +27,17 @@ export default {
     BaseDataTable,
     BaseWidget
   },
-  data: () => ({
+  /**
+   * Fetch Fuel Data when widget is mounted.
+   * See: https://nuxtjs.org/api/pages-fetch#nuxt-gt-2-12
+   */
+  async fetch () {
+    await this.fetchFuelHistory(this.query)
+  },
+  data: vm => ({
     days: 60,
-    icon: 'mdi-gas-station'
+    icon: 'mdi-gas-station',
+    title: vm.$i18n.t('fuel')
   }),
   computed: {
     /**
@@ -41,24 +49,24 @@ export default {
       vehicle_number: 'vehicle-dashboard/getVehicleNumber'
     }),
     /**
-     * Menu Actions
+     * Dropdown Menu Actions
      */
     actions () {
       return [
         {
           text: this.$i18n.t('fuel_history'),
           icon: 'mdi-gas-station',
-          to: this.fuelRoute
+          to: this.localePath({ path: `/vehicle/${this.vehicle_number}/fuel`, query: { start: this.start, end: this.end }, hash: '#history' })
         },
         {
           text: this.$i18n.t('fuel_cards'),
           icon: 'mdi-credit-card',
-          to: this.fuelCardRoute
+          to: this.localePath({ path: `/vehicle/${this.vehicle_number}/fuel`, hash: '#cards' })
         },
         {
           text: this.$i18n.t('fuel_authorization_profiles'),
           icon: 'mdi-clipboard-account',
-          to: this.fuelProfilesRoute
+          to: this.localePath({ path: `/vehicle/${this.vehicle_number}/fuel`, hash: '#profiles' })
         }
       ]
     },
@@ -117,6 +125,9 @@ export default {
         }
       ]
     },
+    /**
+     * Request Parameters
+     */
     query () {
       return {
         start: this.start,
@@ -125,33 +136,28 @@ export default {
         vehicle: this.vehicle_number
       }
     },
-    fuelRoute: vm => vm.localePath({ path: `/vehicle/${vm.vehicle_number}/fuel`, query: { start: vm.start, end: vm.end }, hash: '#0' }),
-    fuelCardRoute: vm => vm.localePath({ path: `/vehicle/${vm.vehicle_number}/fuel`, hash: '#1' }),
-    fuelProfilesRoute: vm => vm.localePath({ path: `/vehicle/${vm.vehicle_number}/fuel`, hash: '#2' }),
     start: vm => vm.$moment().subtract(vm.days, 'days').format('YYYY-MM-DD'),
-    end: vm => vm.$moment().format('YYYY-MM-DD'),
-    title: vm => vm.$i18n.t('fuel')
+    end: vm => vm.$moment().format('YYYY-MM-DD')
   },
   watch: {
     /**
      * Watch 'days' variable for changes, then re-fetch data.
      */
-    async days () {
-      await this.populateWidget(this.query)
-    }
+    days: '$fetch'
   },
-  /**
-   * Fetch Fuel Data when widget is mounted.
-   */
-  async mounted () {
-    await this.populateWidget(this.query)
+  activated () {
+    // Call fetch again if last fetch more than 30seconds ago
+    // See: https://nuxtjs.org/api/pages-fetch#using-code-activated-code-hook
+    // if (this.$fetchState.timestamp <= (Date.now() - 30000)) {
+    //   this.$fetch()
+    // }
   },
   methods: {
     /**
      * Vuex Actions
      */
     ...mapActions({
-      populateWidget: 'vehicle-dashboard/fetchFuelHistory'
+      fetchFuelHistory: 'vehicle-dashboard/fetchFuelHistory'
     })
   }
 }

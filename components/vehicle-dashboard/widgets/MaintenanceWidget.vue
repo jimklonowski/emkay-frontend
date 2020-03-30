@@ -32,11 +32,12 @@ export default {
    * See: https://nuxtjs.org/api/pages-fetch#nuxt-gt-2-12
    */
   async fetch () {
-    await this.populateWidget(this.query)
+    await this.fetchMaintenanceHistory(this.query)
   },
-  data: () => ({
+  data: vm => ({
     days: 60,
-    icon: 'mdi-tools'
+    icon: 'mdi-tools',
+    title: vm.$i18n.t('maintenance')
   }),
   computed: {
     /**
@@ -48,19 +49,19 @@ export default {
       vehicle_number: 'vehicle-dashboard/getVehicleNumber'
     }),
     /**
-     * Dropdown menu actions
+     * Dropdown Menu Actions
      */
     actions () {
       return [
         {
           text: this.$i18n.t('maintenance_history'),
           icon: 'mdi-tools',
-          to: this.maintenanceRoute
+          to: this.localePath({ path: `/vehicle/${this.vehicle_number}/maintenance`, query: { start: this.start, end: this.end }, hash: '#history' })
         },
         {
           text: this.$i18n.t('evoucher'),
           icon: 'mdi-ticket-confirmation',
-          to: this.evoucherRoute
+          to: this.localePath({ path: `/vehicle/${this.vehicle_number}/maintenance`, hash: '#evoucher' })
         }
       ]
     },
@@ -113,7 +114,7 @@ export default {
       ]
     },
     /**
-     * Data Query Parameters
+     * Request Query Parameters
      */
     query () {
       return {
@@ -123,11 +124,8 @@ export default {
         vehicle: this.vehicle_number
       }
     },
-    title: vm => vm.$i18n.t('maintenance'),
     start: vm => vm.$moment().subtract(vm.days, 'days').format('YYYY-MM-DD'),
-    end: vm => vm.$moment().format('YYYY-MM-DD'),
-    maintenanceRoute: vm => vm.localePath({ path: `/vehicle/${vm.vehicle_number}/maintenance`, query: { start: vm.start, end: vm.end }, hash: '#0' }),
-    evoucherRoute: vm => vm.localePath({ path: `/vehicle/${vm.vehicle_number}/maintenance`, hash: '#1' })
+    end: vm => vm.$moment().format('YYYY-MM-DD')
   },
   watch: {
     /**
@@ -147,7 +145,7 @@ export default {
      * Vuex Actions
      */
     ...mapActions({
-      populateWidget: 'vehicle-dashboard/fetchMaintenanceHistory'
+      fetchMaintenanceHistory: 'vehicle-dashboard/fetchMaintenanceHistory'
     })
   }
 }

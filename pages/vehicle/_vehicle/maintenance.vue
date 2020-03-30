@@ -21,13 +21,13 @@
     </v-toolbar>
     <v-divider />
     <v-tabs-items v-model="tab">
-      <v-tab-item>
+      <v-tab-item eager>
         <maintenance-category-pie-chart />
         <v-divider />
         <maintenance-history-table />
       </v-tab-item>
-      <v-tab-item>
-        evoucher
+      <v-tab-item eager>
+        <evoucher />
       </v-tab-item>
     </v-tabs-items>
   </v-card>
@@ -36,34 +36,48 @@
 <script>
 import { mapGetters } from 'vuex'
 import MaintenanceHistoryTable from '@/components/vehicle-dashboard/datatables/MaintenanceHistoryTable'
+import Evoucher from '@/components/vehicle-dashboard/panels/Evoucher.vue'
 import ChartLoading from '@/components/vehicle-dashboard/charts/ChartLoading'
 export default {
   name: 'VehicleMaintenance',
   layout: 'vehicle-dashboard',
   components: {
     MaintenanceHistoryTable,
-    // Evoucher,
+    Evoucher,
     'maintenance-category-pie-chart': () => ({
       component: import(/* webpackChunkName: "MaintenanceCategoryPieChart" */'@/components/vehicle-dashboard/charts/MaintenanceCategoryPieChart.vue'),
       loading: ChartLoading,
       delay: 0
     })
   },
-  data: () => ({
-    tab: 0
-  }),
+  /**
+   * When navigating to the maintenance page, if #hash in url, preselect tab.
+   * Note: Using asyncdata because mounted causes chartjs rendering issues when selecting non-chart tab
+   */
+  asyncData ({ app, route }) {
+    switch (route.hash.substr(1)) {
+      case 'evoucher': return { tab: 1 }
+      case 'history':
+      default: return { tab: 0 }
+    }
+  },
   computed: {
+    /**
+     * Vuex Getters
+     */
     ...mapGetters({
       vehicle_number: 'vehicle-dashboard/getVehicleNumber'
     })
   },
+  /**
+   * Clear the query and hash on mounted
+   */
   mounted () {
-    if (this.$route.hash) {
-      const hash = Number(this.$route.hash.substr(1)) || 0
-      this.tab = hash
-      this.$router.replace({ hash: undefined })
-    }
+    this.$router.replace({ query: undefined, hash: undefined })
   },
+  /**
+   * Page meta
+   */
   head () {
     return {
       title: `${this.vehicle_number} - ${this.$i18n.t('maintenance')}`,

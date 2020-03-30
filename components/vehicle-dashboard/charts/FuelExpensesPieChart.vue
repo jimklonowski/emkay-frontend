@@ -66,7 +66,6 @@ export default {
         const filteredData = this.fuel_history.filter(x => label.startsWith(x.product_type) && label.endsWith(x.product))
         data.push(computeTotalByKey(filteredData, 'amount'))
       })
-      console.dir(data)
       // return the chart data
       return {
         datasets: [{
