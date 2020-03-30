@@ -96,7 +96,7 @@ export default {
     title: vm => vm.$i18n.t('tolls'),
     start: vm => vm.$moment().subtract(vm.days, 'days').format('YYYY-MM-DD'),
     end: vm => vm.$moment().format('YYYY-MM-DD'),
-    tollRoute: vm => vm.localePath({ path: `/vehicle/${vm.vehicle_number}/toll`, query: { start: vm.start, end: vm.end } })
+    tollRoute: vm => vm.localePath({ path: `/vehicle/${vm.vehicle_number}/tolls`, query: { start: vm.start, end: vm.end } })
   },
   watch: {
     /**
