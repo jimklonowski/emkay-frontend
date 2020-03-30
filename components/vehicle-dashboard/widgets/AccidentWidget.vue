@@ -8,7 +8,7 @@
     <template #main>
       <base-data-table
         :days="days"
-        :loading="loading"
+        :loading="$fetchState.pending"
         :headers="headers"
         :items="items"
         :sort-by="['loss_date']"
@@ -27,9 +27,17 @@ export default {
     BaseDataTable,
     BaseWidget
   },
-  data: () => ({
+  /**
+   * Fetch Accident Data when widget is mounted.
+   * See: https://nuxtjs.org/api/pages-fetch#nuxt-gt-2-12
+   */
+  async fetch () {
+    await this.fetchAccidentHistory(this.query)
+  },
+  data: vm => ({
     days: 60,
-    icon: 'mdi-car-parking-lights'
+    icon: 'mdi-car-parking-lights',
+    title: vm.$i18n.t('accidents')
   }),
   computed: {
     /**
@@ -37,7 +45,6 @@ export default {
      */
     ...mapGetters({
       items: 'vehicle-dashboard/getAccidentHistory',
-      loading: 'vehicle-dashboard/getAccidentLoading',
       vehicle_number: 'vehicle-dashboard/getVehicleNumber'
     }),
     /**
@@ -48,7 +55,7 @@ export default {
         {
           text: this.$i18n.t('accident_history'),
           icon: 'mdi-car-parking-lights',
-          to: this.accidentRoute
+          to: this.localePath({ path: `/vehicle/${this.vehicle_number}/accident`, query: { start: this.start, end: this.end } })
         }
       ]
     },
@@ -100,6 +107,9 @@ export default {
         }
       ]
     },
+    /**
+     * Request Parameters
+     */
     query () {
       return {
         start: this.start,
@@ -107,31 +117,28 @@ export default {
         vehicle: this.vehicle_number
       }
     },
-    title: vm => vm.$i18n.t('accidents'),
     start: vm => vm.$moment().subtract(vm.days, 'days').format('YYYY-MM-DD'),
-    end: vm => vm.$moment().format('YYYY-MM-DD'),
-    accidentRoute: vm => vm.localePath({ path: `/vehicle/${vm.vehicle_number}/accident`, query: { start: vm.start, end: vm.end } })
+    end: vm => vm.$moment().format('YYYY-MM-DD')
   },
   watch: {
     /**
      * Watch 'days' variable for changes, then re-fetch data.
      */
-    async days () {
-      await this.populateWidget(this.query)
-    }
+    days: '$fetch'
   },
-  /**
-   * Fetch Accident Data when widget is mounted.
-   */
-  async mounted () {
-    await this.populateWidget(this.query)
+  activated () {
+    // Call fetch again if last fetch more than 30seconds ago
+    // See: https://nuxtjs.org/api/pages-fetch#using-code-activated-code-hook
+    // if (this.$fetchState.timestamp <= (Date.now() - 30000)) {
+    //   this.$fetch()
+    // }
   },
   methods: {
     /**
      * Vuex Actions
      */
     ...mapActions({
-      populateWidget: 'vehicle-dashboard/fetchAccidentHistory'
+      fetchAccidentHistory: 'vehicle-dashboard/fetchAccidentHistory'
     })
   }
 }

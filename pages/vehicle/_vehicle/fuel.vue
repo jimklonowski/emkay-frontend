@@ -84,7 +84,9 @@ export default {
    * Clear the query and hash on mounted
    */
   mounted () {
-    this.$router.replace({ query: undefined, hash: undefined })
+    if (Object.keys(this.$route.query).length > 0 || this.$route.hash.length > 0) {
+      this.$router.replace({ query: undefined, hash: undefined })
+    }
   },
   /**
    * Page meta

@@ -4,7 +4,6 @@ const getDefaultState = () => ({
   accident_history: [],
   accident_loading: false,
   billing_history: [],
-  billing_loading: false,
   documents: [],
   documents_loading: false,
   driver_details: {},
@@ -12,13 +11,10 @@ const getDefaultState = () => ({
   expense_summary: {},
   expense_summary_loading: false,
   fuel_history: [],
-  fuel_loading: false,
   inspection_history: [],
   inspection_loading: false,
   licensing_history: [],
-  licensing_loading: false,
   maintenance_history: [],
-  maintenance_loading: false,
   notes: [],
   notes_loading: false,
   odometer_history: [],
@@ -120,15 +116,12 @@ export const actions = {
    */
   async fetchBillingHistory ({ commit }, { start, end, vehicle }) {
     try {
-      commit('setBillingLoading', true)
       const { data: { success, message, data } } = await this.$axios.get('/vehicle/billing-history', { params: { start, end, vehicle } })
       if (!success) { throw new Error(message) }
       commit('setBillingHistory', data)
     } catch (error) {
       console.error(`[vuex error][fetchBillingHistory]: ${error.message}`)
       commit('setBillingHistory', [])
-    } finally {
-      commit('setBillingLoading', false)
     }
   },
   /**
@@ -139,15 +132,12 @@ export const actions = {
    */
   async fetchLicensingHistory ({ commit }, { start, end, vehicle }) {
     try {
-      commit('setLicensingLoading', true)
       const { data: { success, message, data } } = await this.$axios.get('/vehicle/licensing-history', { params: { start, end, vehicle } })
       if (!success) { throw new Error(message) }
       commit('setLicensingHistory', data)
     } catch (error) {
       console.error(`[vuex error][fetchLicensingHistory]: ${error.message}`)
       commit('setLicensingHistory', [])
-    } finally {
-      commit('setLicensingLoading', false)
     }
   },
   /**
@@ -159,15 +149,12 @@ export const actions = {
    */
   async fetchFuelHistory ({ commit }, { start, end, use_bill_date, vehicle }) {
     try {
-      commit('setFuelLoading', true)
       const { data: { success, message, data } } = await this.$axios.get('/vehicle/fuel-history', { params: { start, end, use_bill_date, vehicle } })
       if (!success) { throw new Error(message) }
       commit('setFuelHistory', data)
     } catch (error) {
       console.error(`[vuex error][fetchFuelHistory]: ${error.message}`)
       commit('setFuelHistory', [])
-    } finally {
-      commit('setFuelLoading', false)
     }
   },
   /**
@@ -179,15 +166,12 @@ export const actions = {
    */
   async fetchMaintenanceHistory ({ commit }, { start, end, use_bill_date, vehicle }) {
     try {
-      commit('setMaintenanceLoading', true)
       const { data: { success, message, data } } = await this.$axios.get('/vehicle/maintenance-history', { params: { start, end, use_bill_date, vehicle } })
       if (!success) { throw new Error(message) }
       commit('setMaintenanceHistory', data)
     } catch (error) {
       console.error(`[vuex error][fetchMaintenanceHistory]: ${error.message}`)
       commit('setMaintenanceHistory', [])
-    } finally {
-      commit('setMaintenanceLoading', false)
     }
   },
   /**
@@ -418,7 +402,6 @@ export const mutations = {
   setAccidentHistory: set('accident_history'),
   setAccidentLoading: set('accident_loading'),
   setBillingHistory: set('billing_history'),
-  setBillingLoading: set('billing_loading'),
   setDocuments: set('documents'),
   setDocumentsLoading: set('documents_loading'),
   setDriverDetails: set('driver_details'),
@@ -426,13 +409,10 @@ export const mutations = {
   setExpenseSummary: set('expense_summary'),
   setExpenseSummaryLoading: set('expense_summary_loading'),
   setFuelHistory: set('fuel_history'),
-  setFuelLoading: set('fuel_loading'),
   setInspectionHistory: set('inspection_history'),
   setInspectionLoading: set('inspection_loading'),
   setLicensingHistory: set('licensing_history'),
-  setLicensingLoading: set('licensing_loading'),
   setMaintenanceHistory: set('maintenance_history'),
-  setMaintenanceLoading: set('maintenance_loading'),
   setNotes: set('notes'),
   setNotesLoading: set('notes_loading'),
   setOdometerHistory: set('odometer_history'),
@@ -453,7 +433,6 @@ export const getters = {
   getAccidentHistory: state => state.accident_history,
   getAccidentLoading: state => state.accident_loading,
   getBillingHistory: state => state.billing_history,
-  getBillingLoading: state => state.billing_loading,
   getDocuments: state => state.documents,
   getDocumentsLoading: state => state.documents_loading,
   getDriverCityStateZip: state => [[state.driver_details.city, state.driver_details.state_province].filter(Boolean).join(', '), state.driver_details.postal_code].filter(Boolean).join(' '),
@@ -463,13 +442,10 @@ export const getters = {
   getExpenseSummary: state => state.expense_summary,
   getExpenseSummaryLoading: state => state.expense_summary_loading,
   getFuelHistory: state => state.fuel_history,
-  getFuelLoading: state => state.fuel_loading,
   getInspectionHistory: state => state.inspection_history,
   getInspectionLoading: state => state.inspection_loading,
   getLicensingHistory: state => state.licensing_history,
-  getLicensingLoading: state => state.licensing_loading,
   getMaintenanceHistory: state => state.maintenance_history,
-  getMaintenanceLoading: state => state.maintenance_loading,
   getNotes: state => state.notes,
   getNotesLoading: state => state.notes_loading,
   getOdometerHistory: state => state.odometer_history,

@@ -8,7 +8,7 @@
     <template #main>
       <base-data-table
         :days="days"
-        :loading="loading"
+        :loading="$fetchState.pending"
         :headers="headers"
         :items="items"
         :sort-by="['service_date']"
@@ -45,7 +45,6 @@ export default {
      */
     ...mapGetters({
       items: 'vehicle-dashboard/getMaintenanceHistory',
-      loading: 'vehicle-dashboard/getMaintenanceLoading',
       vehicle_number: 'vehicle-dashboard/getVehicleNumber'
     }),
     /**

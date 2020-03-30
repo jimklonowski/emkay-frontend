@@ -1,37 +1,35 @@
 <template>
   <v-skeleton-loader :loading="loading" type="table">
-    <v-sheet color="grey" class="pa-4">
-      <v-card shaped>
-        <v-card-title>{{ $t('invoice') }} {{ invoiceNumber }}</v-card-title>
-        <v-divider />
-        <v-card-text class="pa-0">
-          <v-data-table
-            :headers="headers"
-            :items="items"
-            :items-per-page="5"
-            :loading="loading"
-            :mobile-breakpoint="0"
-            :sort-by="['voucher_date']"
-            :sort-desc="[true]"
-            class="striped"
-            dense
-          >
-            <template #item.voucher_date="{ item }">
-              {{ item.voucher_date | date }}
-            </template>
+    <v-card shaped class="ma-4">
+      <v-card-title>{{ $t('invoice') }} {{ invoiceNumber }}</v-card-title>
+      <v-divider />
+      <v-card-text class="pa-0">
+        <v-data-table
+          :headers="headers"
+          :items="items"
+          :items-per-page="15"
+          :loading="loading"
+          :mobile-breakpoint="0"
+          :sort-by="['voucher_date']"
+          :sort-desc="[true]"
+          class="striped"
+          dense
+        >
+          <template #item.voucher_date="{ item }">
+            {{ item.voucher_date | date }}
+          </template>
 
-            <template #item.bill_date="{ item }">
-              {{ item.bill_date | date('YYYY-MM', 'MM/YYYY') }}
-            </template>
+          <template #item.bill_date="{ item }">
+            {{ item.bill_date | date('YYYY-MM', 'MM/YYYY') }}
+          </template>
 
-            <template #item.amount="{ item }">
-              {{ item.amount | currency }}
-            </template>
-          </v-data-table>
-        </v-card-text>
-        <!-- <v-card-actions /> -->
-      </v-card>
-    </v-sheet>
+          <template #item.amount="{ item }">
+            {{ item.amount | currency }}
+          </template>
+        </v-data-table>
+      </v-card-text>
+      <!-- <v-card-actions /> -->
+    </v-card>
   </v-skeleton-loader>
 </template>
 

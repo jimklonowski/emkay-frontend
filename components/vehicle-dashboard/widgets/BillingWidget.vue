@@ -8,7 +8,7 @@
     <template #main>
       <base-data-table
         :days="days"
-        :loading="loading"
+        :loading="$fetchState.pending"
         :headers="headers"
         :items="items"
         :sort-by="['invoice_number']"
@@ -27,9 +27,17 @@ export default {
     BaseDataTable,
     BaseWidget
   },
-  data: () => ({
+  /**
+   * Fetch Billing Data when widget is mounted.
+   * See: https://nuxtjs.org/api/pages-fetch#nuxt-gt-2-12
+   */
+  async fetch () {
+    await this.fetchBillingHistory(this.query)
+  },
+  data: vm => ({
     days: 60,
-    icon: 'mdi-cash-usd-outline'
+    icon: 'mdi-cash-usd-outline',
+    title: vm.$i18n.t('billing')
   }),
   computed: {
     /**
@@ -37,7 +45,6 @@ export default {
      */
     ...mapGetters({
       items: 'vehicle-dashboard/getBillingHistory',
-      loading: 'vehicle-dashboard/getBillingLoading',
       vehicle_number: 'vehicle-dashboard/getVehicleNumber'
     }),
     /**
@@ -48,7 +55,7 @@ export default {
         {
           text: this.$i18n.t('billing_history'),
           icon: this.icon,
-          to: this.billingRoute
+          to: this.localePath({ path: `/vehicle/${this.vehicle_number}/billing`, query: { start: this.start, end: this.end } })
         }
       ]
     },
@@ -100,53 +107,40 @@ export default {
         }
       ]
     },
+    /**
+     * Request Parameters
+     */
     query () {
       return {
-        start: this.start_date,
-        end: this.end_date,
+        start: this.start,
+        end: this.end,
         use_bill_date: false,
         vehicle: this.vehicle_number
       }
     },
-    title: vm => vm.$i18n.t('billing'),
     start: vm => vm.$moment().subtract(vm.days, 'days').format('YYYY-MM-DD'),
-    end: vm => vm.$moment().format('YYYY-MM-DD'),
-    billingRoute: vm => vm.localePath({ path: `/vehicle/${vm.vehicle_number}/billing`, query: { start: vm.start, end: vm.end } })
+    end: vm => vm.$moment().format('YYYY-MM-DD')
   },
   watch: {
     /**
      * Watch 'days' variable for changes, then re-fetch data.
      */
-    async days () {
-      await this.populateWidget(this.query)
-    }
+    days: '$fetch'
   },
-  /**
-   * Fetch Billing Data when widget is mounted.
-   */
-  async mounted () {
-    await this.populateWidget(this.query)
+  activated () {
+    // Call fetch again if last fetch more than 30seconds ago
+    // See: https://nuxtjs.org/api/pages-fetch#using-code-activated-code-hook
+    // if (this.$fetchState.timestamp <= (Date.now() - 30000)) {
+    //   this.$fetch()
+    // }
   },
   methods: {
     /**
      * Vuex Actions
      */
     ...mapActions({
-      populateWidget: 'vehicle-dashboard/fetchBillingHistory'
-    }),
-    /**
-     * Drilldown into billing history and select a given invoice.
-     */
-    invoiceRoute (invoice) {
-      return this.localePath({
-        path: `/vehicle/${this.vehicle_number}/billing`,
-        query: {
-          start: this.start_date,
-          end: this.end_date,
-          invoice
-        }
-      })
-    }
+      fetchBillingHistory: 'vehicle-dashboard/fetchBillingHistory'
+    })
   }
 }
 </script>

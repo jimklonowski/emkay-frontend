@@ -1,12 +1,13 @@
 <template>
-  <v-card :loading="loading" light outlined>
+  <v-card :loading="loading" outlined>
     <ValidationObserver ref="reportOdometer" v-slot="{ handleSubmit }">
       <v-form @submit.prevent="handleSubmit(submitOdometer)">
-        <v-card-title class="font-lato justify-center" v-text="$t('report_odometer')" />
+        <v-card-title class="font-lato" v-text="$t('report_odometer')" />
+        <v-divider />
         <v-card-text>
           <v-container>
             <v-row>
-              <v-col cols="6">
+              <v-col cols="12">
                 <v-dialog
                   ref="start_date"
                   v-model="start_dialog"
@@ -41,7 +42,7 @@
                   </v-date-picker>
                 </v-dialog>
               </v-col>
-              <v-col cols="6">
+              <v-col cols="12">
                 <v-dialog
                   ref="end_date"
                   v-model="end_dialog"
@@ -76,7 +77,7 @@
                   </v-date-picker>
                 </v-dialog>
               </v-col>
-              <v-col cols="6">
+              <v-col cols="12">
                 <ValidationProvider v-slot="{ errors, valid }" :name="$t('ending_odometer')" rules="required">
                   <v-text-field
                     v-model="ending_odometer"
@@ -91,7 +92,7 @@
                   />
                 </ValidationProvider>
               </v-col>
-              <v-col cols="6">
+              <v-col cols="12">
                 <ValidationProvider v-slot="{ errors, valid }" :name="$t('personal_mileage')" rules="required">
                   <v-text-field
                     v-model="personal_mileage"
