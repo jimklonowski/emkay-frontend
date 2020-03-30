@@ -27,6 +27,13 @@ export default {
     BaseDataTable,
     BaseWidget
   },
+  /**
+   * Fetch Maintenance Data when widget is mounted.
+   * See: https://nuxtjs.org/api/pages-fetch#nuxt-gt-2-12
+   */
+  async fetch () {
+    await this.populateWidget(this.query)
+  },
   data: () => ({
     days: 60,
     icon: 'mdi-tools'
@@ -50,16 +57,6 @@ export default {
           icon: 'mdi-tools',
           to: this.maintenanceRoute
         },
-        // {
-        //   text: this.$i18n.t('cpm'),
-        //   icon: 'mdi-cash',
-        //   to: this.maintenanceCpmRoute
-        // },
-        // {
-        //   text: this.$i18n.t('cost_containment'),
-        //   icon: 'mdi-cash',
-        //   to: this.maintenanceCostContainmentRoute
-        // },
         {
           text: this.$i18n.t('evoucher'),
           icon: 'mdi-ticket-confirmation',
@@ -115,6 +112,9 @@ export default {
         }
       ]
     },
+    /**
+     * Data Query Parameters
+     */
     query () {
       return {
         start: this.start,
@@ -126,24 +126,21 @@ export default {
     title: vm => vm.$i18n.t('maintenance'),
     start: vm => vm.$moment().subtract(vm.days, 'days').format('YYYY-MM-DD'),
     end: vm => vm.$moment().format('YYYY-MM-DD'),
-    evoucherRoute: vm => vm.localePath({ path: `/vehicle/${vm.vehicle_number}/maintenance/evoucher` }),
-    maintenanceRoute: vm => vm.localePath({ path: `/vehicle/${vm.vehicle_number}/maintenance`, query: { start: vm.start, end: vm.end } })
-    // maintenanceCpmRoute: vm => vm.localePath({ path: `/vehicle/${vm.vehicle_number}/maintenance/cpm` }),
-    // maintenanceCostContainmentRoute: vm => vm.localePath({ path: `/vehicle/${vm.vehicle_number}/maintenance/cost-containment` })
+    maintenanceRoute: vm => vm.localePath({ path: `/vehicle/${vm.vehicle_number}/maintenance`, query: { start: vm.start, end: vm.end }, hash: '#0' }),
+    evoucherRoute: vm => vm.localePath({ path: `/vehicle/${vm.vehicle_number}/maintenance`, hash: '#1' })
   },
   watch: {
     /**
      * Watch 'days' variable for changes, then re-fetch data.
      */
-    async days () {
-      await this.populateWidget(this.query)
-    }
+    days: '$fetch'
   },
-  /**
-   * Fetch Maintenance Data when widget is mounted.
-   */
-  async mounted () {
-    await this.populateWidget(this.query)
+  activated () {
+    // Call fetch again if last fetch more than 30seconds ago
+    // See: https://nuxtjs.org/api/pages-fetch#using-code-activated-code-hook
+    // if (this.$fetchState.timestamp <= (Date.now() - 30000)) {
+    //   this.$fetch()
+    // }
   },
   methods: {
     /**

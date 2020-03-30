@@ -125,9 +125,9 @@ export default {
         vehicle: this.vehicle_number
       }
     },
-    fuelRoute: vm => vm.localePath({ path: `/vehicle/${vm.vehicle_number}/fuel`, query: { start: vm.start, end: vm.end } }),
-    fuelCardRoute: vm => vm.localePath({ path: `/vehicle/${vm.vehicle_number}/fuel/fuel-cards` }),
-    fuelProfilesRoute: vm => vm.localePath({ path: `/vehicle/${vm.vehicle_number}/fuel/fuel-authorization-profiles` }),
+    fuelRoute: vm => vm.localePath({ path: `/vehicle/${vm.vehicle_number}/fuel`, query: { start: vm.start, end: vm.end }, hash: '#0' }),
+    fuelCardRoute: vm => vm.localePath({ path: `/vehicle/${vm.vehicle_number}/fuel`, hash: '#1' }),
+    fuelProfilesRoute: vm => vm.localePath({ path: `/vehicle/${vm.vehicle_number}/fuel`, hash: '#2' }),
     start: vm => vm.$moment().subtract(vm.days, 'days').format('YYYY-MM-DD'),
     end: vm => vm.$moment().format('YYYY-MM-DD'),
     title: vm => vm.$i18n.t('fuel')

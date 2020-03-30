@@ -141,6 +141,7 @@ export default {
   change_plate: "Change Plate",
   charge_code: "Charge Code",
   charging_locations: "Charging Locations",
+  charts: "Charts",
   city: "City",
   city_state_zip: "City / State / ZIP",
   claim: "Claim",
