@@ -106,14 +106,14 @@
     <v-divider />
 
     <!-- Report Content -->
-    <v-skeleton-loader :loading="loading" type="table">
+    <v-skeleton-loader :loading="$fetchState.pending" type="table">
       <v-data-table
         :dense="items && !!items.length"
         :footer-props="{ itemsPerPageOptions: [10, 25, 50, 100, -1] }"
         :headers="headers"
         :items="items"
         :items-per-page="25"
-        :loading="loading"
+        :loading="$fetchState.pending"
         :mobile-breakpoint="0"
         :search="search"
         :sort-by="['vehicle_number']"
@@ -199,7 +199,7 @@
 /**
  * Notes: Hydration errors occur if using v-if in template. Use v-show instead for SSR (since v-if actually removes the element).
  */
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { dialTo, emailTo } from '@/utility/helpers'
 import { downloadFields } from '@/mixins/datatables'
 
@@ -212,23 +212,26 @@ export default {
     'center-picker': () => import(/* webpackChunkName: "CenterPicker" */ '@/components/core/CenterPicker.vue')
   },
   mixins: [downloadFields],
-  async asyncData ({ store }) {
-    // Fetch report data
-    await store.dispatch('reports/fetchInventoryReport')
-    return {
-      centers_dialog: false,
-      centers_selected: [],
-      panels_expanded: [0],
-      search: '',
-      search_centers: ''
-    }
+  /**
+   * Async Fetch
+   */
+  async fetch () {
+    await this.fetchInventoryReport()
   },
+  data: vm => ({
+    centers_dialog: false,
+    centers_selected: [],
+    panels_expanded: [0],
+    search: '',
+    search_centers: '',
+    title: vm.$i18n.t('inventory_report')
+  }),
   computed: {
-    // Mapped Vuex Getters
+    /**
+     * Vuex Getters
+     */
     ...mapGetters({
-      items: 'reports/getData',
-      error: 'reports/getError',
-      loading: 'reports/getLoading'
+      items: 'reports/getData'
     }),
     // Downloaded csv contains these columns.
     columns () {
@@ -668,13 +671,21 @@ export default {
           class: 'report-column'
         }
       ]
-    },
-    title: vm => vm.$i18n.t('inventory_report')
+    }
   },
   methods: {
+    /**
+     * Vuex Actions
+     */
+    ...mapActions({
+      fetchInventoryReport: 'reports/fetchInventoryReport'
+    }),
     dialTo,
     emailTo
   },
+  /**
+   * Page Meta
+   */
   head () {
     return {
       title: this.title,

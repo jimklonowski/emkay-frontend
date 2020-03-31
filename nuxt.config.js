@@ -234,7 +234,7 @@ export default {
   ** Build configuration
   */
   build: {
-    transpile: ['vee-validate/dist/rules', 'vuetify/lib'],
+    transpile: ['vee-validate/dist/rules', 'vuetify/lib', 'lodash.isequal'],
     /*
     ** You can extend webpack config here
     */

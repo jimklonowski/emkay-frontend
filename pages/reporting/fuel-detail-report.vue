@@ -171,7 +171,7 @@
                 <v-switch
                   v-model="use_bill_date"
                   :label="$t(`use_bill_date`)"
-                  :loading="loading"
+                  :loading="$fetchState.pending"
                   :false-value="false"
                   :true-value="true"
                   class="mt-1"
@@ -187,14 +187,14 @@
     <v-divider />
 
     <!-- Report Content -->
-    <v-skeleton-loader :loading="loading" type="table">
+    <v-skeleton-loader :loading="$fetchState.pending" type="table" transition="fade-transition">
       <v-data-table
         :dense="items && !!items.length"
         :footer-props="{ itemsPerPageOptions: [10, 25, 50, 100, -1] }"
         :headers="headers"
         :items="items"
         :items-per-page="25"
-        :loading="loading"
+        :loading="$fetchState.pending"
         :mobile-breakpoint="0"
         :search="search"
         :sort-by="['service_date']"
@@ -267,68 +267,52 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { downloadFields } from '@/mixins/datatables'
 import { updateQuery } from '@/mixins/routing'
 /**
  * Fuel Detail Report
  * When a date filter changes, a call is made to updateQuery which updates the route's query parameters (?start=2019-11&end=2019-11&...)
- * watchQuery listens for changes in the query parameters and onchange triggers all component methods (i.e. asyncData which will re-request data with new parameters)
+ * When $route.query changes, $fetch is called with the updated parameters
  */
 export default {
   name: 'FuelDetailReport',
   components: {
     'center-picker': () => import(/* webpackChunkName: "CenterPicker" */ '@/components/core/CenterPicker.vue')
   },
-  /**
-   * Mixins
-   * https://vuejs.org/v2/guide/mixins.html
-   * Mixins are a flexible way to distribute reusable functionalities for Vue components. A mixin object can contain any component options.
-   * When a component uses a mixin, all options in the mixin will be “mixed” into the component’s own options.
-   */
   mixins: [downloadFields, updateQuery],
-
   /**
-   * asyncData is called every time before loading the page component and is only available for such.
-   * The result from asyncData will be merged with data.
-   * https://nuxtjs.org/guide/async-data
+   * Async Fetch
+   * See: https://nuxtjs.org/api/pages-fetch#nuxt-gt-2-12
    */
-  async asyncData ({ $moment, query, store }) {
-    // if no date params in query, then use 30day period ending with today
-    const report_length = 30
-    const start = query.start || $moment().subtract(report_length, 'days').format('YYYY-MM-DD')
-    const end = query.end || $moment().format('YYYY-MM-DD')
-    const use_bill_date = query.use_bill_date || false
-
-    // Fetch the report data using the above filters
-    await store.dispatch('reports/fetchFuelDetailReport', { start, end, use_bill_date })
-
-    // Return the report parameters so they are merged with the data() object
-    return {
-      centers_dialog: false,
-      centers_selected: [],
-      start_dialog: false,
-      start,
-      end_dialog: false,
-      end,
-      panels_expanded: [0],
-      search: '',
-      search_centers: '',
-      use_bill_date
-    }
+  async fetch () {
+    await this.fetchFuelDetailReport(this.query)
   },
-  /**
-   * Computed Properties
-   * https://vuejs.org/v2/api/#computed
-   */
+  fetchOnServer: false, // https://nuxtjs.org/api/pages-fetch#options
+  data: vm => ({
+    start_dialog: false,
+    end_dialog: false,
+    centers_dialog: false,
+    centers_selected: [],
+    panels_expanded: [0],
+    search: '',
+    search_centers: '',
+    title: vm.$i18n.t('fuel_detail_report'),
+
+    start: vm.$route.query.start || vm.$moment().subtract(30, 'days').format('YYYY-MM-DD'),
+    end: vm.$route.query.end || vm.$moment().format('YYYY-MM-DD'),
+    use_bill_date: vm.$route.query.use_bill_date || false
+  }),
   computed: {
-    // Mapped Vuex Getters
+    /**
+     * Vuex Getters
+     */
     ...mapGetters({
-      items: 'reports/getData',
-      error: 'reports/getError',
-      loading: 'reports/getLoading'
+      items: 'reports/getData'
     }),
-    // Downloaded csv contains these columns.
+    /**
+     * Datatable columns
+     */
     columns () {
       return [
         'vehicle_number',
@@ -385,7 +369,9 @@ export default {
         'voucher'
       ]
     },
-    // Datatable contains these headers.
+    /**
+     * Datatable headers
+     */
     headers () {
       return [
         {
@@ -653,21 +639,34 @@ export default {
         }
       ]
     },
-    // Query parameters
+    /**
+     * Query parameters
+     */
     query () {
       return {
         start: this.start,
         end: this.end,
         use_bill_date: this.use_bill_date
       }
-    },
-    title: vm => vm.$i18n.t('fuel_detail_report')
+    }
   },
-
   /**
-   * Set specific <meta> tags for the current page.
-   * Nuxt.js uses vue-meta to update the headers and html attributes of your application.
-   * https://nuxtjs.org/api/pages-head */
+   * Re-fetch data on query change
+   */
+  watch: {
+    '$route.query': '$fetch'
+  },
+  methods: {
+    /**
+     * Vuex Actions
+     */
+    ...mapActions({
+      fetchFuelDetailReport: 'reports/fetchFuelDetailReport'
+    })
+  },
+  /**
+   * Page Meta
+   */
   head () {
     return {
       title: this.title,
@@ -675,12 +674,6 @@ export default {
         { hid: 'og:description', property: 'og:description', content: this.title }
       ]
     }
-  },
-
-  /**
-   * Watch query strings and execute component methods on change (asyncData, fetch, validate, layout, ...)
-   * https://nuxtjs.org/api/pages-watchquery
-   */
-  watchQuery: ['start', 'end', 'use_bill_date']
+  }
 }
 </script>
