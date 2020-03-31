@@ -40,3 +40,40 @@ export const computeTotalByKey = (items, key) => {
   }, { [key]: 0 })
   return total[key]
 }
+
+/**
+ * Multifilter
+ * https://gist.github.com/jherax/f11d669ba286f21b7a2dcff69621eb72
+ */
+export const multiFilter = (item, condition) => {
+  const filterKeys = Object.keys(condition)
+  return item.filter((eachObj) => {
+    return filterKeys.every(eachKey => {
+      if (!condition[eachKey].length) {
+        return true // passing an empty filter means that filter is ignored
+      }
+      // this works, but is not case insensitive
+      // return Array.prototype.includes.call(condition[eachKey], eachObj[eachKey].toString().toLowerCase())
+      const lowercaseArray = condition[eachKey].map(x => x.toString().toLowerCase())
+      return Array.prototype.includes.call(lowercaseArray, eachObj[eachKey].toString().toLowerCase())
+    })
+  })
+}
+
+/**
+ * Object key comparator function
+ */
+export const compareObjectByKey = (key, order = 'asc') => {
+  return function innerSort (a, b) {
+    // eslint-disable-next-line no-prototype-builtins
+    if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) {
+      // property doesn't exist on either object
+      return 0
+    }
+    const varA = (typeof a[key] === 'string') ? a[key].toUpperCase() : a[key]
+    const varB = (typeof b[key] === 'string') ? b[key].toUpperCase() : b[key]
+    let comparison = 0
+    if (varA > varB) { comparison = 1 } else if (varA < varB) { comparison = -1 }
+    return ((order === 'desc') ? (comparison * -1) : comparison)
+  }
+}
