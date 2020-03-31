@@ -20,10 +20,10 @@
     </v-toolbar>
     <v-divider />
     <v-tabs-items v-model="tab">
-      <v-tab-item eager>
+      <v-tab-item>
         <documents-table />
       </v-tab-item>
-      <v-tab-item eager>
+      <v-tab-item>
         <notes-table />
       </v-tab-item>
     </v-tabs-items>
@@ -31,13 +31,20 @@
 </template>
 
 <script>
-import DocumentsTable from '@/components/vehicle-dashboard/datatables/DocumentsTable'
-import NotesTable from '@/components/vehicle-dashboard/datatables/NotesTable'
+import DatatableLoading from '@/components/vehicle-dashboard/datatables/DatatableLoading'
 export default {
   name: 'VehicleDocumentsAndNotes',
   components: {
-    DocumentsTable,
-    NotesTable
+    'documents-table': () => ({
+      component: import(/* webpackChunkName: "DocumentsTable" */'@/components/vehicle-dashboard/datatables/DocumentsTable.vue'),
+      loading: DatatableLoading,
+      delay: 0
+    }),
+    'notes-table': () => ({
+      component: import(/* webpackChunkName: "NotesTable" */'@/components/vehicle-dashboard/datatables/NotesTable.vue'),
+      loading: DatatableLoading,
+      delay: 0
+    })
   },
   layout: 'vehicle-dashboard',
   data: () => ({
