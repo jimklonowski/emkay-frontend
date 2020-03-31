@@ -175,14 +175,13 @@
     <v-divider />
 
     <!-- Report Content -->
-    <v-skeleton-loader :loading="loading" type="table">
+    <v-skeleton-loader :loading="$fetchState.pending" type="table">
       <v-data-table
-        :dense="items && !!items.length"
         :footer-props="{ itemsPerPageOptions: [10, 25, 50, 100, -1] }"
         :headers="headers"
         :items="items"
         :items-per-page="25"
-        :loading="loading"
+        :loading="$fetchState.pending"
         :mobile-breakpoint="0"
         :search="search"
         :sort-by="['vehicle_number']"
@@ -208,7 +207,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { downloadFields } from '@/mixins/datatables'
 import { updateQuery } from '@/mixins/routing'
 
@@ -221,29 +220,38 @@ export default {
     'center-picker': () => import(/* webpackChunkName: "CenterPicker" */ '@/components/core/CenterPicker.vue')
   },
   mixins: [downloadFields, updateQuery],
-  async asyncData ({ $moment, query, store }) {
-    const report_length = 30
-    const start = query.start || $moment().subtract(report_length, 'days').format('YYYY-MM-DD')
-    const end = query.end || $moment().format('YYYY-MM-DD')
-    await store.dispatch('reports/fetchExpenseDetailReport', { start, end })
-    return {
-      centers_dialog: false,
-      centers_selected: [],
-      start_dialog: false,
-      start,
-      end_dialog: false,
-      end,
-      panels_expanded: [0],
-      search: '',
-      search_centers: ''
-    }
+  /**
+   * Async Fetch
+   * See: https://nuxtjs.org/api/pages-fetch#nuxt-gt-2-12
+   */
+  async fetch () {
+    await this.fetchExpenseDetailReport(this.query)
   },
+  fetchOnServer: false, // https://nuxtjs.org/api/pages-fetch#options
+  data: vm => ({
+    start_dialog: false,
+    end_dialog: false,
+    centers_dialog: false,
+    centers_selected: [],
+    panels_expanded: [0],
+    search: '',
+    search_centers: '',
+    title: vm.$i18n.t('expense_detail_report'),
+
+    start: vm.$route.query.start || vm.$moment().subtract(30, 'days').format('YYYY-MM-DD'),
+    end: vm.$route.query.end || vm.$moment().format('YYYY-MM-DD')
+  }),
   computed: {
+    /**
+     * Vuex Getters
+     */
     ...mapGetters({
       items: 'reports/getData',
-      error: 'reports/getError',
-      loading: 'reports/getLoading'
+      error: 'reports/getError'
     }),
+    /**
+     * Datatable columns
+     */
     columns () {
       return [
         'vehicle_number',
@@ -274,6 +282,9 @@ export default {
         // ...
       ]
     },
+    /**
+     * Datatable headers
+     */
     headers () {
       return [
         {
@@ -374,15 +385,33 @@ export default {
         }
       ]
     },
+    /**
+     * Query Parameters
+     */
     query () {
       return {
         start: this.start,
-        end: this.end,
-        use_bill_date: this.use_bill_date
+        end: this.end
       }
-    },
-    title: vm => vm.$i18n.t('expense_detail_report')
+    }
   },
+  /**
+   * Re-fetch data on query change
+   */
+  watch: {
+    '$route.query': '$fetch'
+  },
+  methods: {
+    /**
+     * Vuex Actions
+     */
+    ...mapActions({
+      fetchExpenseDetailReport: 'reports/fetchExpenseDetailReport'
+    })
+  },
+  /**
+   * Page Meta
+   */
   head () {
     return {
       title: this.title,

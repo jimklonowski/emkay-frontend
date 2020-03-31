@@ -175,14 +175,13 @@
     <v-divider />
 
     <!-- Report Content -->
-    <v-skeleton-loader :loading="loading" type="table">
+    <v-skeleton-loader :loading="$fetchState.pending" type="table">
       <v-data-table
-        :dense="items && !!items.length"
         :footer-props="{ itemsPerPageOptions: [10, 25, 50, 100, -1] }"
         :headers="headers"
         :items="items"
         :items-per-page="25"
-        :loading="loading"
+        :loading="$fetchState.pending"
         :mobile-breakpoint="0"
         :search="search"
         :sort-by="['vehicle_number']"
@@ -208,7 +207,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { downloadFields } from '@/mixins/datatables'
 import { updateQuery } from '@/mixins/routing'
 /**
@@ -220,30 +219,39 @@ export default {
     'center-picker': () => import(/* webpackChunkName: "CenterPicker" */ '@/components/core/CenterPicker.vue')
   },
   mixins: [downloadFields, updateQuery],
-  async asyncData ({ $moment, query, store }) {
-    const report_length = 30
-    const start = query.start || $moment().subtract(report_length, 'days').format('YYYY-MM-DD')
-    const end = query.end || $moment().format('YYYY-MM-DD')
-    await store.dispatch('reports/fetchSoldVehicleAnalysisReport', { start, end })
-    return {
-      centers_dialog: false,
-      centers_selected: [],
-      start_dialog: false,
-      start,
-      end_dialog: false,
-      end,
-      panels_expanded: [0],
-      search: '',
-      search_centers: ''
-    }
+  /**
+   * Async Fetch
+   * See: https://nuxtjs.org/api/pages-fetch#nuxt-gt-2-12
+   */
+  async fetch () {
+    await this.fetchSoldVehicleAnalysisReport(this.query)
   },
+  fetchOnServer: false, // https://nuxtjs.org/api/pages-fetch#options
+  data: vm => ({
+    start_dialog: false,
+    end_dialog: false,
+    centers_dialog: false,
+    centers_selected: [],
+    panels_expanded: [0],
+    search: '',
+    search_centers: '',
+    title: vm.$i18n.t('sold_vehicle_analysis_report'),
 
+    start: vm.$route.query.start || vm.$moment().subtract(30, 'days').format('YYYY-MM-DD'),
+    end: vm.$route.query.end || vm.$moment().format('YYYY-MM-DD'),
+    use_bill_date: vm.$route.query.use_bill_date || false
+  }),
   computed: {
+    /**
+     * Vuex Getters
+     */
     ...mapGetters({
       items: 'reports/getData',
-      error: 'reports/getError',
-      loading: 'reports/getLoading'
+      error: 'reports/getError'
     }),
+    /**
+     * Datatable columns
+     */
     columns () {
       return [
         'vehicle_number',
@@ -283,6 +291,9 @@ export default {
         'driver_name'
       ]
     },
+    /**
+     * Datatable headers
+     */
     headers () {
       return [
         {
@@ -437,19 +448,33 @@ export default {
         }
       ]
     },
+    /**
+     * Query Parameters
+     */
     query () {
       return {
         start: this.start,
         end: this.end
       }
-    },
-    title: vm => vm.$i18n.t('sold_vehicle_analysis_report')
+    }
   },
-
   /**
-   * Set specific <meta> tags for the current page.
-   * Nuxt.js uses vue-meta to update the headers and html attributes of your application.
-   * https://nuxtjs.org/api/pages-head */
+   * Re-fetch data on query change
+   */
+  watch: {
+    '$route.query': '$fetch'
+  },
+  methods: {
+    /**
+     * Vuex Actions
+     */
+    ...mapActions({
+      fetchSoldVehicleAnalysisReport: 'reports/fetchSoldVehicleAnalysisReport'
+    })
+  },
+  /**
+   * Page Meta
+   */
   head () {
     return {
       title: this.title,
@@ -457,12 +482,6 @@ export default {
         { hid: 'og:description', property: 'og:description', content: this.title }
       ]
     }
-  },
-
-  /**
-   * Watch query strings and execute component methods on change (asyncData, fetch, validate, layout, ...)
-   * https://nuxtjs.org/api/pages-watchquery
-   */
-  watchQuery: ['start', 'end']
+  }
 }
 </script>

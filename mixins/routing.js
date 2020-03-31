@@ -20,3 +20,26 @@ export const updateQuery = {
     }
   }
 }
+
+/**
+ * Using Nuxt 2.12 Component Fetch, watches route.query and calls $fetch on change
+ */
+export const fetchOnQueryChange = {
+  watch: {
+    '$route.query': '$fetch'
+  }
+}
+
+/**
+ * Page title Meta
+ */
+export const pageTitleMeta = {
+  head () {
+    return {
+      title: this.title,
+      meta: [
+        { hid: 'og:description', property: 'og:description', content: this.title }
+      ]
+    }
+  }
+}

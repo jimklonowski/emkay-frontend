@@ -175,14 +175,13 @@
     <v-divider />
 
     <!-- Report Content -->
-    <v-skeleton-loader :loading="loading" type="table">
+    <v-skeleton-loader :loading="$fetchState.pending" type="table" transition="fade-transition">
       <v-data-table
-        :dense="items && !!items.length"
         :footer-props="{ itemsPerPageOptions: [10, 25, 50, 100, -1] }"
         :headers="headers"
         :items="items"
         :items-per-page="25"
-        :loading="loading"
+        :loading="$fetchState.pending"
         :mobile-breakpoint="0"
         :search="search"
         :sort-by="['vehicle_number']"
@@ -261,7 +260,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { downloadFields } from '@/mixins/datatables'
 import { updateQuery } from '@/mixins/routing'
 
@@ -273,48 +272,35 @@ export default {
   components: {
     'center-picker': () => import(/* webpackChunkName: "CenterPicker" */ '@/components/core/CenterPicker.vue')
   },
-  /**
-   * Mixins
-   * https://vuejs.org/v2/guide/mixins.html
-   * Mixins are a flexible way to distribute reusable functionalities for Vue components. A mixin object can contain any component options.
-   * When a component uses a mixin, all options in the mixin will be “mixed” into the component’s own options.
-   */
   mixins: [downloadFields, updateQuery],
-
-  /**
-   * asyncData is called every time before loading the page component and is only available for such.
-   * The result from asyncData will be merged with data.
-   * https://nuxtjs.org/guide/async-data
-   */
-  async asyncData ({ $moment, query, store }) {
-    const report_length = 30
-    const start = query.start || $moment().subtract(report_length, 'days').format('YYYY-MM-DD')
-    const end = query.end || $moment().format('YYYY-MM-DD')
-    await store.dispatch('reports/fetchOrderStatusReport', { start, end })
-    return {
-      centers_dialog: false,
-      centers_selected: [],
-      start_dialog: false,
-      start,
-      end_dialog: false,
-      end,
-      panels_expanded: [0],
-      search: '',
-      search_centers: ''
-    }
+  async fetch () {
+    await this.fetchOrderStatusReport(this.query)
   },
-  /**
-   * Computed Properties
-   * https://vuejs.org/v2/api/#computed
-   */
+  fetchOnServer: false,
+  data: vm => ({
+    start_dialog: false,
+    end_dialog: false,
+    centers_dialog: false,
+    centers_selected: [],
+    panels_expanded: [0],
+    search: '',
+    search_centers: '',
+    title: vm.$i18n.t('order_status_report'),
+
+    start: vm.$route.query.start || vm.$moment().subtract(30, 'days').format('YYYY-MM-DD'),
+    end: vm.$route.query.end || vm.$moment().format('YYYY-MM-DD')
+  }),
   computed: {
-    // Mapped Vuex Getters
+    /**
+     * Vuex Getters
+     */
     ...mapGetters({
       items: 'reports/getData',
-      error: 'reports/getError',
-      loading: 'reports/getLoading'
+      error: 'reports/getError'
     }),
-    // Downloaded CSV contains these columns.
+    /**
+     * Datatable columns
+     */
     columns () {
       return [
         'vehicle_number',
@@ -364,7 +350,9 @@ export default {
         'in_service_date'
       ]
     },
-    // Datatable contains these headers.
+    /**
+     * Datatable headers
+     */
     headers () {
       return [
         {
@@ -598,19 +586,33 @@ export default {
         }
       ]
     },
+    /**
+     * Query Parameters
+     */
     query () {
       return {
         start: this.start,
         end: this.end
       }
-    },
-    title: vm => vm.$i18n.t('order_status_report')
+    }
   },
-
   /**
-   * Set specific <meta> tags for the current page.
-   * Nuxt.js uses vue-meta to update the headers and html attributes of your application.
-   * https://nuxtjs.org/api/pages-head */
+   * Re-fetch data on query change
+   */
+  watch: {
+    '$route.query': '$fetch'
+  },
+  methods: {
+    /**
+     * Vuex Actions
+     */
+    ...mapActions({
+      fetchOrderStatusReport: 'reports/fetchOrderStatusReport'
+    })
+  },
+  /**
+   * Page Meta
+   */
   head () {
     return {
       title: this.title,
@@ -618,7 +620,6 @@ export default {
         { hid: 'og:description', property: 'og:description', content: this.title }
       ]
     }
-  },
-  watchQuery: ['start', 'end']
+  }
 }
 </script>

@@ -108,7 +108,6 @@
     <!-- Report Content -->
     <v-skeleton-loader :loading="$fetchState.pending" type="table">
       <v-data-table
-        :dense="items && !!items.length"
         :footer-props="{ itemsPerPageOptions: [10, 25, 50, 100, -1] }"
         :headers="headers"
         :items="items"
@@ -231,7 +230,8 @@ export default {
      * Vuex Getters
      */
     ...mapGetters({
-      items: 'reports/getData'
+      items: 'reports/getData',
+      error: 'reports/getError'
     }),
     // Downloaded csv contains these columns.
     columns () {
