@@ -2,7 +2,7 @@ const account = {
   title: 'account',
   subtitle: 'configure_your_fleet_settings',
   icon: 'mdi-apps',
-  // to: { path: '/account' },
+  to: { path: '/account' },
   categories: [
     {
       key: 'fleet',
@@ -32,7 +32,7 @@ const account = {
       key: 'tools',
       icon: '',
       items: [
-        { key: 'centers', icon: 'mdi-test-tube', to: { path: '/account/centers' } },
+        // { key: 'centers', icon: 'mdi-test-tube', to: { path: '/account/centers' } },
         { key: 'critical_alerts', icon: 'mdi-bell-ring', to: { path: '/account/critical-alerts' } },
         { key: 'ev_charging_locations', icon: 'mdi-car-electric', to: { path: '/account/charging-locations' } },
         { key: 'fleet_navigator', icon: 'mdi-compass', to: { path: '/account/fleet-navigator' } },
@@ -48,7 +48,7 @@ const ordering = {
   title: 'ordering',
   subtitle: 'ordering_subtitle',
   icon: 'mdi-timetable',
-  // to: { path: '/ordering' },
+  to: { path: '/ordering' },
   categories: [
     {
       key: 'orders',
@@ -83,7 +83,7 @@ const reporting = {
   title: 'reporting',
   subtitle: 'reporting_subtitle',
   icon: 'mdi-file-chart-outline',
-  // to: { path: '/reporting' },
+  to: { path: '/reporting' },
   categories: [
     {
       key: 'fleet',

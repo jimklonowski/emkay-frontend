@@ -18,6 +18,8 @@ const getDefaultState = () => ({
   rental_history: [],
   sale_info: {},
   toll_history: [],
+  transport_storage_history: [],
+  transport_storage_quote: {},
   vehicle_details: {},
   vehicle_number: null,
   violation_history: []
@@ -280,6 +282,35 @@ export const actions = {
     }
   },
   /**
+   * Fetch Transport/Storage History
+   * @param {*} vehicle Vehicle Number
+   */
+  async fetchTransportStorageHistory ({ commit }, { vehicle }) {
+    try {
+      const { data: { success, message, data } } = await this.$axios.get('/vehicle/transport-storage-history', { params: { vehicle } })
+      if (!success) { throw new Error(message) }
+      commit('setTransportStorageHistory', data)
+    } catch (error) {
+      console.error(`[vuex error][fetchTransportStorageHistory]: ${error.message}`)
+      commit('setTransportStorageHistory', [])
+    }
+  },
+  /**
+   * Fetch Transport/Storage Quote
+   * @param {*} payload quote parameters
+   */
+  async fetchTransportStorageQuote ({ commit }, payload) {
+    try {
+      const { data: { success, message, data } } = await this.$axios.post('/vehicle/transport-storage-quote', payload)
+      if (!success) { throw new Error(message) }
+      commit('setTransportStorageQuote', data)
+    } catch (error) {
+      console.error(`[vuex error][fetchTransportStorageQuote]: ${error.message}`)
+      commit('setTransportStorageQuote', {})
+      throw new Error(error)
+    }
+  },
+  /**
    * Fetch Vehicle Documents
    * @param {*} vehicle Vehicle Number
    */
@@ -384,6 +415,8 @@ export const mutations = {
   setRentalHistory: set('rental_history'),
   setSaleInfo: set('sale_info'),
   setTollHistory: set('toll_history'),
+  setTransportStorageHistory: set('transport_storage_history'),
+  setTransportStorageQuote: set('transport_storage_quote'),
   setVehicleDetails: set('vehicle_details'),
   setVehicleNumber: set('vehicle_number'),
   setViolationHistory: set('violation_history')
@@ -409,6 +442,8 @@ export const getters = {
   getRentalHistory: state => state.rental_history,
   getSaleInfo: state => state.sale_info,
   getTollHistory: state => state.toll_history,
+  getTransportStorageHistory: state => state.transport_storage_history,
+  getTransportStorageQuote: state => state.transport_storage_quote,
   getVehicleDetails: state => state.vehicle_details,
   getVehicleNumber: state => state.vehicle_number,
   getViolationHistory: state => state.violation_history,
