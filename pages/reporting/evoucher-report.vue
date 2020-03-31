@@ -175,14 +175,13 @@
     <v-divider />
 
     <!-- Report Content -->
-    <v-skeleton-loader :loading="loading" type="table">
+    <v-skeleton-loader :loading="$fetchState.pending" type="table" transition="fade-transition">
       <v-data-table
-        :dense="items && !!items.length"
         :footer-props="{ itemsPerPageOptions: [10, 25, 50, 100, -1] }"
         :headers="headers"
         :items="items"
         :items-per-page="25"
-        :loading="loading"
+        :loading="$fetchState.pending"
         :mobile-breakpoint="0"
         :search="search"
         :sort-by="[0]"
@@ -208,43 +207,26 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import { downloadFields } from '@/mixins/datatables'
-import { updateQuery } from '@/mixins/routing'
+import { mapActions } from 'vuex'
+import { reportMixins } from '@/mixins/reports'
 /**
  * eVoucher Report
  */
 export default {
   name: 'EvoucherReport',
-  components: {
-    'center-picker': () => import(/* webpackChunkName: "CenterPicker" */ '@/components/core/CenterPicker.vue')
-  },
-  mixins: [downloadFields, updateQuery],
-  async asyncData ({ $moment, query, store }) {
-    const report_length = 30
-    const start = query.start || $moment().subtract(report_length, 'days').format('YYYY-MM-DD')
-    const end = query.end || $moment().format('YYYY-MM-DD')
+  mixins: [reportMixins],
+  data: vm => ({
+    start_dialog: false,
+    end_dialog: false,
+    title: vm.$i18n.t('evoucher_report'),
 
-    // Fetch report data
-    await store.dispatch('reports/fetchEvoucherReport', { start, end })
-    return {
-      centers_dialog: false,
-      centers_selected: [],
-      start_dialog: false,
-      start,
-      end_dialog: false,
-      end,
-      panels_expanded: [0],
-      search: '',
-      search_centers: ''
-    }
-  },
+    start: vm.$route.query.start || vm.$moment().subtract(30, 'days').format('YYYY-MM-DD'),
+    end: vm.$route.query.end || vm.$moment().format('YYYY-MM-DD')
+  }),
   computed: {
-    ...mapGetters({
-      items: 'reports/getData',
-      error: 'reports/getError',
-      loading: 'reports/getLoading'
-    }),
+    /**
+     * Datatable columns
+     */
     columns () {
       return [
         'vehicle_number',
@@ -271,6 +253,9 @@ export default {
         'level_10'
       ]
     },
+    /**
+     * Datatable headers
+     */
     headers () {
       return [
         {
@@ -353,22 +338,23 @@ export default {
         }
       ]
     },
+    /**
+     * Query Parameters
+     */
     query () {
       return {
         start: this.start,
         end: this.end
       }
-    },
-    title: vm => vm.$i18n.t('evoucher_report')
-  },
-  head () {
-    return {
-      title: this.title,
-      meta: [
-        { hid: 'og:description', property: 'og:description', content: this.title }
-      ]
     }
   },
-  watchQuery: ['start', 'end']
+  methods: {
+    /**
+     * Vuex Actions
+     */
+    ...mapActions({
+      fetchReport: 'reports/fetchEvoucherReport'
+    })
+  }
 }
 </script>

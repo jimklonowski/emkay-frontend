@@ -106,7 +106,7 @@
     <v-divider />
 
     <!-- Report Content -->
-    <v-skeleton-loader :loading="$fetchState.pending" type="table">
+    <v-skeleton-loader :loading="$fetchState.pending" type="table" transition="fade-transition">
       <v-data-table
         :footer-props="{ itemsPerPageOptions: [10, 25, 50, 100, -1] }"
         :headers="headers"
@@ -198,42 +198,23 @@
 /**
  * Notes: Hydration errors occur if using v-if in template. Use v-show instead for SSR (since v-if actually removes the element).
  */
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
 import { dialTo, emailTo } from '@/utility/helpers'
-import { downloadFields } from '@/mixins/datatables'
+import { reportMixins } from '@/mixins/reports'
 
 /**
  * Inventory Report (vehicle audit report)
  */
 export default {
   name: 'InventoryReport',
-  components: {
-    'center-picker': () => import(/* webpackChunkName: "CenterPicker" */ '@/components/core/CenterPicker.vue')
-  },
-  mixins: [downloadFields],
-  /**
-   * Async Fetch
-   */
-  async fetch () {
-    await this.fetchInventoryReport()
-  },
+  mixins: [reportMixins],
   data: vm => ({
-    centers_dialog: false,
-    centers_selected: [],
-    panels_expanded: [0],
-    search: '',
-    search_centers: '',
     title: vm.$i18n.t('inventory_report')
   }),
   computed: {
     /**
-     * Vuex Getters
+     * Datatable columns
      */
-    ...mapGetters({
-      items: 'reports/getData',
-      error: 'reports/getError'
-    }),
-    // Downloaded csv contains these columns.
     columns () {
       return [
         'vehicle_number',
@@ -305,7 +286,9 @@ export default {
         // ,...
       ]
     },
-    // Datatable contains these headers.
+    /**
+     * Datatable headers
+     */
     headers () {
       return [
         {
@@ -678,21 +661,10 @@ export default {
      * Vuex Actions
      */
     ...mapActions({
-      fetchInventoryReport: 'reports/fetchInventoryReport'
+      fetchReport: 'reports/fetchInventoryReport'
     }),
     dialTo,
     emailTo
-  },
-  /**
-   * Page Meta
-   */
-  head () {
-    return {
-      title: this.title,
-      meta: [
-        { hid: 'og:description', property: 'og:description', content: this.title }
-      ]
-    }
   }
 }
 </script>

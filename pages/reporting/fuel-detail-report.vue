@@ -272,22 +272,14 @@ import { reportMixins } from '@/mixins/reports'
  * Fuel Detail Report
  * When a date filter changes, a call is made to updateQuery which updates the route's query parameters (?start=2019-11&end=2019-11&...)
  * When $route.query changes, $fetch is called with the updated parameters
- * See Mixin for fetch, getters, export, query watcher, page meta
+ * See Mixin for fetch, getters, centers, json export, query watcher, page meta and more
  */
 export default {
   name: 'FuelDetailReport',
-  components: {
-    'center-picker': () => import(/* webpackChunkName: "CenterPicker" */ '@/components/core/CenterPicker.vue')
-  },
   mixins: [reportMixins],
   data: vm => ({
     start_dialog: false,
     end_dialog: false,
-    centers_dialog: false,
-    centers_selected: [],
-    panels_expanded: [0],
-    search: '',
-    search_centers: '',
     title: vm.$i18n.t('fuel_detail_report'),
 
     start: vm.$route.query.start || vm.$moment().subtract(30, 'days').format('YYYY-MM-DD'),

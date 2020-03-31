@@ -1,12 +1,23 @@
 import { mapGetters } from 'vuex'
 
 /**
- * Adds fetch hook, vuex getters mapped to data, error and center_levels, watcher for query parameters, json-download properties, and page title
+ * Adds fetch hook, vuex getters mapped to data, error and center_levels, center-picker component, watcher for query parameters, json-download properties, and page title
  * Report still requires:
  *  vuex action mapped to fetchReport
  *  'query' parameter object (computed prop)
+ *  'title' (computed or data)
  */
 export const reportMixins = {
+  components: {
+    'center-picker': () => import(/* webpackChunkName: "CenterPicker" */ '@/components/core/CenterPicker.vue')
+  },
+  data: () => ({
+    centers_dialog: false,
+    centers_selected: [],
+    panels_expanded: [0],
+    search: '',
+    search_centers: ''
+  }),
   /**
    * Async Fetch
    * See: https://nuxtjs.org/api/pages-fetch#nuxt-gt-2-12

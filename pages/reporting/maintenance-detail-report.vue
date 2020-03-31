@@ -187,7 +187,7 @@
     <v-divider />
 
     <!-- Report Content -->
-    <v-skeleton-loader :loading="$fetchState.pending" type="table">
+    <v-skeleton-loader :loading="$fetchState.pending" type="table" transition="fade-transition">
       <v-data-table
         :footer-props="{ itemsPerPageOptions: [10, 25, 50, 100, -1] }"
         :headers="headers"
@@ -240,36 +240,20 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
-import { downloadFields } from '@/mixins/datatables'
-import { updateQuery } from '@/mixins/routing'
+import { mapActions } from 'vuex'
+import { reportMixins } from '@/mixins/reports'
 /**
  * Maintenance Detail Report
  * When a date filter changes, a call is made to updateQuery which updates the route's query parameters (?start=2019-11&end=2019-11&...)
- * watchQuery listens for changes in the query parameters and onchange triggers all component methods (i.e. asyncData which will re-request data with new parameters)
+ * When $route.query changes, $fetch is called with the updated parameters
+ * See Mixin for fetch, getters, export, query watcher, page meta
  */
 export default {
   name: 'MaintenanceDetailReport',
-  components: {
-    'center-picker': () => import(/* webpackChunkName: "CenterPicker" */ '@/components/core/CenterPicker.vue')
-  },
-  mixins: [downloadFields, updateQuery],
-  /**
-   * Async Fetch
-   * See: https://nuxtjs.org/api/pages-fetch#nuxt-gt-2-12
-   */
-  async fetch () {
-    await this.fetchMaintenanceDetailReport(this.query)
-  },
-  fetchOnServer: false, // https://nuxtjs.org/api/pages-fetch#options
+  mixins: [reportMixins],
   data: vm => ({
     start_dialog: false,
     end_dialog: false,
-    centers_dialog: false,
-    centers_selected: [],
-    panels_expanded: [0],
-    search: '',
-    search_centers: '',
     title: vm.$i18n.t('maintenance_detail_report'),
 
     start: vm.$route.query.start || vm.$moment().subtract(30, 'days').format('YYYY-MM-DD'),
@@ -277,13 +261,6 @@ export default {
     use_bill_date: vm.$route.query.use_bill_date || false
   }),
   computed: {
-    /**
-     * Vuex Getters
-     */
-    ...mapGetters({
-      items: 'reports/getData',
-      error: 'reports/getError'
-    }),
     /**
      * Datatable columns
      */
@@ -739,30 +716,13 @@ export default {
       }
     }
   },
-  /**
-   * Re-fetch data on query change
-   */
-  watch: {
-    '$route.query': '$fetch'
-  },
   methods: {
     /**
      * Vuex Actions
      */
     ...mapActions({
-      fetchMaintenanceDetailReport: 'reports/fetchMaintenanceDetailReport'
+      fetchReport: 'reports/fetchMaintenanceDetailReport'
     })
-  },
-  /**
-   * Page Meta
-   */
-  head () {
-    return {
-      title: this.title,
-      meta: [
-        { hid: 'og:description', property: 'og:description', content: this.title }
-      ]
-    }
   }
 }
 </script>

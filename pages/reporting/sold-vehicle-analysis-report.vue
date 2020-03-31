@@ -175,7 +175,7 @@
     <v-divider />
 
     <!-- Report Content -->
-    <v-skeleton-loader :loading="$fetchState.pending" type="table">
+    <v-skeleton-loader :loading="$fetchState.pending" type="table" transition="fade-transition">
       <v-data-table
         :footer-props="{ itemsPerPageOptions: [10, 25, 50, 100, -1] }"
         :headers="headers"
@@ -207,34 +207,17 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
-import { downloadFields } from '@/mixins/datatables'
-import { updateQuery } from '@/mixins/routing'
+import { mapActions } from 'vuex'
+import { reportMixins } from '@/mixins/reports'
 /**
  * Sold Vehicle Analysis Report
  */
 export default {
   name: 'SoldVehicleAnalysisReport',
-  components: {
-    'center-picker': () => import(/* webpackChunkName: "CenterPicker" */ '@/components/core/CenterPicker.vue')
-  },
-  mixins: [downloadFields, updateQuery],
-  /**
-   * Async Fetch
-   * See: https://nuxtjs.org/api/pages-fetch#nuxt-gt-2-12
-   */
-  async fetch () {
-    await this.fetchSoldVehicleAnalysisReport(this.query)
-  },
-  fetchOnServer: false, // https://nuxtjs.org/api/pages-fetch#options
+  mixins: [reportMixins],
   data: vm => ({
     start_dialog: false,
     end_dialog: false,
-    centers_dialog: false,
-    centers_selected: [],
-    panels_expanded: [0],
-    search: '',
-    search_centers: '',
     title: vm.$i18n.t('sold_vehicle_analysis_report'),
 
     start: vm.$route.query.start || vm.$moment().subtract(30, 'days').format('YYYY-MM-DD'),
@@ -242,13 +225,6 @@ export default {
     use_bill_date: vm.$route.query.use_bill_date || false
   }),
   computed: {
-    /**
-     * Vuex Getters
-     */
-    ...mapGetters({
-      items: 'reports/getData',
-      error: 'reports/getError'
-    }),
     /**
      * Datatable columns
      */
@@ -458,30 +434,13 @@ export default {
       }
     }
   },
-  /**
-   * Re-fetch data on query change
-   */
-  watch: {
-    '$route.query': '$fetch'
-  },
   methods: {
     /**
      * Vuex Actions
      */
     ...mapActions({
-      fetchSoldVehicleAnalysisReport: 'reports/fetchSoldVehicleAnalysisReport'
+      fetchReport: 'reports/fetchSoldVehicleAnalysisReport'
     })
-  },
-  /**
-   * Page Meta
-   */
-  head () {
-    return {
-      title: this.title,
-      meta: [
-        { hid: 'og:description', property: 'og:description', content: this.title }
-      ]
-    }
   }
 }
 </script>
