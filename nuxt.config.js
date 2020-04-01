@@ -11,7 +11,7 @@ export default {
   */
   head: {
     titleTemplate: 'EMKAY :: %s',
-    title: process.env.npm_package_name || '',
+    title: 'simple. better. different.' || '',
     meta: [
       { charset: 'utf-8' },
       { 'http-equiv': 'X-UA-Compatible', content: 'IE=edge,chrome=1' },
