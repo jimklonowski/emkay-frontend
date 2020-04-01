@@ -20,31 +20,30 @@
       />
       <client-only>
         <v-divider vertical inset class="mx-3" />
-        <v-dialog v-model="dialog" max-width="75vw" persistent scrollable>
+        <v-dialog v-model="driver_dialog" max-width="75vw" persistent scrollable>
           <template #activator="{ on }">
             <v-btn color="primary" rounded depressed v-on="on" @click="driverId = undefined">
               <v-icon class="mr-2" v-text="'mdi-account-plus'" />
               {{ $t('add_new_driver') }}
             </v-btn>
           </template>
-          <driver-details-form :driver-id="driverId" @close="dialog = false" />
+          <driver-details-form :driver-id="driverId" @close="driver_dialog = false" />
         </v-dialog>
       </client-only>
     </v-toolbar>
     <v-divider />
-    <v-skeleton-loader :loading="!initialized" type="table">
+    <v-skeleton-loader :loading="$fetchState.pending" type="table" transition="fade-transition">
       <v-data-table
         :footer-props="{ itemsPerPageOptions: [10, 25, 50, 100, -1] }"
         :headers="headers"
         :items="items"
         :items-per-page="25"
-        :loading="loading"
+        :loading="$fetchState.pending"
         :mobile-break-point="0"
         :search="search"
         :sort-by="['last_name']"
         :sort-desc="[false]"
         class="striped"
-        dense
       >
         <!-- Configure the #no-data message (no data from server) -->
         <template #no-data>
@@ -62,7 +61,7 @@
 
         <!-- Customize rendering of individual columns -->
         <template #item.actions="{ item }">
-          <v-btn icon @click.stop="editDriver(item)">
+          <v-btn icon name="edit" @click.stop="editDriver(item)">
             <v-icon v-text="'mdi-account-edit'" />
           </v-btn>
         </template>
@@ -124,19 +123,28 @@ export default {
   components: {
     DriverDetailsForm
   },
+  async fetch () {
+    await this.fetchDrivers()
+  },
+  fetchOnServer: false, // https://nuxtjs.org/api/pages-fetch#options
   data: () => ({
-    dialog: false,
+    driver_dialog: false,
     driverId: undefined,
-    initialized: false,
     search: ''
   }),
   computed: {
+    /**
+     * Vuex Getters
+     */
     ...mapGetters({
       items: 'drivers/getDrivers',
       error: 'drivers/getDriversError',
       loading: 'drivers/getDriversLoading',
       custom_labels: 'account/getCustomLabels'
     }),
+    /**
+     * Datatable Columns
+     */
     columns () {
       return [
         'actions',
@@ -160,6 +168,9 @@ export default {
         'misc_4'
       ]
     },
+    /**
+     * Datatable headers
+     */
     headers () {
       return [
         {
@@ -286,11 +297,10 @@ export default {
       ]
     }
   },
-  async mounted () {
-    await this.fetchDrivers()
-    this.initialized = true
-  },
   methods: {
+    /**
+     * Vuex Actions
+     */
     ...mapActions({
       fetchDrivers: 'drivers/fetchDrivers'
     }),
@@ -298,9 +308,12 @@ export default {
     emailTo,
     editDriver (item) {
       this.driverId = item.reference_number
-      this.dialog = true
+      this.driver_dialog = true
     }
   },
+  /**
+   * Page Meta
+   */
   head () {
     const title = this.$t('manage_drivers')
     return {

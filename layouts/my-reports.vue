@@ -18,12 +18,14 @@
 import EmkayNavigation from '@/components/core/EmkayNavigation'
 import MyReportsNavigation from '@/components/reporting/MyReportsNavigation'
 import EmkayFooter from '@/components/core/EmkayFooter'
+import { htmlLang } from '@/mixins/meta'
 export default {
   components: {
     EmkayNavigation,
     MyReportsNavigation,
     EmkayFooter
   },
-  middleware: ['check-auth', 'account']
+  middleware: ['check-auth', 'account'],
+  mixins: [htmlLang]
 }
 </script>

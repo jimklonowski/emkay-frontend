@@ -166,9 +166,13 @@ export default {
   components: {
     BaseWidget
   },
-  data: () => ({
+  async fetch () {
+    await this.fetchExpenseSummary(this.query)
+  },
+  data: vm => ({
     icon: 'mdi-cash-usd',
-    mode: 'total'
+    mode: 'total',
+    title: vm.$i18n.t('expense_summary')
   }),
   computed: {
     /**
@@ -184,6 +188,12 @@ export default {
       total_variable_cpm: 'vehicle-dashboard/getTotalVariableCPM',
       vehicle_number: 'vehicle-dashboard/getVehicleNumber'
     }),
+    /**
+     * ChartJS data for three different pie charts
+     * Fixed Costs Pie Chart
+     * Variable Costs Pie Chart
+     * Fixed vs Variable Costs Pie Chart
+     */
     chartData () {
       let backgroundColor = []
       let data = []
@@ -210,28 +220,6 @@ export default {
         labels
       }
     },
-    variableExpensesPieChartData () {
-      return {
-        labels: [this.$i18n.t('fixed_costs'), this.$i18n.t('variable_costs')],
-        datasets: [
-          {
-            backgroundColor: ['#512da8', '#002F87'],
-            data: [this.total_fixed, this.total_variable]
-          }
-        ]
-      }
-    },
-    totalExpensesPieChartData () {
-      return {
-        labels: [this.$i18n.t('fixed_costs'), this.$i18n.t('variable_costs')],
-        datasets: [
-          {
-            backgroundColor: ['#512da8', '#002F87'],
-            data: [this.total_fixed, this.total_variable]
-          }
-        ]
-      }
-    },
     /**
      * Dropdown menu actions
      */
@@ -240,27 +228,25 @@ export default {
         {
           text: this.$i18n.t('report_expenses'),
           icon: this.icon,
-          to: this.reportExpensesRoute
+          to: this.localePath({ path: `/vehicle/${this.vehicle_number}/report-expenses` })
         }
       ]
     },
+    /**
+     * Query Parameters
+     */
     query () {
       return {
         vehicle: this.vehicle_number
       }
-    },
-    reportExpensesRoute: vm => vm.localePath({ path: `/vehicle/${vm.vehicle_number}/report-expenses` }),
-    title: vm => vm.$i18n.t('expense_summary')
-  },
-  async mounted () {
-    await this.populateWidget(this.query)
+    }
   },
   methods: {
     /**
      * Vuex Actions
      */
     ...mapActions({
-      populateWidget: 'vehicle-dashboard/fetchExpenseSummary'
+      fetchExpenseSummary: 'vehicle-dashboard/fetchExpenseSummary'
     }),
     getChartData (mode) {
       switch (mode) {

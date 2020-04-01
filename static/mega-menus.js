@@ -103,7 +103,7 @@ const reporting = {
         { key: 'fuel_detail_report', icon: 'mdi-gas-station', to: { path: '/reporting/fuel-detail-report' } },
         { key: 'maintenance_detail_report', icon: 'mdi-wrench', to: { path: '/reporting/maintenance-detail-report' } },
         { key: 'short_term_rental_detail_report', icon: 'mdi-bus-clock', to: { path: '/reporting/short-term-rental-detail-report' } },
-        { key: 'toll_detail_report', icon: 'mdi-coins', to: { path: '/reporting/toll-detail-report' } }
+        { key: 'toll_detail_report', icon: 'mdi-circle-multiple-outline', to: { path: '/reporting/toll-detail-report' } }
       ]
     },
     {

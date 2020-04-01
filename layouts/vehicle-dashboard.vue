@@ -20,6 +20,7 @@ import EmkayNavigation from '@/components/core/EmkayNavigation'
 import VehicleDashboardNavigation from '@/components/vehicle-dashboard/VehicleDashboardNavigation'
 import VehicleDashboardBreadcrumbs from '@/components/vehicle-dashboard/VehicleDashboardBreadcrumbs'
 import EmkayFooter from '@/components/core/EmkayFooter'
+import { htmlLang } from '@/mixins/meta'
 export default {
   components: {
     EmkayNavigation,
@@ -27,6 +28,7 @@ export default {
     VehicleDashboardNavigation,
     EmkayFooter
   },
-  middleware: ['check-auth', 'account', 'vehicle-dashboard']
+  middleware: ['check-auth', 'account', 'vehicle-dashboard'],
+  mixins: [htmlLang]
 }
 </script>

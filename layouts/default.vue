@@ -14,11 +14,13 @@
 <script>
 import EmkayNavigation from '@/components/core/EmkayNavigation'
 import EmkayFooter from '@/components/core/EmkayFooter'
+import { htmlLang } from '@/mixins/meta'
 export default {
   components: {
     EmkayNavigation,
     EmkayFooter
   },
-  middleware: ['check-auth', 'account']
+  middleware: ['check-auth', 'account'],
+  mixins: [htmlLang]
 }
 </script>
