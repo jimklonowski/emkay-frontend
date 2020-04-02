@@ -67,7 +67,7 @@
         </template>
 
         <template #item.driver_vehicle="{ item }">
-          <nuxt-link :title="$t(`to_vehicle_dashboard`)" :to="localePath({ path: `/vehicle/${item.driver_vehicle}` })" class="text-decoration-none" nuxt v-text="item.driver_vehicle" />
+          <vehicle-number-button :vehicle-number="item.driver_vehicle" />
         </template>
 
         <template #item.phone="{ item }">
@@ -121,7 +121,8 @@ import DriverDetailsForm from '@/components/driver/forms/DriverDetailsForm'
 export default {
   name: 'ManageDrivers',
   components: {
-    DriverDetailsForm
+    DriverDetailsForm,
+    'vehicle-number-button': () => import(/* webpackChunkName: "VehicleNumberButton" */ '@/components/vehicle-dashboard/VehicleNumberButton.vue')
   },
   async fetch () {
     await this.fetchDrivers()

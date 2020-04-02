@@ -228,7 +228,7 @@ export default {
         {
           text: this.$i18n.t('report_expenses'),
           icon: this.icon,
-          to: this.localePath({ path: `/vehicle/${this.vehicle_number}/report-expenses` })
+          to: this.localePath({ path: '/vehicle/dashboard/report-expenses' })
         }
       ]
     },

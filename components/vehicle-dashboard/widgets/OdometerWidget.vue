@@ -55,7 +55,7 @@ export default {
         {
           text: this.$i18n.t('odometer_history'),
           icon: this.icon,
-          to: this.localePath({ path: `/vehicle/${this.vehicle_number}/odometer`, query: { start: this.start, end: this.end } })
+          to: this.localePath({ path: '/vehicle/dashboard/odometer', query: { start: this.start, end: this.end } })
         }
       ]
     },

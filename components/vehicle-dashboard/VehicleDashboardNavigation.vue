@@ -18,8 +18,8 @@
       />
     </template>
     <v-toolbar-title>
-      <nuxt-link :to="vehicleRoute" class="text-decoration-none white--text" v-text="$t('vehicle_dashboard')" />
-      <span class="caption" v-text="$route.params.vehicle" />
+      <nuxt-link :to="localePath({ path: '/vehicle/dashboard' })" class="text-decoration-none white--text" v-text="$t('vehicle_dashboard')" />
+      <span class="caption" v-text="vehicle_number" />
     </v-toolbar-title>
 
     <v-spacer />
@@ -46,30 +46,35 @@
 </template>
 
 <script>
-import { vehicleRoute } from '@/mixins/routing'
+import { mapGetters } from 'vuex'
 /**
  * Vehicle Dashboard Navigation with image background and tabs
  */
 export default {
-  mixins: [vehicleRoute],
   computed: {
+    /**
+     * Vuex Getters
+     */
+    ...mapGetters({
+      vehicle_number: 'vehicle-dashboard/getVehicleNumber'
+    }),
     actions () {
       return [
         {
           key: 'documents_and_notes',
-          to: { path: `/vehicle/${this.$route.params.vehicle}/documents-and-notes` }
+          to: { path: '/vehicle/dashboard/documents-and-notes' }
         },
         {
           key: 'report_expenses',
-          to: { path: `/vehicle/${this.$route.params.vehicle}/report-expenses` }
+          to: { path: '/vehicle/dashboard/report-expenses' }
         },
         {
           key: 'saferoads',
-          to: { path: `/vehicle/${this.$route.params.vehicle}/saferoads` }
+          to: { path: '/vehicle/dashboard/saferoads' }
         },
         {
           key: 'transports_and_storage',
-          to: { path: `/vehicle/${this.$route.params.vehicle}/transports-and-storage` }
+          to: { path: '/vehicle/dashboard/transports-and-storage' }
         }
       ]
     }

@@ -105,7 +105,7 @@
       fixed
       app
     >
-      <v-app-bar-nav-icon @click="toggleSidebar" />
+      <v-app-bar-nav-icon aria-label="Open Sidebar" @click="toggleSidebar" />
       <v-toolbar-title v-text="$t('emkay')" />
 
       <v-spacer />

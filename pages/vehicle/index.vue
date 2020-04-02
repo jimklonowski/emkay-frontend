@@ -1,9 +1,9 @@
 <template>
   <!-- if route has vehicle param: show vehicle dashboard -->
-  <nuxt-child v-if="$route.params.vehicle" />
+  <!-- <nuxt-child v-if="$route.params.vehicle" /> -->
 
   <!-- else: show vehicle search -->
-  <v-container v-else class="vehicle-search" fill-height>
+  <v-container class="vehicle-search" fill-height>
     <v-row justify="center">
       <v-col cols="12" md="8">
         <vehicle-search />

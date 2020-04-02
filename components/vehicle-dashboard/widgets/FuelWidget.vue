@@ -55,17 +55,17 @@ export default {
         {
           text: this.$i18n.t('fuel_history'),
           icon: 'mdi-gas-station',
-          to: this.localePath({ path: `/vehicle/${this.vehicle_number}/fuel`, query: { start: this.start, end: this.end }, hash: '#history' })
+          to: this.localePath({ path: '/vehicle/dashboard/fuel', query: { start: this.start, end: this.end }, hash: '#history' })
         },
         {
           text: this.$i18n.t('fuel_cards'),
           icon: 'mdi-credit-card',
-          to: this.localePath({ path: `/vehicle/${this.vehicle_number}/fuel`, hash: '#cards' })
+          to: this.localePath({ path: '/vehicle/dashboard/fuel', hash: '#cards' })
         },
         {
           text: this.$i18n.t('fuel_authorization_profiles'),
           icon: 'mdi-clipboard-account',
-          to: this.localePath({ path: `/vehicle/${this.vehicle_number}/fuel`, hash: '#profiles' })
+          to: this.localePath({ path: '/vehicle/dashboard/fuel', hash: '#profiles' })
         }
       ]
     },

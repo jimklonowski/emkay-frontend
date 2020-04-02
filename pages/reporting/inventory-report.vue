@@ -134,7 +134,7 @@
 
         <!-- configure individual columns -->
         <template #item.vehicle_number="{ item }">
-          <nuxt-link :title="$t(`to_vehicle_dashboard`)" :to="localePath({ path: `/vehicle/${item.vehicle_number}` })" class="text-decoration-none" nuxt v-text="item.vehicle_number" />
+          <vehicle-number-button :vehicle-number="item.vehicle_number" />
         </template>
 
         <template #item.driver_email_address="{ item }">

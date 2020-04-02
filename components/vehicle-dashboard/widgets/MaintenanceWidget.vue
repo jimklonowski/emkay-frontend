@@ -55,12 +55,12 @@ export default {
         {
           text: this.$i18n.t('maintenance_history'),
           icon: 'mdi-tools',
-          to: this.localePath({ path: `/vehicle/${this.vehicle_number}/maintenance`, query: { start: this.start, end: this.end }, hash: '#history' })
+          to: this.localePath({ path: '/vehicle/dashboard/maintenance', query: { start: this.start, end: this.end }, hash: '#history' })
         },
         {
           text: this.$i18n.t('evoucher'),
           icon: 'mdi-ticket-confirmation',
-          to: this.localePath({ path: `/vehicle/${this.vehicle_number}/maintenance`, hash: '#evoucher' })
+          to: this.localePath({ path: '/vehicle/dashboard/maintenance', hash: '#evoucher' })
         }
       ]
     },

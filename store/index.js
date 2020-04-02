@@ -9,6 +9,7 @@ export const actions = {
     if (process.server) {
       app.$auth.fetchUser()
       if (app.$auth.loggedIn) {
+        // initialize account store
         await dispatch('account/init')
       } else {
         await dispatch('account/logout')

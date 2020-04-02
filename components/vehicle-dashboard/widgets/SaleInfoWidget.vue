@@ -22,8 +22,9 @@ export default {
   components: {
     BaseWidget
   },
-  data: () => ({
-    icon: 'mdi-cash-register'
+  data: vm => ({
+    icon: 'mdi-cash-register',
+    title: vm.$i18n.t('sale_info')
   }),
   computed: {
     ...mapGetters({
@@ -36,12 +37,10 @@ export default {
         {
           text: this.$i18n.t('sale_info'),
           icon: this.icon,
-          to: this.saleInfoRoute
+          to: this.localePath({ path: '/vehicle/dashboard/sale-info' })
         }
       ]
-    },
-    saleInfoRoute: vm => vm.localePath({ path: `/vehicle/${vm.vehicle_number}/sale-info` }),
-    title: vm => vm.$i18n.t('sale_info')
+    }
   }
 }
 </script>

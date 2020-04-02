@@ -55,7 +55,7 @@ export default {
         {
           text: this.$i18n.t('billing_history'),
           icon: this.icon,
-          to: this.localePath({ path: `/vehicle/${this.vehicle_number}/billing`, query: { start: this.start, end: this.end } })
+          to: this.localePath({ path: '/vehicle/dashboard/billing', query: { start: this.start, end: this.end } })
         }
       ]
     },

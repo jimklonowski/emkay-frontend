@@ -15,6 +15,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import WidgetLoading from '@/components/vehicle-dashboard/widgets/WidgetLoading'
 export default {
   name: 'VehicleDashboard',
@@ -120,8 +121,16 @@ export default {
       { cols: 12, xl: 6, component: 'sale-info-widget' }
     ]
   }),
+  computed: {
+    /**
+     * Vuex Getters
+     */
+    ...mapGetters({
+      vehicle_number: 'vehicle-dashboard/getVehicleNumber'
+    })
+  },
   head () {
-    const title = `${this.$route.params.vehicle} :: ${this.$t('vehicle_dashboard')}`
+    const title = `${this.vehicle_number} :: ${this.$t('vehicle_dashboard')}`
     return {
       title,
       meta: [

@@ -55,7 +55,7 @@ export default {
         {
           text: this.$i18n.t('toll_history'),
           icon: 'mdi-highway',
-          to: this.localePath({ path: `/vehicle/${this.vehicle_number}/tolls`, query: { start: this.start, end: this.end } })
+          to: this.localePath({ path: '/vehicle/dashboard/tolls', query: { start: this.start, end: this.end } })
         }
       ]
     },

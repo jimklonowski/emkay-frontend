@@ -55,7 +55,7 @@ export default {
         {
           text: this.$i18n.t('violation_history'),
           icon: this.icon,
-          to: this.localePath({ path: `/vehicle/${this.vehicle_number}/violations`, query: { start: this.start, end: this.end } })
+          to: this.localePath({ path: '/vehicle/dashboard/violations', query: { start: this.start, end: this.end } })
         }
       ]
     },

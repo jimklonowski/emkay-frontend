@@ -40,7 +40,7 @@ export default {
   components: {
     BaseWidget
   },
-  data: () => ({
+  data: vm => ({
     icon: 'mdi-account'
   }),
   computed: {
@@ -51,15 +51,22 @@ export default {
       driver_name: 'vehicle-dashboard/getDriverName',
       vehicle_number: 'vehicle-dashboard/getVehicleNumber'
     }),
+    title: vm => vm.driver_name,
+    /**
+     * Dropdown Menu Actions
+     */
     actions () {
       return [
         {
           text: this.$i18n.t('edit_driver'),
           icon: 'mdi-account-edit',
-          to: this.editDriverRoute
+          to: this.localePath({ path: '/vehicle/dashboard/edit-driver' })
         }
       ]
     },
+    /**
+     * Data columns
+     */
     columns () {
       return [
         {
@@ -132,9 +139,7 @@ export default {
           ]
         }
       ]
-    },
-    editDriverRoute: vm => vm.localePath({ path: `/vehicle/${vm.vehicle_number}/edit-driver` }),
-    title: vm => vm.driver_name
+    }
   }
 }
 </script>

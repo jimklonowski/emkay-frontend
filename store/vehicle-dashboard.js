@@ -41,6 +41,7 @@ export const actions = {
       dispatch('fetchOrderStatus', { vehicle }),
       dispatch('fetchSaleInfo', { vehicle })
     ]).then(() => {
+      this.$cookies.set('vehicle_number', vehicle, { path: '/', maxAge: 60 * 60, secure: true })
       commit('setVehicleNumber', vehicle)
     })
   },
@@ -392,6 +393,7 @@ export const actions = {
     }
   },
   reset ({ commit }) {
+    this.cookies.remove('vehicle_number')
     commit('reset')
   }
 }

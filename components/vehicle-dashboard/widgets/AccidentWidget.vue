@@ -55,7 +55,7 @@ export default {
         {
           text: this.$i18n.t('accident_history'),
           icon: 'mdi-car-parking-lights',
-          to: this.localePath({ path: `/vehicle/${this.vehicle_number}/accident`, query: { start: this.start, end: this.end } })
+          to: this.localePath({ path: '/vehicle/dashboard/accident', query: { start: this.start, end: this.end } })
         }
       ]
     },

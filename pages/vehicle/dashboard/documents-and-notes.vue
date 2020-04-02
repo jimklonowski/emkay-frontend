@@ -31,6 +31,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import DatatableLoading from '@/components/vehicle-dashboard/datatables/DatatableLoading'
 export default {
   name: 'VehicleDocumentsAndNotes',
@@ -50,8 +51,13 @@ export default {
   data: () => ({
     tab: 0
   }),
+  computed: {
+    ...mapGetters({
+      vehicle_number: 'vehicle-dashboard/getVehicleNumber'
+    })
+  },
   head () {
-    const title = `${this.$route.params.vehicle} - ${this.$t('documents_and_notes')}`
+    const title = `${this.vehicle_number} - ${this.$t('documents_and_notes')}`
     return {
       title,
       meta: [

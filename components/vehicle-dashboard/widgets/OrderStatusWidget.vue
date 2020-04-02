@@ -104,9 +104,10 @@ export default {
   components: {
     BaseWidget
   },
-  data: () => ({
+  data: vm => ({
     expanded: false,
-    icon: 'mdi-timeline-clock'
+    icon: 'mdi-timeline-clock',
+    title: vm.$i18n.t('order_status')
   }),
   computed: {
     ...mapGetters({
@@ -119,7 +120,7 @@ export default {
         {
           text: this.$i18n.t('order_status'),
           icon: this.icon,
-          to: this.orderStatusRoute
+          to: this.localePath({ path: '/vehicle/dashboard/order-status' })
         }
       ]
     },
@@ -221,8 +222,6 @@ export default {
       ]
     },
     order_timeline_preview: vm => vm.order_timeline.slice(0, 2),
-    orderStatusRoute: vm => vm.localePath({ path: `/vehicle/${vm.vehicle_number}/order-status` }),
-    title: vm => vm.$i18n.t('order_status'),
     yearMakeModel: vm => vm.order_status && [vm.order_status.model_year, vm.order_status.vehicle_make, vm.order_status.vehicle_model].filter(Boolean).join(' ')
   }
 }

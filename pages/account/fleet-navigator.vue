@@ -113,7 +113,7 @@
               </v-btn>
             </v-card-title>
             <v-card-subtitle>
-              <nuxt-link :title="$t('to_vehicle_dashboard')" :to="selectedVehicleRoute" class="text-decoration-none" nuxt v-text="selectedItem.vehicle_number" />
+              <vehicle-number-button :vehicle-number="selectedItem.vehicle_number" />
             </v-card-subtitle>
             <v-divider />
             <v-card-text class="pa-0">
@@ -163,6 +163,9 @@
 import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'FleetNavigator',
+  components: {
+    'vehicle-number-button': () => import(/* webpackChunkName: "VehicleNumberButton" */ '@/components/vehicle-dashboard/VehicleNumberButton.vue')
+  },
   async fetch () {
     await this.fetchVehicles()
   },
@@ -196,8 +199,7 @@ export default {
     filterCount: vm => [].concat(...Object.values(vm.currentFilters)).length,
     hasFilters: vm => Object.values(vm.currentFilters).map(x => x.filter(Boolean).length).reduce((a, b) => a + b, 0),
     hasSelection: vm => Object.keys(vm.selectedItem).length > 0,
-    selectedItemTitle: vm => [vm.selectedItem.driver_first_name, vm.selectedItem.driver_last_name].filter(Boolean).join(' '),
-    selectedVehicleRoute: vm => vm.localePath({ path: `/vehicle/${vm.selectedItem.vehicle_number}` })
+    selectedItemTitle: vm => [vm.selectedItem.driver_first_name, vm.selectedItem.driver_last_name].filter(Boolean).join(' ')
   },
   methods: {
     /**

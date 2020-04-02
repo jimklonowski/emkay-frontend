@@ -69,11 +69,14 @@ export default {
   components: {
     BaseWidget
   },
-  data: () => ({
+  data: vm => ({
     expanded: false,
     icon: 'mdi-car'
   }),
   computed: {
+    /**
+     * Vuex Getters
+     */
     ...mapGetters({
       custom_labels: 'account/getCustomLabels',
       vehicle_details: 'vehicle-dashboard/getVehicleDetails',
@@ -81,20 +84,26 @@ export default {
       yearMakeModel: 'vehicle-dashboard/getYearMakeModel'
     }),
     title: vm => vm.$options.filters.uppercase(vm.yearMakeModel),
+    /**
+     * Dropdown Menu Actions
+     */
     actions () {
       return [
         {
           text: this.$i18n.t('edit_vehicle'),
           icon: 'mdi-car-info',
-          to: this.editVehicleRoute
+          to: this.localePath({ path: '/vehicle/dashboard/edit-vehicle' })
         },
         {
           text: this.$i18n.t('assign_new_driver'),
           icon: 'mdi-smart-card',
-          to: this.reassignVehicleRoute
+          to: this.localePath({ path: '/vehicle/dashboard/reassign-vehicle' })
         }
       ]
     },
+    /**
+     * Data columns
+     */
     columns () {
       return [
         {
@@ -169,6 +178,9 @@ export default {
         }
       ]
     },
+    /**
+     * Expansion panel data
+     */
     extra_columns () {
       return [
         {
@@ -232,9 +244,7 @@ export default {
           ]
         }
       ]
-    },
-    editVehicleRoute: vm => vm.localePath({ path: `/vehicle/${vm.vehicle_number}/edit-vehicle` }),
-    reassignVehicleRoute: vm => vm.localePath({ path: `/vehicle/${vm.vehicle_number}/reassign-vehicle` })
+    }
   }
 }
 </script>
