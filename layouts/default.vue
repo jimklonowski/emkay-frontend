@@ -20,7 +20,7 @@ export default {
     EmkayNavigation,
     EmkayFooter
   },
-  middleware: ['check-auth', 'account'],
-  mixins: [htmlLang]
+  mixins: [htmlLang],
+  middleware: ['check-auth', 'account']
 }
 </script>

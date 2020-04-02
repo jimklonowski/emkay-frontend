@@ -9,9 +9,54 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+import { SnotifyPosition } from 'vue-snotify'
 export default {
   name: 'Home',
   middleware: 'auth',
+  computed: {
+    /**
+     * Vuex Getters
+     */
+    ...mapGetters({
+      login_messages: 'account/getLoginMessages'
+    })
+  },
+  mounted () {
+    this.$nextTick(() => this.showLoginMessages())
+  },
+  methods: {
+    /**
+     * Loop through login messages and show snotify notifications
+     */
+    showLoginMessages () {
+      this.login_messages.forEach(message => {
+        // If this message has already been dismissed, as indicated by a cookie, don't show it
+        if (this.$cookies.get(message.suppressionCookie)) {
+          console.log(message.suppressionCookie)
+        } else {
+          // show the notification. add a cookie if dismiss button is pressed
+          const detailsActions = (toast) => window.open(message.link)
+          const dismissAction = (toast) => {
+            this.$snotify.remove(toast.id)
+            this.$cookies.set(message.suppressionCookie, true, { maxAge: message.cookieAge || 60 * 60 * 24 })
+          }
+          this.$snotify.info(message.text, message.title, {
+            showProgressBar: true,
+            timeout: 5000,
+            buttons: [
+              { text: 'Details', action: detailsActions, bold: true },
+              { text: 'Dismiss', action: dismissAction }
+            ],
+            position: SnotifyPosition.centerBottom
+          })
+        }
+      })
+    }
+  },
+  /**
+   * Page Meta
+   */
   head () {
     const title = this.$i18n.t('home')
     return {

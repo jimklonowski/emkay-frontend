@@ -58,8 +58,8 @@ export const actions = {
     await Promise.all([
       dispatch('fetchCustomLabels'),
       dispatch('fetchCenterHierarchy'),
-      dispatch('fetchCenterLevels')
-      // dispatch('fetchLoginMessages')
+      dispatch('fetchCenterLevels'),
+      dispatch('fetchLoginMessages')
     ]).finally(() => {
       commit('setInitialized', true)
     })
@@ -119,8 +119,8 @@ export const actions = {
       // if (!success) { throw new Error(message) }
       await console.log('TODO: mocked login message data')
       const data = [
-        { title: 'COVID-19 Update', text: 'EMKAY Coronavirus (COVID-19) Update (March 20)', link: '/coronavirus' },
-        { title: 'COVID-20 Update', text: 'EMKAY Coronavirus (COVID-20) Update (March 25)', link: '/coronavirus2' }
+        { title: 'COVID-19 Update', text: 'EMKAY Coronavirus (COVID-19) Update (March 20)', link: 'coronavirus.html', suppressionCookie: 'covid19_message_seen' },
+        { title: 'Check Fraud', text: 'Updates on check frauds', link: 'checkfraud.html', suppressionCookie: 'check_fraud_message_seen' }
       ]
       commit('setLoginMessages', data)
     } catch (error) {
