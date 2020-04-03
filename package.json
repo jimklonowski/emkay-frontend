@@ -1,6 +1,6 @@
 {
   "name": "emkay-frontend",
-  "version": "1.0.0",
+  "version": "0.9.0",
   "description": "EMKAY Nuxt Frontend",
   "author": "JCK",
   "private": true,
@@ -39,7 +39,7 @@
     "babel-jest": "^25.2.6",
     "eslint": "^6.8.0",
     "eslint-plugin-nuxt": "^0.5.2",
-    "jest": "^25.2.6",
+    "jest": "^25.2.7",
     "vue-jest": "^4.0.0-0"
   }
 }
