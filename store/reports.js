@@ -168,7 +168,7 @@ export const actions = {
    * @param start (YYYY-MM-DD)
    * @param end (YYYY-MM-DD)
    */
-  async fetchInvoiceHistory ({ commit }, { start, end }) {
+  async fetchInvoiceHistoryReport ({ commit }, { start, end }) {
     try {
       commit('setError', null)
       commit('setLoading', true)
