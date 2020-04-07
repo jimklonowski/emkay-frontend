@@ -121,6 +121,8 @@ export default {
   ** See https://auth.nuxtjs.org/api/options.html#redirect
   */
   auth: {
+    cookie: false,
+    localStorage: false,
     plugins: [
       { src: '~/plugins/auth/locale-redirects', mode: 'client' }
     ],
