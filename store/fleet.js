@@ -34,7 +34,10 @@ export const mutations = {
 export const getters = {
   getError: state => state.error,
   getVehicles: state => state.vehicles,
-  filteredVehicles: state => (filters, sortBy, order) => {
+  filteredVehicles: state => (filters) => {
+    return multiFilter(state.vehicles, filters)
+  },
+  filteredVehiclesSort: state => (filters, sortBy, order) => {
     const filtered = multiFilter(state.vehicles, filters)
     return filtered.sort(compareObjectByKey(sortBy, order))
   }
