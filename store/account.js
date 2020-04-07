@@ -58,8 +58,8 @@ export const actions = {
     await Promise.all([
       dispatch('fetchCustomLabels'),
       dispatch('fetchCenterHierarchy'),
-      dispatch('fetchCenterLevels'),
-      dispatch('fetchLoginMessages')
+      dispatch('fetchCenterLevels')
+      // dispatch('fetchLoginMessages')
     ]).finally(() => {
       commit('setInitialized', true)
     })

@@ -26,9 +26,22 @@
     <v-divider />
     <v-tabs-items v-model="tab">
       <v-tab-item eager>
-        <fuel-expenses-pie-chart />
-        <v-divider />
-        <fuel-history-table />
+        <v-container>
+          <v-row>
+            <v-col cols="12" md="6">
+              <fuel-expenses-pie-chart />
+            </v-col>
+            <v-col cols="12" md="6">
+              <fuel-company-donut-chart />
+            </v-col>
+          </v-row>
+          <v-divider />
+          <v-row>
+            <v-col cols="12">
+              <fuel-history-table />
+            </v-col>
+          </v-row>
+        </v-container>
       </v-tab-item>
       <v-tab-item eager>
         <fuel-cards-table />
@@ -56,6 +69,11 @@ export default {
     FuelHistoryTable,
     'fuel-expenses-pie-chart': () => ({
       component: import(/* webpackChunkName: "FuelExpensesPieChart" */'@/components/vehicle-dashboard/charts/FuelExpensesPieChart.vue'),
+      loading: ChartLoading,
+      delay: 0
+    }),
+    'fuel-company-donut-chart': () => ({
+      component: import(/* webpackChunkName: "FuelCompanyDonutChart" */'@/components/vehicle-dashboard/charts/FuelCompanyDonutChart.vue'),
       loading: ChartLoading,
       delay: 0
     })
