@@ -27,6 +27,7 @@
               <v-text-field
                 v-model.trim="model[field]"
                 :label="$t(field)"
+                autocomplete="off"
                 prepend-inner-icon="mdi-filter-variant"
                 clearable
                 dense
@@ -40,8 +41,8 @@
           <v-list-item>
             <v-list-item-content>
               <v-list-item-title class="caption text-right grey--text">
-                <span>{{ items.length }}</span>
-                {{ $tc('vehicles', items.length) }}
+                <span>{{ filteredItems.length }}</span>
+                {{ $tc('vehicles', filteredItems.length) }}
               </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
@@ -50,8 +51,8 @@
     </v-card>
     <v-card outlined width="100%">
       <v-card-title class="font-lato" v-text="$t('fleet_navigator')" />
-      <v-subheader class="overline px-4" v-text="$t('current_filters')" />
-      <v-card-actions class="px-4">
+      <v-subheader v-show="hasFilters" class="overline px-4" v-text="$t('current_filters')" />
+      <v-card-actions v-show="hasFilters" class="px-4">
         <!-- Applied Filters -->
         <v-flex>
           <!-- iterate each category -->
@@ -101,59 +102,46 @@
           </v-btn>
         </v-col>
       </v-card-actions>
-      <v-card-text class="d-flex">
-        <v-scale-transition>
-          <!-- Selected Item -->
-          <v-card v-if="hasSelection" outlined min-width="300" height="400" class="ma-2">
-            <v-card-title>
-              {{ selectedItemTitle }}
-              <v-spacer />
-              <v-btn color="primary" icon @click="clearSelection">
-                <v-icon v-text="'mdi-close'" />
-              </v-btn>
-            </v-card-title>
-            <v-card-subtitle>
-              <vehicle-number-button :vehicle-number="selectedItem.vehicle_number" />
-            </v-card-subtitle>
-            <v-divider />
-            <v-card-text class="pa-0">
-              <v-simple-table dense>
-                <template #default>
-                  <tbody>
-                    <tr v-for="(field, f) in displayFields" :key="f">
-                      <th class="overflow-ellipsis" v-text="$t(field)" />
-                      <!-- eslint-disable-next-line vue/no-v-html -->
-                      <td class="overflow-ellipsis" v-html="selectedItem[field]" />
-                    </tr>
-                  </tbody>
-                </template>
-              </v-simple-table>
-            </v-card-text>
-            <v-card-actions />
-          </v-card>
-        </v-scale-transition>
-        <v-slide-y-transition class="d-flex flex-wrap" group>
-          <v-card
-            v-for="(item, key) in items"
-            :key="key"
-            :color="item.vehicle_number === selectedItem.vehicle_number ? 'primary' : undefined"
-            :dark="item.vehicle_number === selectedItem.vehicle_number"
-            height="100"
-            width="150"
-            class="ma-2"
-            outlined
-            shaped
-            tile
-            @click="selectItem(item)"
-          >
-            <v-card-title>
-              {{ item.vehicle_number }}
-            </v-card-title>
-            <v-card-subtitle class="overflow-ellipsis">
-              {{ item[sortBy] }}
-            </v-card-subtitle>
-          </v-card>
-        </v-slide-y-transition>
+      <v-card-text>
+        <v-data-iterator
+          :footer-props="{ itemsPerPageOptions: [10, 25, 50, 100, 500, 1000, -1] }"
+          :items="filteredItems"
+          :items-per-page.sync="pagination.itemsPerPage"
+          item-key="vehicle_number"
+        >
+          <template #default="{ items, isExpanded, expand }">
+            <v-slide-x-transition group class="d-flex flex-wrap" hide-on-leave>
+              <v-col
+                v-for="item in items"
+                :key="item.vehicle_number"
+                cols="12"
+                sm="6"
+                md="4"
+                lg="3"
+              >
+                <v-card outlined shaped>
+                  <v-toolbar color="transparent" dense flat>
+                    <v-toolbar-title>
+                      {{ item.vehicle_number }}
+                    </v-toolbar-title>
+                    <v-spacer />
+                    <v-btn icon @click="expand(item, !isExpanded(item))">
+                      <v-icon v-text="isExpanded(item) ? 'mdi-card-bulleted' : 'mdi-card-bulleted-outline'" />
+                    </v-btn>
+                  </v-toolbar>
+                  <v-card-subtitle v-show="item[sortBy]" v-text="item[sortBy]" />
+                  <v-list v-if="isExpanded(item)" dense>
+                    <v-divider />
+                    <v-list-item v-for="(field, f) in displayFields" :key="`field-${f}`">
+                      <v-list-item-title>{{ $t(field) }}</v-list-item-title>
+                      <v-list-item-subtitle>{{ item[field] }}</v-list-item-subtitle>
+                    </v-list-item>
+                  </v-list>
+                </v-card>
+              </v-col>
+            </v-slide-x-transition>
+          </template>
+        </v-data-iterator>
       </v-card-text>
     </v-card>
   </v-flex>
@@ -163,9 +151,6 @@
 import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'FleetNavigator',
-  components: {
-    'vehicle-number-button': () => import(/* webpackChunkName: "VehicleNumberButton" */ '@/components/vehicle-dashboard/VehicleNumberButton.vue')
-  },
   async fetch () {
     await this.fetchVehicles()
   },
@@ -173,14 +158,16 @@ export default {
     // to start off, return a default object with no filters in each filterType array
     currentFilters: vm.defaultFilter(),
     displayFields: ['center_code', 'center_name', 'model_year', 'vehicle_make', 'vehicle_model', 'vehicle_color', 'in_service_date', 'vin', 'contract_description'],
-    filterFields: ['center_code', 'model_year', 'vehicle_make', 'vehicle_model'],
+    filterFields: ['center_code', 'model_year', 'vehicle_make', 'vehicle_model', 'vehicle_number', 'driver_last_name'],
     model: {
       center_code: '',
       vehicle_make: ''
     },
+    pagination: {
+      itemsPerPage: 50
+    },
     search: '',
-    selectedItem: {},
-    sortFields: ['center_code', 'center_name', 'driver_last_name', 'model_year', 'vehicle_make', 'vehicle_model', 'vehicle_color', 'in_service_date', 'vin', 'contract_description'],
+    sortFields: ['center_code', 'center_name', 'vehicle_number', 'driver_last_name', 'model_year', 'vehicle_make', 'vehicle_model', 'vehicle_color', 'in_service_date', 'vin', 'contract_description'],
     sortBy: 'center_code',
     sortDesc: false
   }),
@@ -191,15 +178,13 @@ export default {
     ...mapGetters({
       filteredVehicles: 'fleet/filteredVehicles'
     }),
-    items () {
+    filteredItems () {
       const order = this.sortDesc ? 'desc' : 'asc'
       const sortBy = this.sortBy || 'center_code'
       return this.filteredVehicles(this.currentFilters, sortBy, order)
     },
     filterCount: vm => [].concat(...Object.values(vm.currentFilters)).length,
-    hasFilters: vm => Object.values(vm.currentFilters).map(x => x.filter(Boolean).length).reduce((a, b) => a + b, 0),
-    hasSelection: vm => Object.keys(vm.selectedItem).length > 0,
-    selectedItemTitle: vm => [vm.selectedItem.driver_first_name, vm.selectedItem.driver_last_name].filter(Boolean).join(' ')
+    hasFilters: vm => Object.values(vm.currentFilters).map(x => x.filter(Boolean).length).reduce((a, b) => a + b, 0)
   },
   methods: {
     /**
@@ -213,11 +198,7 @@ export default {
       if (!this.currentFilters[name].includes(value)) {
         this.currentFilters[name].push(value.toUpperCase())
         this.model[name] = null // clear the textfield since we successfully added a filter
-        this.clearSelection()
       }
-    },
-    clearSelection () {
-      this.selectedItem = {}
     },
     defaultFilter () {
       return {
@@ -231,17 +212,9 @@ export default {
     },
     removeFilter (name, value) {
       this.currentFilters[name].splice(this.currentFilters[name].findIndex(item => item === value), 1)
-      this.selectedItem = {}
     },
     resetFilters () {
       this.currentFilters = this.defaultFilter()
-    },
-    selectItem (item) {
-      this.selectedItem = {}
-      // adding 100ms between clearing the old selection and selecting a new item lets us see the animation
-      setTimeout(() => {
-        this.selectedItem = { ...item }
-      }, 100)
     }
   },
   /**
@@ -258,17 +231,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.list-item {
-  display: inline-block;
-  margin-right: 10px;
-}
-.list-enter-active, .list-leave-active {
-  transition: all 1s;
-}
-.list-enter, .list-leave-to /* .list-leave-active below version 2.1.8 */ {
-  opacity: 0;
-  transform: translateY(30px);
-}
-</style>
