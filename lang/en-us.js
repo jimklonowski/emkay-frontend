@@ -401,6 +401,7 @@ export default {
   fuel_card_request: "Fuel Card Request",
   fuel_card_vendor: "Fuel Card Vendor",
   fuel_cards: "Fuel Cards",
+  fuel_companies: "Fuel Companies",
   fuel_company_invoice: "Fuel Company Invoice",
   fuel_company_name: "Fuel Company Name",
   fuel_company_number: "Fuel Company Number",
