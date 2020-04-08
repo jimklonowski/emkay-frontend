@@ -256,7 +256,8 @@ export default {
     paginationText () {
       const length = this.filteredItems.length
       const start = ((this.pagination.page - 1) * this.pagination.itemsPerPage) + 1
-      const stop = (start + this.pagination.itemsPerPage - 1)
+      const end = (start + this.pagination.itemsPerPage - 1)
+      const stop = length < end ? length : end
       return this.$vuetify.lang.t('$vuetify.dataFooter.pageText', start, stop, length)
     }
   },
