@@ -276,7 +276,9 @@ export default {
         vehicle_model: [],
         vehicle_category: [],
         driver_state_province: [],
-        model_year: []
+        model_year: [],
+        vehicle_number: [],
+        driver_last_name: []
       }
     },
     removeFilter (name, value) {
