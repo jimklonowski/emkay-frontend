@@ -187,6 +187,7 @@
                   {{ item.vehicle_number }}
                 </v-toolbar-title>
                 <v-spacer />
+                <vehicle-number-button :vehicle-number="item.vehicle_number" icon="mdi-car-info" :color="null" />
                 <v-btn icon @click="expand(item, !isExpanded(item))">
                   <v-icon v-text="isExpanded(item) ? 'mdi-chevron-left' : 'mdi-chevron-right'" />
                 </v-btn>
@@ -291,7 +292,8 @@ export default {
   name: 'FleetNavigator',
   components: {
     'center-picker': () => import(/* webpackChunkName: "CenterPicker" */ '@/components/core/CenterPicker.vue'),
-    'search-bar': () => import(/* webpackChunkName: "SearchBar" */ '@/components/core/SearchBar.vue')
+    'search-bar': () => import(/* webpackChunkName: "SearchBar" */ '@/components/core/SearchBar.vue'),
+    'vehicle-number-button': () => import(/* webpackChunkName: "VehicleNumberButton" */ '@/components/vehicle-dashboard/VehicleNumberButton.vue')
   },
   async fetch () {
     await this.reset()
