@@ -3,21 +3,7 @@
     <v-toolbar flat color="transparent">
       <v-toolbar-title>{{ title }}</v-toolbar-title>
       <v-spacer />
-      <v-text-field
-        v-model="search"
-        :label="$t('search')"
-        prepend-inner-icon="mdi-magnify"
-        background-color="transparent"
-        class="mr-1"
-        clearable
-        dense
-        flat
-        hide-details
-        outlined
-        rounded
-        single-line
-        solo
-      />
+      <search-bar v-model="search" :label="$t('search')" class="mr-2" />
 
       <!-- Download as XLS button -->
       <client-only>
