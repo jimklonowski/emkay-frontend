@@ -59,7 +59,7 @@ export default {
         const filteredData = this.maintenance_history.filter(x => x.maintenance_category === label)
         data.push(computeTotalByKey(filteredData, 'amount'))
       })
-      console.dir(data)
+      // console.dir(data)
       // return the chart data
       return {
         datasets: [{

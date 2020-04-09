@@ -143,6 +143,11 @@
               </v-card>
             </v-dialog>
             <v-spacer />
+            <v-btn-toggle v-show="chartable" v-model="show_charts" dense class="mr-2">
+              <v-btn color="primary" :value="true">
+                <v-icon v-text="'mdi-chart-bar'" />
+              </v-btn>
+            </v-btn-toggle>
             <v-select
               v-model="sortBy"
               flat
@@ -170,6 +175,9 @@
             </v-btn-toggle>
           </template>
         </v-toolbar>
+        <v-sheet v-if="show_charts && chartable" color="transparent" class="py-4">
+          <inventory-bar-chart :items="filteredItems" :field="sortBy" />
+        </v-sheet>
       </template>
       <template #default="{ items, isExpanded, expand }">
         <v-slide-x-transition group class="d-flex flex-wrap" hide-on-leave>
@@ -291,6 +299,7 @@ import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'FleetNavigator',
   components: {
+    'inventory-bar-chart': () => import(/* webpackChunkName: "InventoryBarChart" */ '@/components/charts/InventoryBarChart.vue'),
     'center-picker': () => import(/* webpackChunkName: "CenterPicker" */ '@/components/core/CenterPicker.vue'),
     'search-bar': () => import(/* webpackChunkName: "SearchBar" */ '@/components/core/SearchBar.vue'),
     'vehicle-number-button': () => import(/* webpackChunkName: "VehicleNumberButton" */ '@/components/vehicle-dashboard/VehicleNumberButton.vue')
@@ -312,6 +321,7 @@ export default {
       totalVisible: 5
     },
     search: '',
+    show_charts: false,
     show_filter_dialog: false,
     sortFields: ['center_name', 'driver_last_name', 'in_service_date', 'model_year', 'vehicle_color', 'vehicle_make', 'vehicle_model', 'vehicle_number', 'vin'],
     sortBy: 'center_name',
@@ -327,6 +337,9 @@ export default {
       vehicle_makes: 'fleet/getVehicleMakes',
       vehicle_models: 'fleet/getVehicleModels'
     }),
+    chartable () {
+      return ['center_name', 'model_year', 'vehicle_make', 'vehicle_model'].includes(this.sortBy)
+    },
     filteredItems () {
       return this.filteredVehicles(this.currentFilters)
     },
