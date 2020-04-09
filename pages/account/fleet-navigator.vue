@@ -21,22 +21,11 @@
           color="primary darken-2"
           extension-height="64"
         >
-          <v-toolbar-title>{{ $t('fleet_navigator') }}</v-toolbar-title>
+          <v-toolbar-title class="font-lato">
+            {{ $t('fleet_navigator') }}
+          </v-toolbar-title>
           <v-spacer />
-          <v-text-field
-            v-model="search"
-            :label="$t('search')"
-            prepend-inner-icon="mdi-magnify"
-            background-color="transparent"
-            clearable
-            dense
-            flat
-            hide-details
-            outlined
-            rounded
-            single-line
-            solo
-          />
+          <search-bar v-model="search" :label="$t('search')" />
           <template #extension>
             <v-dialog
               v-model="show_filter_dialog"
@@ -208,6 +197,9 @@
 import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'FleetNavigator',
+  components: {
+    'search-bar': () => import(/* webpackChunkName: "SearchBar" */ '@/components/core/SearchBar.vue')
+  },
   async fetch () {
     await this.reset()
     await this.fetchVehicles()
