@@ -253,10 +253,6 @@ export default {
     // to start off, return a default object with no filters in each filterType array
     currentFilters: vm.defaultFilter(),
     displayFields: ['center_code', 'center_name', 'model_year', 'vehicle_make', 'vehicle_model', 'vehicle_color', 'in_service_date', 'vin', 'contract_description'],
-    model: {
-      center_code: '',
-      vehicle_make: ''
-    },
     pagination: {
       itemsLength: 0,
       itemsPerPage: 50,
@@ -312,7 +308,6 @@ export default {
       if (!value) { return }
       if (!this.currentFilters[name].includes(value)) {
         this.currentFilters[name].push(value.toUpperCase())
-        this.model[name] = null // clear the textfield since we successfully added a filter
       }
     },
     defaultFilter () {
