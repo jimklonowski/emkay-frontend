@@ -1,3 +1,5 @@
+// See: https://medium.com/code-nebula/automatically-generate-chart-colors-with-chart-js-d3s-color-scales-f62e282b2b41
+
 import { interpolateViridis as defaultColorFunction } from 'd3-scale-chromatic'
 
 function calculatePoint (i, intervalSize, colorRangeInfo) {

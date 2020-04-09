@@ -39,7 +39,8 @@ export default {
               labelString: this.$i18n.t('vehicles')
             },
             ticks: {
-              beginAtZero: true
+              beginAtZero: true,
+              precision: 0
             }
           }]
         }
