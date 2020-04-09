@@ -10,6 +10,7 @@ import { mapGetters } from 'vuex'
 export const reportMixins = {
   components: {
     'center-picker': () => import(/* webpackChunkName: "CenterPicker" */ '@/components/core/CenterPicker.vue'),
+    'excel-downloader': () => import(/* webpackChunkName: "ExcelDownloader" */ '@/components/core/ExcelDownloader.vue'),
     'search-bar': () => import(/* webpackChunkName: "SearchBar" */ '@/components/core/SearchBar.vue'),
     'vehicle-number-button': () => import(/* webpackChunkName: "VehicleNumberButton" */ '@/components/vehicle-dashboard/VehicleNumberButton.vue')
   },

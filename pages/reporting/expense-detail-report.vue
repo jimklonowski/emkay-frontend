@@ -4,16 +4,7 @@
       <v-toolbar-title>{{ title }}</v-toolbar-title>
       <v-spacer />
       <search-bar v-model="search" :label="$t('search')" class="mr-2" />
-
-      <!-- Download as XLS button -->
-      <client-only>
-        <v-divider vertical inset class="mx-3" />
-        <download-excel :fields="downloadFields" :data="items" :name="exportName">
-          <v-btn :title="`${$t('save')} .xls`" color="primary" large icon>
-            <v-icon v-text="'mdi-cloud-download'" />
-          </v-btn>
-        </download-excel>
-      </client-only>
+      <excel-downloader :download-fields="downloadFields" :items="items" :export-name="exportName" />
     </v-toolbar>
     <v-divider />
 
