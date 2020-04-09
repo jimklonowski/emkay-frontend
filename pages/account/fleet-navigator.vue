@@ -150,6 +150,7 @@
               :label="$t('sort')"
               prepend-inner-icon="mdi-sort"
               :items="sortFields.map(x => { return { text: $t(x), value: x }})"
+              :menu-props="{ bottom: true, offsetY: true }"
               style="max-width:300px;"
               class="mr-2"
               dense
@@ -176,9 +177,9 @@
             v-for="item in items"
             :key="item.vehicle_number"
             cols="12"
-            sm="6"
-            md="4"
-            lg="3"
+            :sm="isExpanded(item) ? 12 : 6"
+            :md="isExpanded(item) ? 8 : 4"
+            :lg="isExpanded(item) ? 6 : 3"
           >
             <v-card outlined shaped>
               <v-toolbar color="transparent" dense flat>
@@ -187,17 +188,64 @@
                 </v-toolbar-title>
                 <v-spacer />
                 <v-btn icon @click="expand(item, !isExpanded(item))">
-                  <v-icon v-text="isExpanded(item) ? 'mdi-chevron-up' : 'mdi-chevron-down'" />
+                  <v-icon v-text="isExpanded(item) ? 'mdi-chevron-left' : 'mdi-chevron-right'" />
                 </v-btn>
               </v-toolbar>
-              <v-card-subtitle v-show="item[sortBy]" v-text="item[sortBy]" />
-              <v-list v-if="isExpanded(item)" dense>
-                <v-divider />
-                <v-list-item v-for="(field, f) in displayFields" :key="`field-${f}`">
-                  <v-list-item-title>{{ $t(field) }}</v-list-item-title>
-                  <v-list-item-subtitle>{{ item[field] }}</v-list-item-subtitle>
-                </v-list-item>
-              </v-list>
+              <!-- <v-card-subtitle v-show="item[sortBy]" v-text="item[sortBy]" /> -->
+              <v-card-text class="d-flex flex-row">
+                <v-list :width="isExpanded(item) ? '50%' : '100%'" dense>
+                  <v-list-item>
+                    <v-list-item-content>
+                      <v-list-item-title>{{ $t('year_make_model') }}</v-list-item-title>
+                      <v-list-item-subtitle>{{ yearMakeModel(item) || '--' }}</v-list-item-subtitle>
+                    </v-list-item-content>
+                  </v-list-item>
+                  <v-list-item>
+                    <v-list-item-content>
+                      <v-list-item-title>{{ $t('driver') }}</v-list-item-title>
+                      <v-list-item-subtitle>{{ driverName(item) || '--' }}</v-list-item-subtitle>
+                    </v-list-item-content>
+                  </v-list-item>
+                  <v-list-item>
+                    <v-list-item-content>
+                      <v-list-item-title>{{ $t('center') }}</v-list-item-title>
+                      <v-list-item-subtitle>{{ item.center_name || '--' }}</v-list-item-subtitle>
+                    </v-list-item-content>
+                  </v-list-item>
+                  <v-list-item>
+                    <v-list-item-content>
+                      <v-list-item-title>{{ $t('in_service_date') }}</v-list-item-title>
+                      <v-list-item-subtitle>{{ $options.filters.date(item.in_service_date) || '--' }}</v-list-item-subtitle>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-list>
+                <v-list v-if="isExpanded(item)" :width="isExpanded(item) ? '50%' : '100%'" dense>
+                  <v-list-item>
+                    <v-list-item-content>
+                      <v-list-item-title>{{ $t('odometer') }}</v-list-item-title>
+                      <v-list-item-subtitle>{{ $options.filters.number(item.odometer) || '--' }}</v-list-item-subtitle>
+                    </v-list-item-content>
+                  </v-list-item>
+                  <v-list-item>
+                    <v-list-item-content>
+                      <v-list-item-title>{{ $t('odometer_date') }}</v-list-item-title>
+                      <v-list-item-subtitle>{{ $options.filters.date(item.odometer_date) || '--' }}</v-list-item-subtitle>
+                    </v-list-item-content>
+                  </v-list-item>
+                  <v-list-item>
+                    <v-list-item-content>
+                      <v-list-item-title>{{ $t('vin') }}</v-list-item-title>
+                      <v-list-item-subtitle>{{ item.vin || '--' }}</v-list-item-subtitle>
+                    </v-list-item-content>
+                  </v-list-item>
+                  <v-list-item>
+                    <v-list-item-content>
+                      <v-list-item-title>{{ $t('contract_description') }}</v-list-item-title>
+                      <v-list-item-subtitle>{{ item.contract_description || '--' }}</v-list-item-subtitle>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-list>
+              </v-card-text>
             </v-card>
           </v-col>
         </v-slide-x-transition>
@@ -205,7 +253,7 @@
       <template #footer>
         <v-toolbar color="primary darken-2" dark flat>
           <span style="white-space:nowrap;" class="mr-2">{{ $vuetify.lang.locales[$vuetify.lang.current].dataFooter.itemsPerPageText }}</span>
-          <v-menu offset-y>
+          <v-menu top offset-y>
             <template #activator="{ on }">
               <v-btn depressed color="primary" v-on="on">
                 {{ pagination.itemsPerPage === -1 ? $vuetify.lang.locales[$vuetify.lang.current].dataFooter.itemsPerPageAll : pagination.itemsPerPage }}
@@ -252,11 +300,10 @@ export default {
   data: vm => ({
     // to start off, return a default object with no filters in each filterType array
     currentFilters: vm.defaultFilter(),
-    displayFields: ['center_code', 'center_name', 'model_year', 'vehicle_make', 'vehicle_model', 'vehicle_color', 'in_service_date', 'vin', 'contract_description'],
     pagination: {
       itemsLength: 0,
       itemsPerPage: 50,
-      itemsPerPageOptions: [50, 100, 500, 1000, -1],
+      itemsPerPageOptions: [15, 50, 100, 500, 1000, -1],
       page: 1,
       pageCount: 0,
       pageStart: 1,
@@ -264,8 +311,8 @@ export default {
     },
     search: '',
     show_filter_dialog: false,
-    sortFields: ['center_code', 'center_name', 'vehicle_number', 'driver_last_name', 'model_year', 'vehicle_make', 'vehicle_model', 'vehicle_color', 'in_service_date', 'vin', 'contract_description'],
-    sortBy: 'center_code',
+    sortFields: ['center_name', 'driver_last_name', 'in_service_date', 'model_year', 'vehicle_color', 'vehicle_make', 'vehicle_model', 'vehicle_number', 'vin'],
+    sortBy: 'center_name',
     sortDesc: false
   }),
   computed: {
@@ -327,6 +374,12 @@ export default {
     },
     resetFilters () {
       this.currentFilters = this.defaultFilter()
+    },
+    driverName (item) {
+      return [item.driver_first_name, item.driver_last_name].filter(Boolean).join(' ')
+    },
+    yearMakeModel (item) {
+      return [item.model_year, item.vehicle_make, item.vehicle_model].filter(Boolean).join(' ')
     }
   },
   /**
