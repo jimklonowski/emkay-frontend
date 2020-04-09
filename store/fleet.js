@@ -34,6 +34,15 @@ export const mutations = {
 export const getters = {
   getError: state => state.error,
   getVehicles: state => state.vehicles,
+  getModelYears: state => {
+    return state.vehicles.map(x => x.model_year).filter((item, index, array) => array.indexOf(item) === index).sort()
+  },
+  getVehicleMakes: state => {
+    return state.vehicles.map(x => x.vehicle_make).filter((item, index, array) => array.indexOf(item) === index).sort()
+  },
+  getVehicleModels: state => {
+    return state.vehicles.map(x => x.vehicle_model).filter((item, index, array) => array.indexOf(item) === index).sort()
+  },
   filteredVehicles: state => (filters) => {
     return multiFilter(state.vehicles, filters)
   },

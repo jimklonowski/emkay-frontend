@@ -30,6 +30,7 @@
             <v-dialog
               v-model="show_filter_dialog"
               max-width="600"
+              scrollable
             >
               <template #activator="{ on }">
                 <v-btn color="primary" depressed v-on="on">
@@ -55,8 +56,8 @@
                     <v-icon v-text="'mdi-close'" />
                   </v-btn>
                 </v-toolbar>
-                <v-subheader class="overline px-4" v-text="$t('current_filters')" />
-                <v-card-text>
+                <v-card-title>
+                  <v-subheader class="overline px-4" v-text="$t('current_filters')" />
                   <v-flex v-if="hasFilters">
                     <!-- iterate each category -->
                     <template v-for="(value, name, index) in currentFilters">
@@ -75,27 +76,70 @@
                       </v-chip>
                     </template>
                   </v-flex>
-                  <span v-else>{{ $t('no_selection') }}</span>
-                </v-card-text>
-                <v-subheader class="overline px-4" v-text="$t('add_filters')" />
-                <v-card-text>
+                  <span v-else class="caption">
+                    {{ $t('no_selection') }}
+                  </span>
+                </v-card-title>
+                <v-card-text max-height="300">
                   <v-list dense rounded>
-                    <v-list-item v-for="(field, f) in filterFields" :key="f">
+                    <v-subheader>{{ $t('center_filters') }}</v-subheader>
+                    <v-list-item>
                       <v-list-item-content>
-                        <v-text-field
-                          v-model.trim="model[field]"
-                          :label="$t(field)"
-                          autocomplete="off"
+                        <center-picker v-model="currentFilters.center_code" :return-value.sync="currentFilters.center_code" :return-object="false" />
+                      </v-list-item-content>
+                    </v-list-item>
+                    <v-list-item>
+                      <v-list-item-content>
+                        <v-select
+                          v-model="currentFilters.model_year"
                           prepend-inner-icon="mdi-filter-variant"
-                          clearable
+                          autocomplete="off"
+                          :items="model_years"
+                          :label="$t('model_year')"
                           dense
+                          multiple
                           outlined
-                          @keydown.enter="addFilter(field, model[field])"
+                          :menu-props="{ bottom: true, offsetY: true }"
+                        />
+                      </v-list-item-content>
+                    </v-list-item>
+                    <v-list-item>
+                      <v-list-item-content>
+                        <v-select
+                          v-model="currentFilters.vehicle_make"
+                          prepend-inner-icon="mdi-filter-variant"
+                          autocomplete="off"
+                          :items="vehicle_makes"
+                          :label="$t('vehicle_make')"
+                          dense
+                          multiple
+                          outlined
+                          :menu-props="{ bottom: true, offsetY: true }"
+                        />
+                      </v-list-item-content>
+                    </v-list-item>
+                    <v-list-item>
+                      <v-list-item-content>
+                        <v-select
+                          v-model="currentFilters.vehicle_model"
+                          prepend-inner-icon="mdi-filter-variant"
+                          autocomplete="off"
+                          :items="vehicle_models"
+                          :label="$t('vehicle_model')"
+                          dense
+                          multiple
+                          outlined
+                          :menu-props="{ bottom: true, offsetY: true }"
                         />
                       </v-list-item-content>
                     </v-list-item>
                   </v-list>
                 </v-card-text>
+                <v-card-actions>
+                  <v-btn block color="primary" depressed @click="show_filter_dialog = false">
+                    {{ $t('ok') }}
+                  </v-btn>
+                </v-card-actions>
               </v-card>
             </v-dialog>
             <v-spacer />
@@ -198,6 +242,7 @@ import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'FleetNavigator',
   components: {
+    'center-picker': () => import(/* webpackChunkName: "CenterPicker" */ '@/components/core/CenterPicker.vue'),
     'search-bar': () => import(/* webpackChunkName: "SearchBar" */ '@/components/core/SearchBar.vue')
   },
   async fetch () {
@@ -208,7 +253,6 @@ export default {
     // to start off, return a default object with no filters in each filterType array
     currentFilters: vm.defaultFilter(),
     displayFields: ['center_code', 'center_name', 'model_year', 'vehicle_make', 'vehicle_model', 'vehicle_color', 'in_service_date', 'vin', 'contract_description'],
-    filterFields: ['center_code', 'model_year', 'vehicle_make', 'vehicle_model', 'vehicle_number', 'driver_last_name'],
     model: {
       center_code: '',
       vehicle_make: ''
@@ -233,7 +277,10 @@ export default {
      * Vuex Getters
      */
     ...mapGetters({
-      filteredVehicles: 'fleet/filteredVehicles'
+      filteredVehicles: 'fleet/filteredVehicles',
+      model_years: 'fleet/getModelYears',
+      vehicle_makes: 'fleet/getVehicleMakes',
+      vehicle_models: 'fleet/getVehicleModels'
     }),
     filteredItems () {
       return this.filteredVehicles(this.currentFilters)

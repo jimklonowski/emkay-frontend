@@ -39,7 +39,14 @@ export default {
     items: {
       type: Array,
       default () {
-        return this.$store.getters['account/getCenters']
+        const centers = this.$store.getters['account/getCenters']
+        // add a 'Select all' root node
+        const root = {
+          center_code: -1,
+          center_name: this.$i18n.t('select_all'),
+          children: centers
+        }
+        return [root]
       }
     },
     itemChildren: {

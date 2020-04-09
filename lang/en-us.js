@@ -812,6 +812,7 @@ export default {
   search_placeholder: "Enter a vehicle number, driver name, license plate number, or last 8 of VIN",
   select: "Select",
   select_a_report: "Select a report",
+  select_all: "Select All",
   select_an_action: "Select an action",
   select_columns: "Select Columns",
   select_recipients_or_add: "Select recipient(s) or add your own",
