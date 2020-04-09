@@ -3,30 +3,8 @@
     <v-toolbar flat color="transparent">
       <v-toolbar-title>{{ title }}</v-toolbar-title>
       <v-spacer />
-      <v-text-field
-        v-model="search"
-        :label="$t('search')"
-        prepend-inner-icon="mdi-magnify"
-        background-color="transparent"
-        class="mr-2"
-        clearable
-        dense
-        flat
-        hide-details
-        outlined
-        rounded
-        single-line
-        solo
-      />
-      <!-- Download as XLS button -->
-      <client-only>
-        <v-divider vertical inset class="mx-3" />
-        <download-excel :fields="downloadFields" :data="items" :name="exportName">
-          <v-btn :title="`${$t('save')} .xls`" color="primary" large icon>
-            <v-icon v-text="'mdi-cloud-download'" />
-          </v-btn>
-        </download-excel>
-      </client-only>
+      <search-bar v-model="search" :label="$t('search')" class="mr-2" />
+      <excel-downloader :download-fields="downloadFields" :items="items" :export-name="exportName" />
     </v-toolbar>
     <v-divider />
 

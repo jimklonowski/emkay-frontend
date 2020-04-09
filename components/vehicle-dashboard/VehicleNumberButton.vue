@@ -1,12 +1,16 @@
 <template>
   <v-btn
     :title="$t('to_vehicle_dashboard')"
+    :icon="icon && !text"
+    :ripple="false"
     nuxt
     text
-    color="primary"
+    :color="color"
     @click="goToVehicleDashboard()"
   >
-    {{ vehicleNumber }}
+    <v-icon v-if="icon" v-text="icon" />
+    <span v-if="text" v-text="text" />
+    <span v-else-if="!text && !icon" v-text="vehicleNumber" />
   </v-btn>
 </template>
 
@@ -14,6 +18,18 @@
 import { mapActions } from 'vuex'
 export default {
   props: {
+    color: {
+      type: String,
+      default: 'primary'
+    },
+    icon: {
+      type: [Boolean, String],
+      default: false
+    },
+    text: {
+      type: String,
+      default: ''
+    },
     vehicleNumber: {
       type: String,
       required: true
