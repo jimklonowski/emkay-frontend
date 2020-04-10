@@ -3,7 +3,53 @@
     <donut-chart
       :data="chartData"
       :chart-data="chartData"
-      :options="{
+      :options="chartOptions"
+      :styles="chartStyles"
+    />
+  </client-only>
+</template>
+
+<script>
+import { mapGetters } from 'vuex'
+import { computeTotalByKey } from '@/utility/helpers'
+import { interpolateColors } from '@/utility/color-generator'
+
+export default {
+  computed: {
+    /**
+     * Vuex Getters
+     */
+    ...mapGetters({
+      fuel_history: 'vehicle-dashboard/getFuelHistory'
+    }),
+    /**
+     * Chartjs data.  Needs data, labels, and colors
+     */
+    chartData () {
+      const data = []
+
+      const labels = this.fuel_history
+        .map(x => x.fuel_company_name)
+        .filter((item, index, array) => array.indexOf(item) === index)
+        .sort()
+
+      labels.forEach(label => {
+        const filteredData = this.fuel_history.filter(x => x.fuel_company_name === label)
+        data.push(computeTotalByKey(filteredData, 'amount'))
+      })
+
+      const backgroundColor = interpolateColors(labels.length)
+
+      return {
+        datasets: [{ backgroundColor, borderWidth: 1, data }],
+        labels
+      }
+    },
+    /**
+     * Chartjs options
+     */
+    chartOptions () {
+      return {
         legend: {
           align: 'center',
           display: true,
@@ -16,7 +62,7 @@
         tooltips: {
           callbacks: {
             label: (tooltipItem, data) => {
-              return `${data.labels[tooltipItem.index]}: ${$options.filters.currency(data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index])}`
+              return `${data.labels[tooltipItem.index]}: ${this.$options.filters.currency(data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index])}`
             }
           }
         },
@@ -27,42 +73,17 @@
           fontFamily: 'Lato, sans-serif',
           fontSize: 16,
           fontStyle: 'normal',
-          text: $t('fuel_companies')
+          text: this.$i18n.t('fuel_companies')
         }
-      }"
-      :styles="{
+      }
+    },
+    /**
+     * Chartjs styles
+     */
+    chartStyles () {
+      return {
         height: '256px',
         position: 'relative'
-      }"
-    />
-  </client-only>
-</template>
-
-<script>
-import { mapGetters } from 'vuex'
-import { computeTotalByKey } from '@/utility/helpers'
-
-export default {
-  computed: {
-    /**
-     * Vuex Getters
-     */
-    ...mapGetters({
-      fuel_history: 'vehicle-dashboard/getFuelHistory'
-    }),
-    chartData () {
-      const data = []
-      const backgroundColor = ['#4F286C', '#752870', '#99286E', '#B92D67', '#D33B5B', '#E6504B', '#F26B38', '#F68820']
-
-      const labels = this.fuel_history.map(x => x.fuel_company_name).filter((value, index, self) => self.indexOf(value) === index)
-      labels.forEach(label => {
-        const filteredData = this.fuel_history.filter(x => x.fuel_company_name === label)
-        data.push(computeTotalByKey(filteredData, 'amount'))
-      })
-      // return chart data
-      return {
-        datasets: [{ backgroundColor, borderWidth: 1, data }],
-        labels
       }
     }
   }

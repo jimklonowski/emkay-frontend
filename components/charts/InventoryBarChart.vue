@@ -3,8 +3,8 @@
     <bar-chart
       :data="chartData"
       :chart-data="chartData"
-      :options="options"
-      :styles="styles"
+      :options="chartOptions"
+      :styles="chartStyles"
     />
   </client-only>
 </template>
@@ -23,7 +23,33 @@ export default {
     }
   },
   computed: {
-    options () {
+    /**
+     * Chartjs config.  Needs data, labels, and colors
+     */
+    chartData () {
+      const data = []
+
+      const labels = this.items
+        .map(x => { return x[this.field] })
+        .filter((item, index, array) => array.indexOf(item) === index)
+        .sort()
+
+      labels.forEach(label => {
+        const count = this.items.filter(x => x[this.field] === label).length
+        data.push(count)
+      })
+
+      const backgroundColor = interpolateColors(labels.length)
+
+      return {
+        datasets: [{ backgroundColor, data }],
+        labels
+      }
+    },
+    /**
+     * Chartjs options
+     */
+    chartOptions () {
       return {
         legend: false,
         maintainAspectRatio: false,
@@ -46,30 +72,13 @@ export default {
         }
       }
     },
-    styles () {
+    /**
+     * Chartjs styles
+     */
+    chartStyles () {
       return {
         height: '256px',
         position: 'relative'
-      }
-    },
-    chartData () {
-      const data = []
-      // const backgroundColor = ['#4F286C', '#752870', '#99286E', '#B92D67', '#D33B5B', '#E6504B', '#F26B38', '#F68820']
-      const labels = this.items
-        .map(x => { return x[this.field] })
-        .filter((item, index, array) => { return array.indexOf(item) === index })
-        .sort()
-      const backgroundColor = interpolateColors(labels.length)
-      labels.forEach(label => {
-        const count = this.items.filter(x => x[this.field] === label).length
-        data.push(count)
-      })
-      return {
-        datasets: [{
-          backgroundColor,
-          data
-        }],
-        labels
       }
     }
   }
