@@ -24,7 +24,7 @@ export default {
   },
   computed: {
     /**
-     * Chartjs config.  Needs data, labels, and colors
+     * Chartjs data.  Needs data, labels, and colors
      */
     chartData () {
       const data = []

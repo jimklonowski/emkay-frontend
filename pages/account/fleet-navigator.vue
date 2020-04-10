@@ -181,7 +181,7 @@
         <v-card outlined rounded class="ma-4 mt-6">
           <v-card-text>
             <inventory-bar-chart v-if="dataviz === 'bar-chart' && chartable" :items="filteredItems" :field="sortBy" />
-            <v-skeleton-loader v-else-if="dataviz === 'map'" type="image" />
+            <inventory-geo-map v-else-if="dataviz === 'map'" :items="filteredItems" />
           </v-card-text>
         </v-card>
       </template>
@@ -306,6 +306,7 @@ export default {
   name: 'FleetNavigator',
   components: {
     'inventory-bar-chart': () => import(/* webpackChunkName: "InventoryBarChart" */ '@/components/charts/InventoryBarChart.vue'),
+    'inventory-geo-map': () => import(/* webpackChunkName: "InventoryGeoMap" */ '@/components/charts/InventoryGeoMap.vue'),
     'center-picker': () => import(/* webpackChunkName: "CenterPicker" */ '@/components/core/CenterPicker.vue'),
     'search-bar': () => import(/* webpackChunkName: "SearchBar" */ '@/components/core/SearchBar.vue'),
     'vehicle-number-button': () => import(/* webpackChunkName: "VehicleNumberButton" */ '@/components/vehicle-dashboard/VehicleNumberButton.vue')

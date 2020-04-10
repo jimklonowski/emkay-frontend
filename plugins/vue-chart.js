@@ -1,7 +1,25 @@
 /* eslint-disable vue/require-prop-types */
 import Vue from 'vue'
-import { Bar, Doughnut, Line, Pie, mixins } from 'vue-chartjs'
+import 'chartjs-chart-geo'
+import { Bar, Doughnut, Line, Pie, mixins, generateChart } from 'vue-chartjs'
 const { reactiveProp } = mixins
+
+const Choropleth = generateChart('choropleth', 'choropleth')
+
+Vue.component('map-geo', {
+  extends: Choropleth,
+  mixins: [reactiveProp],
+  props: ['options'],
+  watch: {
+    options () {
+      this.$data._chart.options = this.options
+      this.$data._chart.update()
+    }
+  },
+  mounted () {
+    this.renderChart(this.chartData, this.options)
+  }
+})
 
 Vue.component('bar-chart', {
   extends: Bar,
