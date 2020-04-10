@@ -205,8 +205,8 @@ export default {
           labels = [this.$i18n.t('depreciation'), this.$i18n.t('interest'), this.$i18n.t('licensing'), this.$i18n.t('tax')]
           break
         case 'variable':
-          data = [this.expense_summary.maintenance, this.expense_summary.accident, this.expense_summary.fuel]
-          labels = [this.$i18n.t('maintenance'), this.$i18n.t('accident'), this.$i18n.t('fuel')]
+          data = [this.expense_summary.accident, this.expense_summary.fuel, this.expense_summary.maintenance]
+          labels = [this.$i18n.t('accident'), this.$i18n.t('fuel'), this.$i18n.t('maintenance')]
           break
         default:
           data = [this.total_fixed, this.total_variable]
