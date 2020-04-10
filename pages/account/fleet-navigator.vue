@@ -143,8 +143,11 @@
               </v-card>
             </v-dialog>
             <v-spacer />
-            <v-btn-toggle v-show="chartable" v-model="show_charts" dense class="mr-2">
-              <v-btn color="primary" :value="true">
+            <v-btn-toggle v-model="dataviz" dense class="mr-2">
+              <v-btn color="primary" value="map">
+                <v-icon v-text="'mdi-earth'" />
+              </v-btn>
+              <v-btn v-show="chartable" color="primary" value="bar-chart">
                 <v-icon v-text="'mdi-chart-bar'" />
               </v-btn>
             </v-btn-toggle>
@@ -175,9 +178,12 @@
             </v-btn-toggle>
           </template>
         </v-toolbar>
-        <v-sheet v-if="show_charts && chartable" color="transparent" class="py-4">
-          <inventory-bar-chart :items="filteredItems" :field="sortBy" />
-        </v-sheet>
+        <v-card outlined rounded class="ma-4 mt-6">
+          <v-card-text>
+            <inventory-bar-chart v-if="dataviz === 'bar-chart' && chartable" :items="filteredItems" :field="sortBy" />
+            <v-skeleton-loader v-else-if="dataviz === 'map'" type="image" />
+          </v-card-text>
+        </v-card>
       </template>
       <template #default="{ items, isExpanded, expand }">
         <v-slide-x-transition group class="d-flex flex-wrap" hide-on-leave>
@@ -321,7 +327,7 @@ export default {
       totalVisible: 5
     },
     search: '',
-    show_charts: false,
+    dataviz: 'bar-chart',
     show_filter_dialog: false,
     sortFields: ['center_name', 'driver_last_name', 'in_service_date', 'model_year', 'vehicle_color', 'vehicle_make', 'vehicle_model', 'vehicle_number', 'vin'],
     sortBy: 'center_name',

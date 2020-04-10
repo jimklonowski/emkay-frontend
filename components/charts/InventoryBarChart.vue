@@ -56,7 +56,10 @@ export default {
         responsive: true,
         title: {
           text: this.$i18n.t(this.field),
-          display: true
+          display: true,
+          fontFamily: 'Lato, sans-serif',
+          fontSize: 16,
+          fontStyle: 'normal'
         },
         scales: {
           yAxes: [{
@@ -77,7 +80,7 @@ export default {
      */
     chartStyles () {
       return {
-        height: '256px',
+        height: '300px',
         position: 'relative'
       }
     }

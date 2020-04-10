@@ -1,6 +1,7 @@
 // See: https://medium.com/code-nebula/automatically-generate-chart-colors-with-chart-js-d3s-color-scales-f62e282b2b41
 
-import { interpolateViridis as defaultColorFunction } from 'd3-scale-chromatic'
+// import { interpolateViridis as defaultColorFunction } from 'd3-scale-chromatic'
+import { interpolatePlasma as defaultColorFunction } from 'd3-scale-chromatic'
 
 function calculatePoint (i, intervalSize, colorRangeInfo) {
   const { colorStart, colorEnd, useEndAsStart } = colorRangeInfo
@@ -10,7 +11,7 @@ function calculatePoint (i, intervalSize, colorRangeInfo) {
 /**
  * Generate and return an array of colors using D3's chromatic interpolation library
  */
-export function interpolateColors (dataLength, colorScale = defaultColorFunction, colorRangeInfo = { colorStart: 0, colorEnd: 1, useEndAsStart: true }) {
+export function interpolateColors (dataLength, colorScale = defaultColorFunction, colorRangeInfo = { colorStart: 0, colorEnd: 0.9, useEndAsStart: true }) {
   const { colorStart, colorEnd } = colorRangeInfo
   const colorRange = colorEnd - colorStart
   const intervalSize = colorRange / dataLength
