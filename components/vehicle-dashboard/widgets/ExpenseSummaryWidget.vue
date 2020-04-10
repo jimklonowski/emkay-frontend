@@ -161,6 +161,7 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import { interpolateColors } from '@/utility/color-generator'
 import BaseWidget from '@/components/vehicle-dashboard/widgets/BaseWidget'
 export default {
   components: {
@@ -195,26 +196,26 @@ export default {
      * Fixed vs Variable Costs Pie Chart
      */
     chartData () {
-      let backgroundColor = []
       let data = []
       let labels = []
+
       switch (this.mode) {
         case 'fixed':
-          backgroundColor = ['#4F286C', '#752870', '#99286E', '#B92D67']
           data = [this.expense_summary.depreciation, this.expense_summary.interest, this.expense_summary.licensing, this.expense_summary.tax]
           labels = [this.$i18n.t('depreciation'), this.$i18n.t('interest'), this.$i18n.t('licensing'), this.$i18n.t('tax')]
           break
         case 'variable':
-          backgroundColor = ['#E6504B', '#F26B38', '#F68820']
           data = [this.expense_summary.maintenance, this.expense_summary.accident, this.expense_summary.fuel]
           labels = [this.$i18n.t('maintenance'), this.$i18n.t('accident'), this.$i18n.t('fuel')]
           break
         default:
-          backgroundColor = ['#4F286C', '#D33B5B']
           data = [this.total_fixed, this.total_variable]
           labels = [this.$i18n.t('total_fixed'), this.$i18n.t('total_variable')]
           break
       }
+
+      const backgroundColor = interpolateColors(labels.length)
+
       return {
         datasets: [{ backgroundColor, data }],
         labels
