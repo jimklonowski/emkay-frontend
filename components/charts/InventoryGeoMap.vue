@@ -9,12 +9,15 @@
 </template>
 
 <script>
-// const countries = require('world-atlas/countries-10m.json')
 import { topojson } from 'chartjs-chart-geo'
 import statesJson from 'us-atlas/states-10m.json'
 import { interpolateSingleColor } from '@/utility/color-generator'
-import states_abbreviations from '@/assets/json/states'
+import state_abbreviations from '@/assets/json/state_abbreviations'
+import { features as provinces } from '@/assets/json/provinces'
+import province_abbreviations from '@/assets/json/province_abbreviations'
 const states = topojson.feature(statesJson, statesJson.objects.states).features
+// const provinces = topojson.feature(provincesJson, provincesJson.objects.provinces).features
+/* eslint-disable no-prototype-builtins */
 export default {
   props: {
     items: {
@@ -23,22 +26,44 @@ export default {
     }
   },
   computed: {
+    // usaCustomer: () => false,
+    usaCustomer () {
+      for (let i = 0; i < this.items.length; i++) {
+        const state_or_province = this.items[i].driver_state_province
+        if (state_abbreviations.hasOwnProperty(state_or_province)) {
+          return true
+        } else if (province_abbreviations.hasOwnProperty(state_or_province)) {
+          return false
+        } else {
+          console.log(`Unknown State/Province: ${state_or_province}`)
+        }
+      }
+      return true
+    },
     /**
      * Chartjs data
      */
     chartData () {
+      let abbreviations, locations
       const vehicleCounts = []
-      // const totalVehicles = this.items.length
-      states.forEach(state => {
-        const count = this.items.filter(x => states_abbreviations[x.driver_state_province] === state.properties.name).length
+      // usa or canada check?
+      if (this.usaCustomer) {
+        abbreviations = state_abbreviations
+        locations = states
+      } else {
+        abbreviations = province_abbreviations
+        locations = provinces
+      }
+
+      locations.forEach(location => {
+        const count = this.items.filter(vehicle => abbreviations[vehicle.driver_state_province] === location.properties.name).length
         vehicleCounts.push(count)
       })
-
-      const labels = states.map(d => d.properties.name)
-      const data = states.map((d, i) => {
-        // debugger
-        return { feature: d, value: vehicleCounts[i] }
+      const labels = locations.map(location => location.properties.name)
+      const data = locations.map((location, i) => {
+        return { feature: location, value: vehicleCounts[i] }
       })
+
       return {
         labels,
         datasets: [
@@ -46,13 +71,11 @@ export default {
             backgroundColor: context => {
               if (context.dataIndex == null) { return null }
               const value = context.dataset.data[context.dataIndex].value
+              // calculate the maximum count across each state, use as max parameter in color function
               const max = Math.max(...vehicleCounts)
-              // const weight = (value.value / totalVehicles)
-
-              // debugger
-              // return `rgba(81, 45, 168, ${weight})`
               return interpolateSingleColor(value, max)
             },
+            outline: this.usaCustomer ? states : provinces,
             data
           }
         ]
@@ -69,7 +92,7 @@ export default {
         maintainAspectRatio: false,
         responsive: true,
         scale: {
-          projection: 'albersUsa'
+          projection: this.usaCustomer ? 'albersUsa' : 'mercator'
         },
         showOutline: true,
         showGraticule: true,
