@@ -346,7 +346,7 @@ export default {
     search: '',
     dataviz: 'bar-chart',
     show_filter_dialog: false,
-    sortFields: ['center_name', 'driver_last_name', 'in_service_date', 'model_year', 'vehicle_color', 'vehicle_make', 'vehicle_model', 'vehicle_number', 'vin'],
+    sortFields: ['center_name', 'driver_last_name', 'in_service_date', 'model_year', 'odometer', 'vehicle_make', 'vehicle_model', 'vehicle_number', 'vin'],
     sortBy: 'center_name',
     sortDesc: false
   }),

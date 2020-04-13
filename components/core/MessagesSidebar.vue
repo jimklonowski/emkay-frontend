@@ -49,7 +49,7 @@
       </template>
       <div class="d-flex">
         <v-spacer />
-        <nuxt-link to="/fleet-messages" class="text-decoration-none subtitle-2 pa-2">
+        <nuxt-link :to="localePath({ path: '/account/fleet-messages' })" class="text-decoration-none subtitle-2 pa-2">
           {{ $t('fleet_messages') }}
         </nuxt-link>
       </div>
