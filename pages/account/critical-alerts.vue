@@ -72,11 +72,11 @@ export default {
      **/
     alert_types () {
       return [
-        { key: 'fuel_card_misuse', value: 264, suppressed: false, component: () => import(/* webpackChunkName: "CriticalAlertsForms" */ '@/components/account/critical-alerts/FuelCardMisuseAlertForm.vue') },
-        { key: 'delayed_orders', value: 21, suppressed: false, component: () => import(/* webpackChunkName: "CriticalAlertsForms" */ '@/components/account/critical-alerts/DelayedOrdersAlertForm.vue') },
-        { key: 'neglected_maintenance', value: 94, suppressed: false, component: () => import(/* webpackChunkName: "CriticalAlertsForms" */ '@/components/account/critical-alerts/NeglectedMaintenanceAlertForm.vue') },
-        { key: 'plate_expirations', value: 10, suppressed: false, component: () => import(/* webpackChunkName: "CriticalAlertsForms" */ '@/components/account/critical-alerts/PlateExpirationsAlertForm.vue') },
-        { key: 'overdue_rentals', value: 2, suppressed: true, component: () => import(/* webpackChunkName: "CriticalAlertsForms" */ '@/components/account/critical-alerts/OverdueRentalsAlertForm.vue') }
+        { key: 'fuel_card_misuse', value: 3, suppressed: false, component: () => import(/* webpackChunkName: "CriticalAlertsForms" */ '@/components/account/critical-alerts/FuelCardMisuseAlertForm.vue') },
+        { key: 'delayed_orders', value: 1, suppressed: false, component: () => import(/* webpackChunkName: "CriticalAlertsForms" */ '@/components/account/critical-alerts/DelayedOrdersAlertForm.vue') },
+        { key: 'neglected_maintenance', value: 3, suppressed: false, component: () => import(/* webpackChunkName: "CriticalAlertsForms" */ '@/components/account/critical-alerts/NeglectedMaintenanceAlertForm.vue') },
+        { key: 'plate_expirations', value: 0, suppressed: false, component: () => import(/* webpackChunkName: "CriticalAlertsForms" */ '@/components/account/critical-alerts/PlateExpirationsAlertForm.vue') },
+        { key: 'overdue_rentals', value: 0, suppressed: true, component: () => import(/* webpackChunkName: "CriticalAlertsForms" */ '@/components/account/critical-alerts/OverdueRentalsAlertForm.vue') }
       ]
     },
     edit_form: vm => vm.alert_types[vm.selected].component,

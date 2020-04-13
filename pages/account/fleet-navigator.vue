@@ -143,7 +143,7 @@
               </v-card>
             </v-dialog>
             <v-spacer />
-            <v-btn-toggle v-model="dataviz" dense class="mr-2">
+            <v-btn-toggle v-model="dataviz" dense class="mr-2" mandatory>
               <v-btn color="primary" value="map">
                 <v-icon v-text="'mdi-earth'" />
               </v-btn>

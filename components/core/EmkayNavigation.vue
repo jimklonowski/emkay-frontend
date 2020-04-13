@@ -3,7 +3,7 @@
     <client-only>
       <v-navigation-drawer
         v-if="$auth.loggedIn"
-        :value="sidebar"
+        :value="left_sidebar"
         clipped
         fixed
         disable-route-watcher
@@ -23,7 +23,7 @@
         </template>
 
         <v-list nav>
-          <template v-for="(item, i) in sidebar_items">
+          <template v-for="(item, i) in left_sidebar_items">
             <v-list-group v-if="item.children" :key="`item-${i}`">
               <template #activator>
                 <v-list-item-action>
@@ -105,7 +105,7 @@
       fixed
       app
     >
-      <v-app-bar-nav-icon aria-label="Open Sidebar" @click="toggleSidebar" />
+      <v-app-bar-nav-icon aria-label="Open Sidebar" @click="toggleLeftSidebar" />
       <v-toolbar-title v-text="$t('emkay')" />
 
       <v-spacer />
@@ -120,41 +120,55 @@
 
       <dark-mode-toggle class="mx-1" />
       <language-picker class="mx-1" />
+      <v-btn v-show="$auth.loggedIn" icon @click="toggleMessagesSidebar">
+        <v-badge color="error" dot left overlap offset-x="12">
+          <v-icon v-text="'mdi-bell'" />
+        </v-badge>
+      </v-btn>
     </v-app-bar>
+
+    <messages-sidebar v-if="$auth.loggedIn" />
   </nav>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { account, ordering, reporting } from '@/static/mega-menus'
 import DarkModeToggle from '@/components/core/DarkModeToggle'
 import LanguagePicker from '@/components/core/LanguagePicker'
 import MegaMenu from '@/components/core/MegaMenu'
+import MessagesSidebar from '@/components/core/MessagesSidebar'
 export default {
+  components: {
+    DarkModeToggle,
+    LanguagePicker,
+    MegaMenu,
+    MessagesSidebar
+  },
+  data: () => ({
+    right_sidebar: false
+  }),
   menus: {
     account,
     ordering,
     reporting
   },
-  components: {
-    DarkModeToggle,
-    LanguagePicker,
-    MegaMenu
-  },
   computed: {
+    ...mapGetters({
+      login_messages: 'account/getLoginMessages'
+    }),
     accountMenu: vm => vm.$options.menus.account,
     orderingMenu: vm => vm.$options.menus.ordering,
     reportingMenu: vm => vm.$options.menus.reporting,
-    // sidebar: vm => vm.$store.getters['account/getSidebar'],
-    sidebar: {
+    left_sidebar: {
       get () {
-        return this.$store.getters['account/getSidebar']
+        return this.$store.getters['account/getLeftSidebar']
       },
       set (val) {
-        this.setSidebar(val)
+        this.setLeftSidebar(val)
       }
     },
-    sidebar_items () {
+    left_sidebar_items () {
       return [
         { key: 'home', icon: 'mdi-home', to: { path: '/' } },
         { key: 'account', icon: 'mdi-apps', to: { path: '/account' } },
@@ -190,8 +204,9 @@ export default {
   methods: {
     ...mapActions({
       logout: 'account/logout',
-      setSidebar: 'account/setSidebar',
-      toggleSidebar: 'account/toggleSidebar'
+      setLeftSidebar: 'account/setLeftSidebar',
+      toggleLeftSidebar: 'account/toggleLeftSidebar',
+      toggleMessagesSidebar: 'account/toggleRightSidebar'
     })
   }
 }
