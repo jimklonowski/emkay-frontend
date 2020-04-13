@@ -4,7 +4,23 @@ import 'chartjs-chart-geo'
 import { Bar, Doughnut, Line, Pie, mixins, generateChart } from 'vue-chartjs'
 const { reactiveProp } = mixins
 
+const BubbleMap = generateChart('bubbleMap', 'bubbleMap')
 const Choropleth = generateChart('choropleth', 'choropleth')
+
+Vue.component('bubble-map', {
+  extends: BubbleMap,
+  mixins: [reactiveProp],
+  props: ['options'],
+  watch: {
+    options () {
+      this.$data._chart.options = this.options
+      this.$data._chart.update()
+    }
+  },
+  mounted () {
+    this.renderChart(this.chartData, this.options)
+  }
+})
 
 Vue.component('map-geo', {
   extends: Choropleth,

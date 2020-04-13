@@ -37,7 +37,7 @@
 import { mapGetters } from 'vuex'
 import MaintenanceHistoryTable from '@/components/vehicle-dashboard/datatables/MaintenanceHistoryTable'
 import Evoucher from '@/components/vehicle-dashboard/panels/Evoucher.vue'
-import ChartLoading from '@/components/vehicle-dashboard/charts/ChartLoading'
+import ChartLoading from '@/components/charts/ChartLoading'
 export default {
   name: 'VehicleMaintenance',
   layout: 'vehicle-dashboard',

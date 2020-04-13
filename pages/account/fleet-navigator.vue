@@ -147,6 +147,9 @@
               <v-btn color="primary" value="map">
                 <v-icon v-text="'mdi-earth'" />
               </v-btn>
+              <v-btn color="primary" value="bubble-map">
+                <v-icon v-text="'mdi-chart-bubble'" />
+              </v-btn>
               <v-btn v-show="chartable" color="primary" value="bar-chart">
                 <v-icon v-text="'mdi-chart-bar'" />
               </v-btn>
@@ -182,6 +185,8 @@
           <v-card-text>
             <inventory-bar-chart v-if="dataviz === 'bar-chart' && chartable" :items="filteredItems" :field="sortBy" />
             <inventory-geo-map v-else-if="dataviz === 'map'" :items="filteredItems" />
+            <chart-loading v-else-if="dataviz === 'bubble-map'" title="TODO: Bubble Map" />
+            <!-- <inventory-bubble-map v-else-if="dataviz === 'bubble-map'" :items="filteredItems" /> -->
           </v-card-text>
         </v-card>
       </template>
@@ -302,11 +307,22 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import ChartLoading from '@/components/charts/ChartLoading'
 export default {
   name: 'FleetNavigator',
   components: {
-    'inventory-bar-chart': () => import(/* webpackChunkName: "InventoryBarChart" */ '@/components/charts/InventoryBarChart.vue'),
-    'inventory-geo-map': () => import(/* webpackChunkName: "InventoryGeoMap" */ '@/components/charts/InventoryGeoMap.vue'),
+    ChartLoading,
+    'inventory-bar-chart': () => ({
+      component: import(/* webpackChunkName: "InventoryBarChart" */ '@/components/charts/InventoryBarChart.vue'),
+      loading: ChartLoading,
+      delay: 0
+    }),
+    'inventory-geo-map': () => ({
+      component: import(/* webpackChunkName: "InventoryGeoMap" */ '@/components/charts/InventoryGeoMap.vue'),
+      loading: ChartLoading,
+      delay: 0
+    }),
+    // 'inventory-bubble-map': () => import(/* webpackChunkName: "InventoryBubbleMap" */ '@/components/charts/InventoryBubbleMap.vue'),
     'center-picker': () => import(/* webpackChunkName: "CenterPicker" */ '@/components/core/CenterPicker.vue'),
     'search-bar': () => import(/* webpackChunkName: "SearchBar" */ '@/components/core/SearchBar.vue'),
     'vehicle-number-button': () => import(/* webpackChunkName: "VehicleNumberButton" */ '@/components/vehicle-dashboard/VehicleNumberButton.vue')

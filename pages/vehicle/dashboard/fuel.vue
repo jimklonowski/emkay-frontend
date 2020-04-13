@@ -58,7 +58,7 @@ import { mapGetters } from 'vuex'
 import FuelAuthorizationProfileTable from '@/components/vehicle-dashboard/datatables/FuelAuthorizationProfileTable'
 import FuelCardsTable from '@/components/vehicle-dashboard/datatables/FuelCardsTable'
 import FuelHistoryTable from '@/components/vehicle-dashboard/datatables/FuelHistoryTable'
-import ChartLoading from '@/components/vehicle-dashboard/charts/ChartLoading'
+import ChartLoading from '@/components/charts/ChartLoading'
 
 export default {
   name: 'VehicleFuel',
