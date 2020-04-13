@@ -34,7 +34,7 @@
             >
               <template #activator="{ on }">
                 <v-btn color="primary" depressed v-on="on">
-                  {{ hasFilters ? `${filterCount} ${$tc('filters_applied', filterCount)}` : $t('filters') }}
+                  {{ hasFilters ? `${$tc('filters_applied', filterCount)}` : $t('filters') }}
                 </v-btn>
               </template>
               <v-card>
@@ -143,7 +143,7 @@
               </v-card>
             </v-dialog>
             <v-spacer />
-            <v-btn-toggle v-model="dataviz" dense class="mr-2" mandatory>
+            <v-btn-toggle v-model="dataviz" dense class="mr-2">
               <v-btn color="primary" value="map">
                 <v-icon v-text="'mdi-earth'" />
               </v-btn>
