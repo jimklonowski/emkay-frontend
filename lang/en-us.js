@@ -943,7 +943,7 @@ export default {
   variable: "Variable",
   variable_costs: "Variable Costs",
   vehicle: "Vehicle",
-  vehicles: "Vehicle | Vehicles",
+  vehicles: "Vehicles",
   vehicle_acquisitions: "Vehicle Acquisitions",
   vehicle_and_driver_details: "Vehicle and Driver Details",
   vehicle_cap_cost: "Vehicle Capitalized Cost",

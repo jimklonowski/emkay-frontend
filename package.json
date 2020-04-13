@@ -1,6 +1,6 @@
 {
   "name": "emkay-frontend",
-  "version": "0.9.7",
+  "version": "0.9.8",
   "description": "EMKAY Nuxt Frontend",
   "author": "JCK",
   "private": true,
@@ -18,16 +18,20 @@
     "@nuxtjs/dotenv": "^1.4.0",
     "@nuxtjs/moment": "^1.6.0",
     "chart.js": "^2.9.3",
+    "chartjs-chart-geo": "^1.1.4",
     "cookie-universal-nuxt": "^2.1.3",
+    "d3-scale-chromatic": "^1.5.0",
     "lodash.groupby": "^4.6.0",
     "lodash.isequal": "^4.5.0",
     "nuxt": "^2.12.2",
     "nuxt-i18n": "^6.8.1",
     "nuxt-webfontloader": "^1.1.0",
+    "us-atlas": "^3.0.0",
     "vee-validate": "^3.2.5",
     "vue-chartjs": "^3.5.0",
     "vue-json-excel": "^0.2.98",
-    "vue-snotify": "^3.2.1"
+    "vue-snotify": "^3.2.1",
+    "world-atlas": "^2.0.2"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^2.0.0",

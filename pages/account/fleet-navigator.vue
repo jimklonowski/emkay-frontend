@@ -143,6 +143,17 @@
               </v-card>
             </v-dialog>
             <v-spacer />
+            <v-btn-toggle v-model="dataviz" dense class="mr-2" mandatory>
+              <v-btn color="primary" value="map">
+                <v-icon v-text="'mdi-earth'" />
+              </v-btn>
+              <v-btn color="primary" value="bubble-map">
+                <v-icon v-text="'mdi-chart-bubble'" />
+              </v-btn>
+              <v-btn v-show="chartable" color="primary" value="bar-chart">
+                <v-icon v-text="'mdi-chart-bar'" />
+              </v-btn>
+            </v-btn-toggle>
             <v-select
               v-model="sortBy"
               flat
@@ -170,6 +181,14 @@
             </v-btn-toggle>
           </template>
         </v-toolbar>
+        <v-card v-if="dataviz" outlined rounded class="ma-4 mt-6">
+          <v-card-text>
+            <inventory-bar-chart v-if="dataviz === 'bar-chart' && chartable" :items="filteredItems" :field="sortBy" />
+            <inventory-geo-map v-else-if="dataviz === 'map'" :items="filteredItems" />
+            <chart-loading v-else-if="dataviz === 'bubble-map'" title="TODO: Bubble Map" />
+            <!-- <inventory-bubble-map v-else-if="dataviz === 'bubble-map'" :items="filteredItems" /> -->
+          </v-card-text>
+        </v-card>
       </template>
       <template #default="{ items, isExpanded, expand }">
         <v-slide-x-transition group class="d-flex flex-wrap" hide-on-leave>
@@ -288,9 +307,22 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import ChartLoading from '@/components/charts/ChartLoading'
 export default {
   name: 'FleetNavigator',
   components: {
+    ChartLoading,
+    'inventory-bar-chart': () => ({
+      component: import(/* webpackChunkName: "InventoryBarChart" */ '@/components/charts/InventoryBarChart.vue'),
+      loading: ChartLoading,
+      delay: 0
+    }),
+    'inventory-geo-map': () => ({
+      component: import(/* webpackChunkName: "InventoryGeoMap" */ '@/components/charts/InventoryGeoMap.vue'),
+      loading: ChartLoading,
+      delay: 0
+    }),
+    // 'inventory-bubble-map': () => import(/* webpackChunkName: "InventoryBubbleMap" */ '@/components/charts/InventoryBubbleMap.vue'),
     'center-picker': () => import(/* webpackChunkName: "CenterPicker" */ '@/components/core/CenterPicker.vue'),
     'search-bar': () => import(/* webpackChunkName: "SearchBar" */ '@/components/core/SearchBar.vue'),
     'vehicle-number-button': () => import(/* webpackChunkName: "VehicleNumberButton" */ '@/components/vehicle-dashboard/VehicleNumberButton.vue')
@@ -312,6 +344,7 @@ export default {
       totalVisible: 5
     },
     search: '',
+    dataviz: 'bar-chart',
     show_filter_dialog: false,
     sortFields: ['center_name', 'driver_last_name', 'in_service_date', 'model_year', 'vehicle_color', 'vehicle_make', 'vehicle_model', 'vehicle_number', 'vin'],
     sortBy: 'center_name',
@@ -327,6 +360,9 @@ export default {
       vehicle_makes: 'fleet/getVehicleMakes',
       vehicle_models: 'fleet/getVehicleModels'
     }),
+    chartable () {
+      return ['center_name', 'model_year', 'vehicle_make', 'vehicle_model'].includes(this.sortBy)
+    },
     filteredItems () {
       return this.filteredVehicles(this.currentFilters)
     },

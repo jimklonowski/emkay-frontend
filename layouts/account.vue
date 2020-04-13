@@ -20,6 +20,7 @@ import AccountNavigation from '@/components/account/AccountNavigation'
 import EmkayFooter from '@/components/core/EmkayFooter'
 import { htmlLang } from '@/mixins/meta'
 export default {
+  name: 'Account',
   components: {
     EmkayNavigation,
     AccountNavigation,

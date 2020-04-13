@@ -26,9 +26,12 @@ const getDefaultState = () => ({
     driver_use_label_3: '',
     driver_use_label_4: ''
   },
+  critical_alerts: [],
+  fleet_messages: [],
   login_messages: [],
   initialized: false,
-  sidebar: false
+  left_sidebar: false,
+  right_sidebar: false
 })
 
 export const state = () => getDefaultState()
@@ -58,8 +61,10 @@ export const actions = {
     await Promise.all([
       dispatch('fetchCustomLabels'),
       dispatch('fetchCenterHierarchy'),
-      dispatch('fetchCenterLevels')
-      // dispatch('fetchLoginMessages')
+      dispatch('fetchCenterLevels'),
+      dispatch('fetchLoginMessages'),
+      dispatch('fetchFleetMessages'),
+      dispatch('fetchCriticalAlerts')
     ]).finally(() => {
       commit('setInitialized', true)
     })
@@ -111,20 +116,66 @@ export const actions = {
     }
   },
   /**
+   * Fetch Critical Alerts
+   */
+  async fetchCriticalAlerts ({ commit }) {
+    try {
+      const data = [
+        { key: 'fuel_card_misuse', value: 3 },
+        { key: 'delayed_orders', value: 1 },
+        { key: 'neglected_maintenance', value: 3 },
+        { key: 'plate_expirations', value: 0 },
+        { key: 'overdue_rentals', value: 0 }
+      ]
+      commit('setCriticalAlerts', data)
+    } catch (error) {
+      await console.error(`[vuex error][fetchCriticalAlerts]: ${error}`)
+    }
+  },
+  /**
    * Fetch Login Messages
    */
   async fetchLoginMessages ({ commit }) {
     try {
       // const { data: { data, success, message } } = await this.$axios.get('/account/login-messages')
       // if (!success) { throw new Error(message) }
-      await console.log('TODO: mocked login message data')
+      // await console.log('TODO: mocked login message data')
       const data = [
-        { title: 'COVID-19 Update', text: 'EMKAY Coronavirus (COVID-19) Update (March 20)', link: 'coronavirus.html', suppressionCookie: 'covid19_message_seen' },
-        { title: 'Check Fraud', text: 'Updates on check frauds', link: 'checkfraud.html', suppressionCookie: 'check_fraud_message_seen' }
+        { title: 'COVID-19 Update', text: 'EMKAY Coronavirus (COVID-19) Update (March 20)', date: '2020-03-20', link: 'coronavirus.html', suppressionCookie: 'covid19_message_seen' },
+        { title: 'Check Fraud', text: 'Updates on check frauds', date: '2020-01-01', link: 'checkfraud.html', suppressionCookie: 'check_fraud_message_seen' }
       ]
       commit('setLoginMessages', data)
     } catch (error) {
-      console.error(`[vuex error][fetchLoginMessages]: ${error}`)
+      await console.error(`[vuex error][fetchLoginMessages]: ${error}`)
+    }
+  },
+  /**
+   * Fetch Fleet Messages
+   */
+  async fetchFleetMessages ({ commit }) {
+    try {
+      // const { data: { data, success, message } } = await this.$axios.get('/account/fleet-messages')
+      // if (!success) { throw new Error(message) }
+      // await console.log('TODO: mocked fleet message data')
+      const data = [
+        {
+          from: 'me',
+          to: 'Cathy Pecora',
+          title: 'Personal Mileage',
+          text: 'Please log in and report your personal mileage for the month of March. Thx! - Andy',
+          date: '2020-04-13'
+        },
+        {
+          from: 'me',
+          to: 'Dave Lodding',
+          title: 'Personal Mileage',
+          text: 'Hi Dave, please log in and report your personal mileage from March.',
+          date: '2020-04-13'
+        }
+      ]
+      commit('setFleetMessages', data)
+    } catch (error) {
+      await console.error(`[vuex error][fetchFleetMessages]: ${error}`)
     }
   },
   /**
@@ -141,11 +192,13 @@ export const actions = {
   /**
    * Set Sidebar State (boolean)
    */
-  setSidebar: ({ commit }, payload) => commit('setSidebar', payload),
+  setLeftSidebar: ({ commit }, payload) => commit('setLeftSidebar', payload),
+  setRightSidebar: ({ commit }, payload) => commit('setRightSidebar', payload),
   /**
    * Toggle Sidebar State
    */
-  toggleSidebar: ({ commit }) => commit('toggleSidebar')
+  toggleLeftSidebar: ({ commit }) => commit('toggleLeftSidebar'),
+  toggleRightSidebar: ({ commit }) => commit('toggleRightSidebar')
 }
 
 export const mutations = {
@@ -156,9 +209,13 @@ export const mutations = {
     state.custom_labels = { ...state.custom_labels, ...data }
   },
   setInitialized: set('initialized'),
+  setCriticalAlerts: set('critical_alerts'),
+  setFleetMessages: set('fleet_messages'),
   setLoginMessages: set('login_messages'),
-  setSidebar: set('sidebar'),
-  toggleSidebar: toggle('sidebar')
+  setLeftSidebar: set('left_sidebar'),
+  setRightSidebar: set('right_sidebar'),
+  toggleLeftSidebar: toggle('left_sidebar'),
+  toggleRightSidebar: toggle('right_sidebar')
 }
 
 export const getters = {
@@ -169,7 +226,10 @@ export const getters = {
   getDriverLabels: state => Object.entries(state.custom_labels).map(([key, value]) => ({ key, value })).slice(5),
   getInitialized: state => state.initialized,
   getFlattenedCenters: state => flatten(state.centers),
+  getCriticalAlerts: state => state.critical_alerts,
+  getFleetMessages: state => state.fleet_messages,
   getLoginMessages: state => state.login_messages,
-  getSidebar: state => state.sidebar,
+  getLeftSidebar: state => state.left_sidebar,
+  getRightSidebar: state => state.right_sidebar,
   isInitialized: state => state.initialized
 }
