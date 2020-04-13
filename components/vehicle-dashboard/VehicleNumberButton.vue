@@ -45,7 +45,7 @@ export default {
     async goToVehicleDashboard () {
       // init vehicle dashboard data and then go to dashboard
       await this.selectVehicle({ vehicle: this.vehicleNumber })
-      this.$router.push({ path: '/vehicle/dashboard' })
+      this.$router.push(this.localePath({ path: '/vehicle/dashboard' }))
     }
   }
 }
