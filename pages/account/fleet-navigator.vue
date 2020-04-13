@@ -46,7 +46,7 @@
                   </v-btn>
                 </v-toolbar>
                 <v-toolbar v-else color="error" dark>
-                  <v-avatar size="20" color="white error--text" class="mr-2" v-text="filterCount" />
+                  <!-- <v-avatar size="20" color="white error--text" class="mr-2" v-text="filterCount" /> -->
                   <v-toolbar-title>{{ $tc('filters_applied', filterCount) }}</v-toolbar-title>
                   <v-spacer />
                   <v-btn tabindex="-1" class="mr-2" small text @click="resetFilters">

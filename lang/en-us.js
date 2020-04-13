@@ -611,6 +611,7 @@ export default {
   not_drivable: "Not Drivable",
   note: "Note",
   notes: "Notes",
+  notification_center: "Notification Center",
   number_of_cylinders: "Number of Cylinders",
   number_of_days_ext: "Number of Days Ext",
   number_of_ext: "Number of Ext",

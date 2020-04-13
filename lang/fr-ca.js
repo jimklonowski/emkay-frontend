@@ -611,6 +611,7 @@ export default {
   not_drivable: "Non pilotable",
   note: "Remarque",
   notes: "Remarques",
+  notification_center: "Centre de notification",
   number_of_cylinders: "Nombre de cylindres",
   number_of_days_ext: "Nombre de jours ext",
   number_of_ext: "Nombre d'ext",

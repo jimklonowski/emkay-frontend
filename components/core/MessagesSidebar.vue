@@ -9,7 +9,7 @@
   >
     <template #prepend>
       <h1 class="pa-4 text-center">
-        Message Center
+        {{ $t('notification_center') }}
       </h1>
     </template>
     <v-list subheader>
