@@ -61,16 +61,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .login {
-  user-select: none;
-  .theme--dark &:before {
-    background-image: url(~@/assets/images/coveredcar--dark.jpg);
-    opacity: 0.5;
-  }
-  .theme--light &:before {
-    background-image: url(~@/assets/images/coveredcar--light.jpg);
-    opacity: 1.0;
-  }
-  &:before {
+  &::before {
     content: "";
     display: block;
     position: absolute;
@@ -81,6 +72,15 @@ export default {
     background-size: cover;
     background-repeat: no-repeat;
     background-position: 50% 50%;
+
+    .theme--dark & {
+      background-image: url(~@/assets/images/coveredcar--dark.jpg);
+      opacity: 0.5;
+    }
+    .theme--light & {
+      background-image: url(~@/assets/images/coveredcar--light.jpg);
+      opacity: 1.0;
+    }
   }
 }
 </style>

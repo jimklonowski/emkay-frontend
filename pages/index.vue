@@ -32,7 +32,7 @@ export default {
 <style lang="scss" scoped>
 .welcome {
   user-select: none;
-  &:before {
+  &::before {
     content: "";
     display: block;
     position: absolute;
