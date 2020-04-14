@@ -53,10 +53,4 @@ describe('LanguagePicker', () => {
     frenchButton.trigger('click')
     expect(wrapper.vm.changeLocale).toHaveBeenCalledTimes(1)
   })
-
-  // it('calls changeLocale on button click', () => {
-  //   const btn = wrapper.find('.v-list-item > .v-btn')
-  //   wrapper.vm.changeLocale = jest.fn()
-  //   expect(wrapper.vm.changeLocale).toHaveBeenCalledTimes(0)
-  // })
 })
