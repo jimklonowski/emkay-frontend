@@ -13,8 +13,8 @@
       <v-list>
         <v-list-item v-for="locale in availableLocales" :key="locale.code">
           <v-btn
-            :disabled="$nuxt.$i18n.locale === locale.code"
-            :outlined="$nuxt.$i18n.locale === locale.code"
+            :disabled="$i18n.locale === locale.code"
+            :outlined="$i18n.locale === locale.code"
             small
             text
             block
