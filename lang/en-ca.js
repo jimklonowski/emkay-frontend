@@ -26,5 +26,6 @@ export default {
   postal_code: "Postal Code",
   total_cpm: "Total Cost Per Kilometer",
   vendor_postal_code: "Vendor Postal Code",
-  vendor_state_province: "Vendor Province"
+  vendor_state_province: "Vendor Province",
+  violation_state_province: "Violation Province"
 }

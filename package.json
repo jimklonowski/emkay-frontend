@@ -24,7 +24,7 @@
     "lodash.groupby": "^4.6.0",
     "lodash.isequal": "^4.5.0",
     "nuxt": "^2.12.2",
-    "nuxt-i18n": "^6.8.1",
+    "nuxt-i18n": "^6.9.1",
     "nuxt-webfontloader": "^1.1.0",
     "us-atlas": "^3.0.0",
     "vee-validate": "^3.2.5",
