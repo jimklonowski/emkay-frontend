@@ -34,8 +34,8 @@ const getDefaultState = () => ({
       icon: 'mdi-shield-car'
     }
   ],
-  saved_reports: [],
-  selected_report: undefined,
+  profile: {},
+  profiles: [],
   suggested_emails: []
 })
 
@@ -45,7 +45,7 @@ export const actions = {
   async init ({ commit, dispatch }) {
     console.log('Fetching saved reports and emails')
     await Promise.all([
-      dispatch('fetchSavedReports'),
+      dispatch('fetchProfiles'),
       dispatch('fetchSuggestedEmails')
     ])
   },
@@ -87,20 +87,72 @@ export const actions = {
       commit('setReportLoading', false)
     }
   },
-  async fetchSavedReports ({ commit }) {
+  async fetchProfiles ({ commit }) {
     try {
-      // const { data: { success, message, data } } = await this.$axios.get('/my-reports/saved-reports')
+      // const { data: { success, message, data } } = await this.$axios.get('/my-reports/profiles')
       // if (!success) { throw new Error(message) }
       await console.log('TODO: fetch data')
       const data = [
-        { header: '(Mocked) Your saved reports' },
-        'ABC123',
-        'QWERTY666',
-        'MySavedReport3'
+        {
+          profile_name: 'BIL:  RENTAL BILLING SUMMARY',
+          profile_group: 'BILLING INVOICE INFORMATION',
+          profile_date_modified: '2020-04-08',
+          profile_id: 'MO109GLOBAL~~~~~~BIL:~~RENTAL~BILLING~SUMMARY~~~~~~~',
+          profile_admin_created: 'N'
+        },
+        {
+          profile_name: 'BIL:  TAXES & DEPRECIATION',
+          profile_group: 'BILLING INVOICE INFORMATION',
+          profile_date_modified: '2020-03-25',
+          profile_id: 'MO109GLOBAL~~~~~~BIL:~~TAXES~&~DEPRECIATION~~~~~~~~~',
+          profile_admin_created: 'N'
+        },
+        {
+          profile_name: 'OPS:  OPERATING EXPENSES',
+          profile_group: 'EXPENSE INFORMATION',
+          profile_date_modified: '2020-04-06',
+          profile_id: 'MO109GLOBAL~~~~~~OPS:~~OPERATING~EXPENSES~~~~~~~~~~~',
+          profile_admin_created: 'N'
+        },
+        {
+          profile_name: 'FUEL:  PREMIUM PURCHASES',
+          profile_group: 'FUEL TRANSACTION INFORMATION',
+          profile_date_modified: '2020-03-25',
+          profile_id: 'MO109GLOBAL~~~~~~FUEL:~~PREMIUM~PURCHASES~~~~~~~~~~~',
+          profile_admin_created: 'N'
+        },
+        {
+          profile_name: 'MNT:  NON-NATIONAL VENDORS',
+          profile_group: 'FUEL TRANSACTION INFORMATION',
+          profile_date_modified: '2020-03-25',
+          profile_id: 'MO109GLOBAL~~~~~~MNT:~~NON-NATIONAL~VENDORS~~~~~~~~~',
+          profile_admin_created: 'N'
+        },
+        {
+          profile_name: 'VIOLATION REPORT',
+          profile_group: 'FUEL TRANSACTION INFORMATION',
+          profile_date_modified: '2020-04-07',
+          profile_id: 'MO109GLOBAL~~~~~~VIOLATION~REPORT~~~~~~~~~~~~~~~~~~~',
+          profile_admin_created: 'N'
+        },
+        {
+          profile_name: 'VEH:  MAKE / MODEL REPORT',
+          profile_group: 'VEHICLE-DRIVER INFORMATION',
+          profile_date_modified: '2020-03-25',
+          profile_id: 'MO109GLOBAL~~~~~~VEH:~~MAKE~/~MODEL~REPORT~~~~~~~~~~',
+          profile_admin_created: 'N'
+        },
+        {
+          profile_name: 'VEH:  VEHICLE INVENTORY',
+          profile_group: 'VEHICLE-DRIVER INFORMATION',
+          profile_date_modified: '2020-03-25',
+          profile_id: 'MO109GLOBAL~~~~~~VEH:~~VEHICLE~INVENTORY~~~~~~~~~~~~',
+          profile_admin_created: 'N'
+        }
       ]
-      commit('setSavedReports', data)
+      commit('setProfiles', data)
     } catch (error) {
-      commit('setData', [])
+      commit('setProfiles', [])
     }
   },
   async fetchSuggestedEmails ({ commit }) {
@@ -118,8 +170,32 @@ export const actions = {
       commit('setSuggestedEmails', [])
     }
   },
-  setSelectedReport ({ commit }, payload) {
-    commit('setSelectedReport', payload)
+  clearProfile ({ commit }) {
+    commit('setProfile', {})
+    commit('setColumnGroups', [])
+    commit('setReportData', [])
+  },
+  async loadProfile ({ commit }, id) {
+    try {
+      await console.log(`Loading profile ${id}`)
+      // const { data: { success, message, data } } = await this.$axios.get('/my-reports/load-profile', { params: { id }})
+      // if (!success) { throw new Error(message) }
+      const data = {
+        id,
+        auto_send: false,
+        centers: ['001', 'A01', 'B01'],
+        columns: ['vehicle_number', 'center_code', 'center_name'],
+        email_recipients: [],
+        report_schedule: 'monthly',
+        report_title: 'BIL: RENTAL BILLING SUMMARY',
+        report_type: 'billing',
+        start: '2020-03-01',
+        end: '2020-04-01'
+      }
+      commit('setProfile', data)
+    } catch (error) {
+      await console.error(error)
+    }
   },
   reset ({ commit }) {
     commit('reset')
@@ -131,8 +207,8 @@ export const mutations = {
   setColumnGroups: set('column_groups'),
   setReportData: set('report_data'),
   setReportLoading: set('report_loading'),
-  setSavedReports: set('saved_reports'),
-  setSelectedReport: set('selected_report'),
+  setProfile: set('profile'),
+  setProfiles: set('profiles'),
   setSuggestedEmails: set('suggested_emails')
 }
 
@@ -141,7 +217,7 @@ export const getters = {
   getReportData: state => state.report_data,
   getReportLoading: state => state.report_loading,
   getReportTypes: state => state.report_types,
-  getSavedReports: state => state.saved_reports,
-  getSelectedReport: state => state.selected_report,
+  getProfile: state => state.profile,
+  getProfiles: state => state.profiles,
   getSuggestedEmails: state => state.suggested_emails
 }
