@@ -178,6 +178,33 @@
             {{ $t('no_search_results', { 'query': search }) }}
           </div>
         </template>
+        <template #item.date_sold="{ item }">
+          {{ item.date_sold | date }}
+        </template>
+        <template #item.capitalized_cost="{ item }">
+          {{ item.capitalized_cost | currency }}
+        </template>
+        <template #item.gain_loss="{ item }">
+          {{ item.gain_loss | currency }}
+        </template>
+        <template #item.net_depreciation_percent="{ item }">
+          {{ item.net_depreciation_percent | percent }}
+        </template>
+        <template #item.depreciation_percent="{ item }">
+          {{ item.depreciation_percent | percent }}
+        </template>
+        <template #item.cost_per_mile="{ item }">
+          {{ item.cost_per_mile | currency(3, 3) }}
+        </template>
+        <template #item.cost_per_month="{ item }">
+          {{ item.cost_per_month | currency }}
+        </template>
+        <template #item.odometer="{ item }">
+          {{ item.odometer | number }}
+        </template>
+        <template #item.sold_amount="{ item }">
+          {{ item.sold_amount | currency }}
+        </template>
       </v-data-table>
     </v-skeleton-loader>
   </v-card>
@@ -207,41 +234,30 @@ export default {
      */
     columns () {
       return [
+        'date_sold',
         'vehicle_number',
         'client_vehicle_number',
+        'bb_mmr_percent',
+        'bill_sort',
+        'buyer',
+        'capitalized_cost',
         'center_code',
-        'center_name',
-        'level_01',
-        'level_02',
-        'level_03',
-        'level_04',
-        'level_05',
-        'level_06',
-        'level_07',
-        'level_08',
-        'level_09',
-        'level_10',
-        'sort',
+        'condition',
+        'cost_per_mile',
+        'cost_per_month',
+        'depreciation_percent',
+        'driver_name',
+        'gain_loss',
         'model_year',
+        'months_in_service',
+        'net_depreciation_percent',
+        'odometer',
+        'priced_by',
+        'sold_amount',
+        'vehicle_color',
         'vehicle_make',
         'vehicle_model',
-        'depreciation_percent',
-        'capitalized_cost',
-        'sold_amount',
-        'black_book_percent',
-        'date_sold',
-        'gain_loss',
-        'months',
-        'cost_per_month',
-        'odometer',
-        'cost_per_mile',
-        'net_depreciation_percent',
-        'condition',
-        'priced_by',
-        'vehicle_color',
-        'buyer',
-        'vin',
-        'driver_name'
+        'vin'
       ]
     },
     /**
@@ -249,6 +265,12 @@ export default {
      */
     headers () {
       return [
+        {
+          text: this.$i18n.t('date_sold'),
+          value: 'date_sold',
+          class: 'report-column',
+          divider: true
+        },
         {
           text: this.$i18n.t('vehicle_number'),
           value: 'vehicle_number',
@@ -258,6 +280,30 @@ export default {
         {
           text: this.$i18n.t('client_vehicle_number'),
           value: 'client_vehicle_number',
+          class: 'report-column',
+          divider: true
+        },
+        {
+          text: this.$i18n.t('bb_mmr_percent'),
+          value: 'bb_mmr_percent',
+          class: 'report-column',
+          divider: true
+        },
+        {
+          text: this.$i18n.t('bill_sort'),
+          value: 'bill_sort',
+          class: 'report-column',
+          divider: true
+        },
+        {
+          text: this.$i18n.t('buyer'),
+          value: 'buyer',
+          class: 'report-column',
+          divider: true
+        },
+        {
+          text: this.$i18n.t('capitalized_cost'),
+          value: 'capitalized_cost',
           class: 'report-column',
           divider: true
         },
@@ -275,14 +321,80 @@ export default {
           }
         },
         {
-          text: this.$i18n.t('center_name'),
-          value: 'center_name',
+          text: this.$i18n.t('condition'),
+          value: 'condition',
+          class: 'report-column',
+          divider: true
+        },
+        {
+          text: this.$i18n.t('cost_per_mile'),
+          value: 'cost_per_mile',
+          class: 'report-column',
+          divider: true
+        },
+        {
+          text: this.$i18n.t('cost_per_month'),
+          value: 'cost_per_month',
+          class: 'report-column',
+          divider: true
+        },
+        {
+          text: this.$i18n.t('depreciation_percent'),
+          value: 'depreciation_percent',
+          class: 'report-column',
+          divider: true
+        },
+        {
+          text: this.$i18n.t('driver_name'),
+          value: 'driver_name',
+          class: 'report-column',
+          divider: true
+        },
+        {
+          text: this.$i18n.t('gain_loss'),
+          value: 'gain_loss',
           class: 'report-column',
           divider: true
         },
         {
           text: this.$i18n.t('model_year'),
           value: 'model_year',
+          class: 'report-column',
+          divider: true
+        },
+        {
+          text: this.$i18n.t('months_in_service'),
+          value: 'months_in_service',
+          class: 'report-column',
+          divider: true
+        },
+        {
+          text: this.$i18n.t('net_depreciation_percent'),
+          value: 'net_depreciation_percent',
+          class: 'report-column',
+          divider: true
+        },
+        {
+          text: this.$i18n.t('odometer'),
+          value: 'odometer',
+          class: 'report-column',
+          divider: true
+        },
+        {
+          text: this.$i18n.t('priced_by'),
+          value: 'priced_by',
+          class: 'report-column',
+          divider: true
+        },
+        {
+          text: this.$i18n.t('sold_amount'),
+          value: 'sold_amount',
+          class: 'report-column',
+          divider: true
+        },
+        {
+          text: this.$i18n.t('vehicle_color'),
+          value: 'vehicle_color',
           class: 'report-column',
           divider: true
         },
@@ -299,104 +411,8 @@ export default {
           divider: true
         },
         {
-          text: this.$i18n.t('depreciation_percent'),
-          value: 'depreciation_percent',
-          class: 'report-column',
-          divider: true
-        },
-        {
-          text: this.$i18n.t('capitalized_cost'),
-          value: 'capitalized_cost',
-          class: 'report-column',
-          divider: true
-        },
-        {
-          text: this.$i18n.t('sold_amount'),
-          value: 'sold_amount',
-          class: 'report-column',
-          divider: true
-        },
-        {
-          text: this.$i18n.t('black_book_percent'),
-          value: 'black_book_percent',
-          class: 'report-column',
-          divider: true
-        },
-        {
-          text: this.$i18n.t('date_sold'),
-          value: 'date_sold',
-          class: 'report-column',
-          divider: true
-        },
-        {
-          text: this.$i18n.t('gain_loss'),
-          value: 'gain_loss',
-          class: 'report-column',
-          divider: true
-        },
-        {
-          text: this.$i18n.t('months'),
-          value: 'months',
-          class: 'report-column',
-          divider: true
-        },
-        {
-          text: this.$i18n.t('cost_per_month'),
-          value: 'cost_per_month',
-          class: 'report-column',
-          divider: true
-        },
-        {
-          text: this.$i18n.t('odometer'),
-          value: 'odometer',
-          class: 'report-column',
-          divider: true
-        },
-        {
-          text: this.$i18n.t('cost_per_mile'),
-          value: 'cost_per_mile',
-          class: 'report-column',
-          divider: true
-        },
-        {
-          text: this.$i18n.t('net_depreciation_percent'),
-          value: 'net_depreciation_percent',
-          class: 'report-column',
-          divider: true
-        },
-        {
-          text: this.$i18n.t('condition'),
-          value: 'condition',
-          class: 'report-column',
-          divider: true
-        },
-        {
-          text: this.$i18n.t('priced_by'),
-          value: 'priced_by',
-          class: 'report-column',
-          divider: true
-        },
-        {
-          text: this.$i18n.t('vehicle_color'),
-          value: 'vehicle_color',
-          class: 'report-column',
-          divider: true
-        },
-        {
-          text: this.$i18n.t('buyer'),
-          value: 'buyer',
-          class: 'report-column',
-          divider: true
-        },
-        {
           text: this.$i18n.t('vin'),
           value: 'vin',
-          class: 'report-column',
-          divider: true
-        },
-        {
-          text: this.$i18n.t('driver_name'),
-          value: 'driver_name',
           class: 'report-column'
         }
       ]

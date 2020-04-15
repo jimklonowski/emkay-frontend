@@ -111,11 +111,11 @@ export const actions = {
    * Fetch SOLD VEHICLE ANALYSIS REPORT data.
    * No parameters are supplied.
    */
-  async fetchSoldVehicleAnalysisReport ({ commit }) {
+  async fetchSoldVehicleAnalysisReport ({ commit }, { start, end }) {
     try {
       commit('setError', null)
       commit('setLoading', true)
-      const { data: { success, message, data } } = await this.$axios.get('/reports/sold-vehicle-analysis-report')
+      const { data: { success, message, data } } = await this.$axios.get('/reports/sold-vehicle', { params: { start, end } })
       if (!success) { throw new Error(message) }
       commit('setData', data)
     } catch (error) {

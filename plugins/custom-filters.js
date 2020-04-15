@@ -4,6 +4,13 @@ import { formatCurrency } from '@/utility/helpers'
 export default ({ app }) => {
   Vue.filter('currency', formatCurrency)
 
+  Vue.filter('percent', (value = 0, decimals = 0) => {
+    value = value * 100
+    value = Math.round(value * 10 ** decimals) / 10 ** decimals
+    value = `${value} %`
+    return value
+  })
+
   Vue.filter('date', (value, inFormat = 'YYYY-MM-DD', outFormat = 'L') => {
     if (value) {
       return app.$moment(value, inFormat).format(outFormat)
@@ -24,7 +31,7 @@ export default ({ app }) => {
     }
   })
 
-  Vue.filter('number', (value, minDigits = 0, maxDigits = 2) => {
+  Vue.filter('number', (value = 0, minDigits = 0, maxDigits = 2) => {
     const formatter = new Intl.NumberFormat('en-US', { minimumFractionDigits: minDigits, maximumFractionDigits: maxDigits })
     return formatter.format(value)
   })

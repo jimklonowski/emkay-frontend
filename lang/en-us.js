@@ -93,6 +93,7 @@ export default {
   average_per_month: "Average Per Month",
   back: "Back",
   back_at_manufacturer_date: "Back at Manufacturer Date",
+  bb_mmr_percent: "Blackbook/MMR Percent",
   bill_date: "Bill Date",
   bill_for_date: "Bill For Date",
   bill_for_month: "Bill For Month",

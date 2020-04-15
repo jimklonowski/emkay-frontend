@@ -93,6 +93,7 @@ export default {
   average_per_month: "Moyenne par mois",
   back: "Retourner",
   back_at_manufacturer_date: "Retour à la date du fabricant",
+  bb_mmr_percent: "Pourcentage du Blackbook/MMR",
   bill_date: "Date de facturation",
   bill_for_date: "Facturer la date",
   bill_for_month: "Facturer pour le mois",

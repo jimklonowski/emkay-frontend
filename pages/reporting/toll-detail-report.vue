@@ -92,58 +92,6 @@
                   </v-date-picker>
                 </v-dialog>
               </v-col>
-              <v-col cols="12" sm="6" lg="3">
-                <v-dialog
-                  ref="centers_dialog"
-                  v-model="centers_dialog"
-                  max-width="650"
-                  scrollable
-                >
-                  <template #activator="{ on }">
-                    <v-btn color="primary" width="100%" depressed rounded v-on="on">
-                      {{ $tc('centers_filtered', centers_selected.length) }}
-                    </v-btn>
-                  </template>
-                  <v-card>
-                    <v-sheet class="pa-0 primary" dark>
-                      <v-toolbar flat color="transparent">
-                        <v-toolbar-title>{{ $t('centers') }}</v-toolbar-title>
-                        <v-spacer />
-                        <v-btn icon @click="centers_dialog = false">
-                          <v-icon v-text="'mdi-close'" />
-                        </v-btn>
-                      </v-toolbar>
-                      <v-sheet class="primary lighten-1 flex-column pa-4" dark>
-                        <v-text-field
-                          v-model="search_centers"
-                          :label="$t('search_centers')"
-                          dark
-                          flat
-                          solo-inverted
-                          hide-details
-                          clearable
-                          clear-icon="mdi-close-circle-outline"
-                          autocomplete="off"
-                        />
-                      </v-sheet>
-                    </v-sheet>
-                    <v-card-text>
-                      <center-picker v-model="centers_selected" :return-value.sync="centers_selected" :search="search_centers" />
-                    </v-card-text>
-                    <v-divider />
-                    <v-card-actions>
-                      {{ $tc('centers_selected', centers_selected.length) }}
-                      <v-spacer />
-                      <v-btn color="error" text @click="centers_selected = [], search_centers = ''">
-                        {{ $t('reset') }}
-                      </v-btn>
-                      <v-btn color="primary" @click="centers_dialog = false">
-                        {{ $t('ok') }}
-                      </v-btn>
-                    </v-card-actions>
-                  </v-card>
-                </v-dialog>
-              </v-col>
             </v-row>
           </v-container>
         </v-expansion-panel-content>
@@ -178,6 +126,16 @@
             {{ $t('no_search_results', { 'query': search }) }}
           </div>
         </template>
+
+        <template #item.date="{ item }">
+          {{ item.date | date }}
+        </template>
+        <template #item.vehicle_number="{ item }">
+          <vehicle-number-button :vehicle-number="item.vehicle_number" />
+        </template>
+        <template #item.amount="{ item }">
+          {{ item.amount | currency }}
+        </template>
       </v-data-table>
     </v-skeleton-loader>
   </v-card>
@@ -208,22 +166,8 @@ export default {
       return [
         'date',
         'vehicle_number',
-        'client_vehicle_number',
-        'center_code',
-        'center_name',
         'description',
-        'location',
-        'amount',
-        'level_01',
-        'level_02',
-        'level_03',
-        'level_04',
-        'level_05',
-        'level_06',
-        'level_07',
-        'level_08',
-        'level_09',
-        'level_10'
+        'amount'
       ]
     },
     /**
@@ -244,34 +188,8 @@ export default {
           divider: true
         },
         {
-          text: this.$i18n.t('center_code'),
-          value: 'center_code',
-          class: 'report-column',
-          divider: true,
-          filter: (value) => {
-            if (!this.centers_selected || this.centers_selected.length === 0) {
-              // no centers selected, don't filter anything
-              return true
-            }
-            return this.centers_selected.find(center => center.center_code === value)
-          }
-        },
-        {
-          text: this.$i18n.t('center_name'),
-          value: 'center_name',
-          class: 'report-column',
-          width: 300,
-          divider: true
-        },
-        {
           text: this.$i18n.t('description'),
           value: 'description',
-          class: 'report-column',
-          divider: true
-        },
-        {
-          text: this.$i18n.t('location'),
-          value: 'location',
           class: 'report-column',
           divider: true
         },
