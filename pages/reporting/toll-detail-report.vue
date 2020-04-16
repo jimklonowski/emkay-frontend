@@ -128,7 +128,7 @@
         </template>
 
         <template #item.date="{ item }">
-          {{ item.date | date }}
+          {{ item.date | date('YYYY-MM-DD HH:mm:ss', 'lll') }}
         </template>
         <template #item.vehicle_number="{ item }">
           <vehicle-number-button :vehicle-number="item.vehicle_number" />
