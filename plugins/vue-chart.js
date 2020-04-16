@@ -1,10 +1,11 @@
 /* eslint-disable vue/require-prop-types */
 import Vue from 'vue'
 import 'chartjs-chart-geo'
-import 'chartjs-plugin-datalabels'
+import Chart from 'chart.js'
+import ChartDataLabels from 'chartjs-plugin-datalabels'
 import { Bar, Doughnut, Line, Pie, mixins, generateChart } from 'vue-chartjs'
 const { reactiveProp } = mixins
-
+Chart.plugins.unregister(ChartDataLabels)
 const BubbleMap = generateChart('bubbleMap', 'bubbleMap')
 const Choropleth = generateChart('choropleth', 'choropleth')
 
@@ -34,6 +35,7 @@ Vue.component('map-geo', {
     }
   },
   mounted () {
+    this.addPlugin(ChartDataLabels)
     this.renderChart(this.chartData, this.options)
   }
 })

@@ -143,14 +143,14 @@
               </v-card>
             </v-dialog>
             <v-spacer />
-            <v-btn-toggle v-model="dataviz" dense class="mr-2">
+            <v-btn-toggle v-model="dataviz" dense class="mr-2" mandatory>
               <v-btn color="primary" value="map">
                 <v-icon v-text="'mdi-earth'" />
               </v-btn>
-              <v-btn color="primary" value="bubble-map">
-                <v-icon v-text="'mdi-chart-bubble'" />
+              <v-btn v-if="chartable" color="primary" value="pie">
+                <v-icon v-text="'mdi-chart-pie'" />
               </v-btn>
-              <v-btn v-show="chartable" color="primary" value="bar-chart">
+              <v-btn v-if="chartable" color="primary" value="bar">
                 <v-icon v-text="'mdi-chart-bar'" />
               </v-btn>
             </v-btn-toggle>
@@ -182,14 +182,15 @@
           </template>
         </v-toolbar>
         <v-card v-if="dataviz" outlined rounded class="ma-4 mt-6">
-          <v-skeleton-loader :loading="$fetchState.pending" type="image">
-            <v-card-text>
-              <inventory-bar-chart v-if="dataviz === 'bar-chart' && chartable" :items="filteredItems" :field="sortBy" />
+          <v-card-text>
+            <v-skeleton-loader :loading="$fetchState.pending" type="image">
+              <inventory-bar-chart v-if="dataviz === 'bar' && chartable" :items="filteredItems" :field="sortBy" />
+              <inventory-pie-chart v-if="dataviz === 'pie' && chartable" :items="filteredItems" :field="sortBy" />
               <inventory-geo-map v-else-if="dataviz === 'map'" :items="filteredItems" />
-              <chart-loading v-else-if="dataviz === 'bubble-map'" title="TODO: Bubble Map" />
+              <!-- <chart-loading v-else-if="dataviz === 'bubble-map'" title="TODO: Bubble Map" /> -->
               <!-- <inventory-bubble-map v-else-if="dataviz === 'bubble-map'" :items="filteredItems" /> -->
-            </v-card-text>
-          </v-skeleton-loader>
+            </v-skeleton-loader>
+          </v-card-text>
         </v-card>
       </template>
       <template #default="{ items, isExpanded, expand }">
@@ -313,7 +314,11 @@ import ChartLoading from '@/components/charts/ChartLoading'
 export default {
   name: 'FleetNavigator',
   components: {
-    ChartLoading,
+    'inventory-pie-chart': () => ({
+      component: import(/* webpackChunkName: "InventoryPieChart" */ '@/components/charts/InventoryPieChart.vue'),
+      loading: ChartLoading,
+      delay: 0
+    }),
     'inventory-bar-chart': () => ({
       component: import(/* webpackChunkName: "InventoryBarChart" */ '@/components/charts/InventoryBarChart.vue'),
       loading: ChartLoading,
@@ -346,7 +351,7 @@ export default {
       totalVisible: 5
     },
     search: '',
-    dataviz: 'bar-chart',
+    dataviz: 'bar',
     show_filter_dialog: false,
     sortFields: ['center_name', 'driver_last_name', 'in_service_date', 'model_year', 'odometer', 'vehicle_make', 'vehicle_model', 'vehicle_number', 'vin'],
     sortBy: 'center_name',
@@ -363,7 +368,7 @@ export default {
       vehicle_models: 'fleet/getVehicleModels'
     }),
     chartable () {
-      return ['center_name', 'model_year', 'vehicle_make', 'vehicle_model'].includes(this.sortBy)
+      return ['center_name', 'model_year', 'vehicle_make'].includes(this.sortBy)
     },
     filteredItems () {
       return this.filteredVehicles(this.currentFilters)

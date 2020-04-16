@@ -88,7 +88,16 @@
                   :data="chartData"
                   :chart-data="chartData"
                   :options="{
-                    legend: { position: 'bottom', align: 'center' },
+                    legend: {
+                      align: 'center',
+                      display: true,
+                      position: 'bottom',
+                      labels: {
+                        boxWidth: 16,
+                        fontFamily: 'Roboto Condensed, sans-serif',
+                        fontSize: 13
+                      }
+                    },
                     tooltips: {
                       callbacks: {
                         label: (tooltipItem, data) => {
@@ -96,10 +105,13 @@
                         }
                       }
                     },
-                    responsive: true,
-                    maintainAspectRatio: false
+                    maintainAspectRatio: false,
+                    responsive: true
                   }"
-                  :styles="{ height: '256px', position: 'relative' }"
+                  :styles="{
+                    height: '256px',
+                    position: 'relative'
+                  }"
                 />
               </v-card-text>
             </v-card>
@@ -217,7 +229,7 @@ export default {
       const backgroundColor = interpolateColors(labels.length)
 
       return {
-        datasets: [{ backgroundColor, data }],
+        datasets: [{ backgroundColor, borderWidth: 1, data }],
         labels
       }
     },

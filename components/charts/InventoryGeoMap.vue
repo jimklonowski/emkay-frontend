@@ -91,6 +91,22 @@ export default {
           display: false
         },
         maintainAspectRatio: false,
+        plugins: {
+          datalabels: {
+            backgroundColor: '#ffffff',
+            borderRadius: 8,
+            padding: 3,
+            display: context => (context.dataset.data[context.dataIndex].value > 0) ? 'auto' : false,
+            font: {
+              family: 'Roboto Condensed, sans-serif',
+              size: 12
+            },
+            formatter: value => {
+              return value.value
+            },
+            textAlign: 'center'
+          }
+        },
         responsive: true,
         scale: {
           projection: this.usaCustomer ? 'albersUsa' : 'albers'
