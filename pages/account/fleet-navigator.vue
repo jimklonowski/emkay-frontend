@@ -182,12 +182,14 @@
           </template>
         </v-toolbar>
         <v-card v-if="dataviz" outlined rounded class="ma-4 mt-6">
-          <v-card-text>
-            <inventory-bar-chart v-if="dataviz === 'bar-chart' && chartable" :items="filteredItems" :field="sortBy" />
-            <inventory-geo-map v-else-if="dataviz === 'map'" :items="filteredItems" />
-            <chart-loading v-else-if="dataviz === 'bubble-map'" title="TODO: Bubble Map" />
-            <!-- <inventory-bubble-map v-else-if="dataviz === 'bubble-map'" :items="filteredItems" /> -->
-          </v-card-text>
+          <v-skeleton-loader :loading="$fetchState.pending" type="image">
+            <v-card-text>
+              <inventory-bar-chart v-if="dataviz === 'bar-chart' && chartable" :items="filteredItems" :field="sortBy" />
+              <inventory-geo-map v-else-if="dataviz === 'map'" :items="filteredItems" />
+              <chart-loading v-else-if="dataviz === 'bubble-map'" title="TODO: Bubble Map" />
+              <!-- <inventory-bubble-map v-else-if="dataviz === 'bubble-map'" :items="filteredItems" /> -->
+            </v-card-text>
+          </v-skeleton-loader>
         </v-card>
       </template>
       <template #default="{ items, isExpanded, expand }">

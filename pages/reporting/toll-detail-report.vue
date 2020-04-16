@@ -109,7 +109,7 @@
         :loading="$fetchState.pending"
         :mobile-breakpoint="0"
         :search="search"
-        :sort-by="['toll_date']"
+        :sort-by="['date']"
         :sort-desc="[true]"
         class="striped"
       >

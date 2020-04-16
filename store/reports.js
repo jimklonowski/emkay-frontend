@@ -330,6 +330,23 @@ export const actions = {
     }
   },
   /**
+   * Fetch MPG REPORT data.
+   */
+  async fetchMPGReport ({ commit }, { start, end, below_avg }) {
+    try {
+      commit('setError', null)
+      commit('setLoading', true)
+      const { data: { success, message, data } } = await this.$axios.get('/reports/mpg-report', { params: { start, end, below_avg } })
+      if (!success) { throw new Error(message) }
+      commit('setData', data)
+    } catch (error) {
+      commit('setError', error.message)
+      commit('setData', [])
+    } finally {
+      commit('setLoading', false)
+    }
+  },
+  /**
    * Fetch TOLL DETAIL REPORT data.
    * @param {*} start Start Date
    * @param {*} end End Date
