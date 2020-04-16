@@ -93,11 +93,11 @@ export const actions = {
    * Fetch REPLACEMENT ANALYSIS REPORT data.
    * No parameters are supplied.
    */
-  async fetchReplacementAnalysisReport ({ commit }) {
+  async fetchReplacementAnalysisReport ({ commit }, { report_type, report_months, miles_driven, and_or, months_in_service }) {
     try {
       commit('setError', null)
       commit('setLoading', true)
-      const { data: { success, message, data } } = await this.$axios.get('/reports/replacement-analysis-report')
+      const { data: { success, message, data } } = await this.$axios.get('/reports/replacement-analysis', { params: { report_type, report_months, miles_driven, and_or, months_in_service } })
       if (!success) { throw new Error(message) }
       commit('setData', data)
     } catch (error) {
@@ -297,14 +297,12 @@ export const actions = {
   },
   /**
    * Fetch EVOUCHER REPORT data.
-   * @param start (YYYY-MM-DD)
-   * @param end (YYYY-MM-DD)
    */
-  async fetchEvoucherReport ({ commit }, { start, end }) {
+  async fetchEvoucherReport ({ commit }) {
     try {
       commit('setError', null)
       commit('setLoading', true)
-      const { data: { success, message, data } } = await this.$axios.get('/reports/evoucher-report', { params: { start, end } })
+      const { data: { success, message, data } } = await this.$axios.get('/reports/evoucher')
       if (!success) { throw new Error(message) }
       commit('setData', data)
     } catch (error) {
@@ -316,14 +314,12 @@ export const actions = {
   },
   /**
    * Fetch LICENSE RENEWAL REPORT data.
-   * @param start (YYYY-MM-DD)
-   * @param end (YYYY-MM-DD)
    */
-  async fetchLicenseRenewalReport ({ commit }, { start, end }) {
+  async fetchLicenseRenewalReport ({ commit }) {
     try {
       commit('setError', null)
       commit('setLoading', true)
-      const { data: { success, message, data } } = await this.$axios.get('/reports/license-renewal-report', { params: { start, end } })
+      const { data: { success, message, data } } = await this.$axios.get('/reports/license-renewal')
       if (!success) { throw new Error(message) }
       commit('setData', data)
     } catch (error) {

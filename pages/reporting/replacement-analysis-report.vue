@@ -24,75 +24,29 @@
         <v-expansion-panel-content>
           <v-container class="pb-0">
             <v-row>
-              <v-col cols="12" sm="6" lg="3">
-                <v-dialog
-                  ref="start_dialog"
-                  v-model="start_dialog"
-                  :return-value.sync="start"
-                  persistent
-                  width="290px"
-                  @keydown.esc="start_dialog = false"
-                >
-                  <template #activator="{ on }">
-                    <v-text-field
-                      :value="$moment(start).format('L')"
-                      :label="$t('start_date')"
-                      prepend-inner-icon="mdi-calendar"
-                      dense
-                      outlined
-                      readonly
-                      rounded
-                      v-on="on"
-                    />
-                  </template>
-                  <v-date-picker
-                    v-model="start"
-                    :locale="$moment.locale()"
-                    color="primary"
-                    header-color="primary"
-                    scrollable
-                  >
-                    <v-spacer />
-                    <v-btn text @click="start_dialog = false" v-text="$t('cancel')" />
-                    <v-btn text @click="$refs.start_dialog.save(start), updateQuery()" v-text="$t('ok')" />
-                  </v-date-picker>
-                </v-dialog>
+              <v-col cols="auto">
+                <v-select
+                  v-model="report_type"
+                  :items="report_types"
+                  :label="$t('report_type')"
+                  :menu-props="{ bottom: true, offsetY: true }"
+                  dense
+                  outlined
+                  rounded
+                />
               </v-col>
-              <v-col cols="12" sm="6" lg="3">
-                <v-dialog
-                  ref="end_dialog"
-                  v-model="end_dialog"
-                  :return-value.sync="end"
-                  persistent
-                  width="290px"
-                  @keydown.esc="end_dialog = false"
-                >
-                  <template #activator="{ on }">
-                    <v-text-field
-                      :value="$moment(end).format('L')"
-                      :label="$t('end_date')"
-                      prepend-inner-icon="mdi-calendar"
-                      dense
-                      outlined
-                      readonly
-                      rounded
-                      v-on="on"
-                    />
-                  </template>
-                  <v-date-picker
-                    v-model="end"
-                    :locale="$moment.locale()"
-                    color="primary"
-                    header-color="primary"
-                    scrollable
-                  >
-                    <v-spacer />
-                    <v-btn text @click="end_dialog = false" v-text="$t('cancel')" />
-                    <v-btn text @click="$refs.end_dialog.save(end), updateQuery()" v-text="$t('ok')" />
-                  </v-date-picker>
-                </v-dialog>
+              <v-col cols="auto">
+                <v-select
+                  v-model="report_months"
+                  :items="[1,2,3,4,5,6,7,8,9,10,11,12]"
+                  :label="$t('number_of_months')"
+                  :menu-props="{ bottom: true, offsetY: true }"
+                  dense
+                  outlined
+                  rounded
+                />
               </v-col>
-              <v-col cols="12" sm="6" lg="3">
+              <v-col cols="auto">
                 <v-dialog
                   ref="centers_dialog"
                   v-model="centers_dialog"
@@ -145,6 +99,36 @@
                 </v-dialog>
               </v-col>
             </v-row>
+            <v-row v-show="report_type === 'model'">
+              <v-col cols="auto">
+                <v-text-field
+                  v-model="miles_driven"
+                  :label="$t('miles_driven')"
+                  autocomplete="off"
+                  type="number"
+                  dense
+                  outlined
+                  rounded
+                />
+              </v-col>
+              <v-col cols="auto">
+                <v-btn-toggle v-model="and_or" dense mandatory rounded>
+                  <v-btn>And</v-btn>
+                  <v-btn>Or</v-btn>
+                </v-btn-toggle>
+              </v-col>
+              <v-col cols="auto">
+                <v-text-field
+                  v-model="months_in_service"
+                  :label="$t('months_in_service')"
+                  autocomplete="off"
+                  type="number"
+                  dense
+                  outlined
+                  rounded
+                />
+              </v-col>
+            </v-row>
           </v-container>
         </v-expansion-panel-content>
       </v-expansion-panel>
@@ -178,6 +162,27 @@
             {{ $t('no_search_results', { 'query': search }) }}
           </div>
         </template>
+        <template #item.odometer="{ item }">
+          {{ item.odometer | number }}
+        </template>
+        <template #item.odometer_date="{ item }">
+          {{ item.odometer_date | date }}
+        </template>
+        <template #item.average_miles_per_month="{ item }">
+          {{ item.average_miles_per_month | number }}
+        </template>
+        <template #item.projected_odometer="{ item }">
+          {{ item.projected_odometer | number }}
+        </template>
+        <template #item.in_service_date="{ item }">
+          {{ item.in_service_date | number }}
+        </template>
+        <template #item.rent="{ item }">
+          {{ item.rent | currency }}
+        </template>
+        <template #item.excess_charge="{ item }">
+          {{ item.excess_charge | number }}
+        </template>
       </v-data-table>
     </v-skeleton-loader>
   </v-card>
@@ -193,6 +198,11 @@ export default {
   name: 'ReplacementAnalysisReport',
   mixins: [reportMixins],
   data: vm => ({
+    and_or: 'and',
+    report_months: 12,
+    report_type: 'standard',
+    miles_driven: 0,
+    months_in_service: 0,
     start_dialog: false,
     end_dialog: false,
     title: vm.$i18n.t('replacement_analysis_report'),
@@ -201,6 +211,18 @@ export default {
     end: vm.$route.query.end || vm.$moment().format('YYYY-MM-DD')
   }),
   computed: {
+    report_types () {
+      return [
+        {
+          text: this.$i18n.t('standard'),
+          value: 'standard'
+        },
+        {
+          text: this.$i18n.t('model'),
+          value: 'model'
+        }
+      ]
+    },
     /**
      * Datatable columns
      */
@@ -220,31 +242,36 @@ export default {
         'level_08',
         'level_09',
         'level_10',
-        'project',
+        'client_use_1',
+        'client_use_2',
+        'client_use_3',
+        'client_use_4',
+        'client_use_5',
         'lease_type',
         'driver_last_name',
         'driver_first_name',
-        'year_make_model',
-        'mileage',
-        'as_of_date',
-        'average_per_month',
-        'projected_mileage',
-        'estimate',
+        'model_year',
+        'vehicle_make',
+        'vehicle_model',
+        'odometer',
+        'odometer_date',
+        'average_miles_per_month',
+        'projected_odometer',
         'months_in_service',
         'in_service_date',
         'next_vehicle_number',
         'driver_state_province',
-        'comments',
+        'comment',
         'policy',
-        'team_t',
-        'team_#',
+        'team_type',
+        'team_number',
         'lease_termination_date',
-        'c_lease',
+        'closed_lease_type',
         'min_term',
         'max_term',
         'term',
         'rent',
-        'miles_allow',
+        'miles_allowed',
         'excess_charge'
       ]
     },
@@ -285,8 +312,32 @@ export default {
           divider: true
         },
         {
-          text: this.$i18n.t('project'),
-          value: 'project',
+          text: this.$i18n.t('client_use_1'),
+          value: 'client_use_1',
+          class: 'report-column',
+          divider: true
+        },
+        {
+          text: this.$i18n.t('client_use_2'),
+          value: 'client_use_2',
+          class: 'report-column',
+          divider: true
+        },
+        {
+          text: this.$i18n.t('client_use_3'),
+          value: 'client_use_3',
+          class: 'report-column',
+          divider: true
+        },
+        {
+          text: this.$i18n.t('client_use_4'),
+          value: 'client_use_4',
+          class: 'report-column',
+          divider: true
+        },
+        {
+          text: this.$i18n.t('client_use_5'),
+          value: 'client_use_5',
           class: 'report-column',
           divider: true
         },
@@ -309,38 +360,44 @@ export default {
           divider: true
         },
         {
-          text: this.$i18n.t('year_make_model'),
-          value: 'year_make_model',
+          text: this.$i18n.t('model_year'),
+          value: 'model_year',
           class: 'report-column',
           divider: true
         },
         {
-          text: this.$i18n.t('mileage'),
-          value: 'mileage',
+          text: this.$i18n.t('vehicle_make'),
+          value: 'vehicle_make',
           class: 'report-column',
           divider: true
         },
         {
-          text: this.$i18n.t('as_of_date'),
-          value: 'as_of_date',
+          text: this.$i18n.t('vehicle_model'),
+          value: 'vehicle_model',
           class: 'report-column',
           divider: true
         },
         {
-          text: this.$i18n.t('average_per_month'),
-          value: 'average_per_month',
+          text: this.$i18n.t('odometer'),
+          value: 'odometer',
           class: 'report-column',
           divider: true
         },
         {
-          text: this.$i18n.t('projected_mileage'),
-          value: 'projected_mileage',
+          text: this.$i18n.t('odometer_date'),
+          value: 'odometer_date',
           class: 'report-column',
           divider: true
         },
         {
-          text: this.$i18n.t('estimate'),
-          value: 'estimate',
+          text: this.$i18n.t('average_miles_per_month'),
+          value: 'average_miles_per_month',
+          class: 'report-column',
+          divider: true
+        },
+        {
+          text: this.$i18n.t('projected_odometer'),
+          value: 'projected_odometer',
           class: 'report-column',
           divider: true
         },
@@ -369,8 +426,8 @@ export default {
           divider: true
         },
         {
-          text: this.$i18n.t('comments'),
-          value: 'comments',
+          text: this.$i18n.t('comment'),
+          value: 'comment',
           class: 'report-column',
           divider: true
         },
@@ -381,14 +438,14 @@ export default {
           divider: true
         },
         {
-          text: this.$i18n.t('team_t'),
-          value: 'team_t',
+          text: this.$i18n.t('team_type'),
+          value: 'team_type',
           class: 'report-column',
           divider: true
         },
         {
-          text: this.$i18n.t('team_#'),
-          value: 'team_#',
+          text: this.$i18n.t('team_number'),
+          value: 'team_number',
           class: 'report-column',
           divider: true
         },
@@ -399,8 +456,8 @@ export default {
           divider: true
         },
         {
-          text: this.$i18n.t('c_lease'),
-          value: 'c_lease',
+          text: this.$i18n.t('closed_lease_type'),
+          value: 'closed_lease_type',
           class: 'report-column',
           divider: true
         },
@@ -429,8 +486,8 @@ export default {
           divider: true
         },
         {
-          text: this.$i18n.t('miles_allow'),
-          value: 'miles_allow',
+          text: this.$i18n.t('miles_allowed'),
+          value: 'miles_allowed',
           class: 'report-column',
           divider: true
         },
@@ -446,8 +503,11 @@ export default {
      */
     query () {
       return {
-        start: this.start,
-        end: this.end
+        report_type: this.report_type,
+        report_months: this.report_months,
+        miles_driven: this.miles_driven,
+        and_or: this.and_or,
+        months_in_service: this.months_in_service
       }
     }
   },

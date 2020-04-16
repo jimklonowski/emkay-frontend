@@ -26,74 +26,6 @@
             <v-row>
               <v-col cols="12" sm="6" lg="3">
                 <v-dialog
-                  ref="start_dialog"
-                  v-model="start_dialog"
-                  :return-value.sync="start"
-                  persistent
-                  width="290px"
-                  @keydown.esc="start_dialog = false"
-                >
-                  <template #activator="{ on }">
-                    <v-text-field
-                      :value="$moment(start).format('L')"
-                      :label="$t('start_date')"
-                      prepend-inner-icon="mdi-calendar"
-                      dense
-                      outlined
-                      readonly
-                      rounded
-                      v-on="on"
-                    />
-                  </template>
-                  <v-date-picker
-                    v-model="start"
-                    :locale="$moment.locale()"
-                    color="primary"
-                    header-color="primary"
-                    scrollable
-                  >
-                    <v-spacer />
-                    <v-btn text @click="start_dialog = false" v-text="$t('cancel')" />
-                    <v-btn text @click="$refs.start_dialog.save(start), updateQuery()" v-text="$t('ok')" />
-                  </v-date-picker>
-                </v-dialog>
-              </v-col>
-              <v-col cols="12" sm="6" lg="3">
-                <v-dialog
-                  ref="end_dialog"
-                  v-model="end_dialog"
-                  :return-value.sync="end"
-                  persistent
-                  width="290px"
-                  @keydown.esc="end_dialog = false"
-                >
-                  <template #activator="{ on }">
-                    <v-text-field
-                      :value="$moment(end).format('L')"
-                      :label="$t('end_date')"
-                      prepend-inner-icon="mdi-calendar"
-                      dense
-                      outlined
-                      readonly
-                      rounded
-                      v-on="on"
-                    />
-                  </template>
-                  <v-date-picker
-                    v-model="end"
-                    :locale="$moment.locale()"
-                    color="primary"
-                    header-color="primary"
-                    scrollable
-                  >
-                    <v-spacer />
-                    <v-btn text @click="end_dialog = false" v-text="$t('cancel')" />
-                    <v-btn text @click="$refs.end_dialog.save(end), updateQuery()" v-text="$t('ok')" />
-                  </v-date-picker>
-                </v-dialog>
-              </v-col>
-              <v-col cols="12" sm="6" lg="3">
-                <v-dialog
                   ref="centers_dialog"
                   v-model="centers_dialog"
                   max-width="650"
@@ -178,6 +110,22 @@
             {{ $t('no_search_results', { 'query': search }) }}
           </div>
         </template>
+
+        <template #item.odometer="{ item }">
+          {{ item.odometer | number }}
+        </template>
+        <template #item.last_pm_date="{ item }">
+          {{ item.last_pm_date | date }}
+        </template>
+        <template #item.last_pm_odometer="{ item }">
+          {{ item.last_pm_odometer | number }}
+        </template>
+        <template #item.next_pm_odometer="{ item }">
+          {{ item.next_pm_odometer | number }}
+        </template>
+        <template #item.due_in_miles="{ item }">
+          {{ item.due_in_miles | number }}
+        </template>
       </v-data-table>
     </v-skeleton-loader>
   </v-card>
@@ -193,12 +141,7 @@ export default {
   name: 'EvoucherReport',
   mixins: [reportMixins],
   data: vm => ({
-    start_dialog: false,
-    end_dialog: false,
-    title: vm.$i18n.t('evoucher_report'),
-
-    start: vm.$route.query.start || vm.$moment().subtract(30, 'days').format('YYYY-MM-DD'),
-    end: vm.$route.query.end || vm.$moment().format('YYYY-MM-DD')
+    title: vm.$i18n.t('evoucher_report')
   }),
   computed: {
     /**
@@ -210,24 +153,17 @@ export default {
         'client_vehicle_number',
         'center_code',
         'center_name',
-        'driver',
-        'year_make_model',
+        'model_year',
+        'vehicle_make',
+        'vehicle_model',
         'odometer',
         'last_pm_date',
         'last_pm_odometer',
         'next_pm_odometer',
         'due_in_miles',
-        'status',
-        'level_01',
-        'level_02',
-        'level_03',
-        'level_04',
-        'level_05',
-        'level_06',
-        'level_07',
-        'level_08',
-        'level_09',
-        'level_10'
+        'driver_last_name',
+        'driver_first_name',
+        'note'
       ]
     },
     /**
@@ -267,14 +203,20 @@ export default {
           divider: true
         },
         {
-          text: this.$i18n.t('driver'),
-          value: 'driver',
+          text: this.$i18n.t('model_year'),
+          value: 'model_year',
           class: 'report-column',
           divider: true
         },
         {
-          text: this.$i18n.t('year_make_model'),
-          value: 'year_make_model',
+          text: this.$i18n.t('vehicle_make'),
+          value: 'vehicle_make',
+          class: 'report-column',
+          divider: true
+        },
+        {
+          text: this.$i18n.t('vehicle_model'),
+          value: 'vehicle_model',
           class: 'report-column',
           divider: true
         },
@@ -309,20 +251,23 @@ export default {
           divider: true
         },
         {
-          text: this.$i18n.t('status'),
-          value: 'status',
+          text: this.$i18n.t('driver_last_name'),
+          value: 'driver_last_name',
+          class: 'report-column',
+          divider: true
+        },
+        {
+          text: this.$i18n.t('driver_first_name'),
+          value: 'driver_first_name',
+          class: 'report-column',
+          divider: true
+        },
+        {
+          text: this.$i18n.t('note'),
+          value: 'note',
           class: 'report-column'
         }
       ]
-    },
-    /**
-     * Query Parameters
-     */
-    query () {
-      return {
-        start: this.start,
-        end: this.end
-      }
     }
   },
   methods: {
