@@ -92,7 +92,8 @@ const reporting = {
         { key: 'inventory_report', icon: 'mdi-bus-multiple', to: { path: '/reporting/inventory-report' } },
         { key: 'order_status_report', icon: 'mdi-bus-clock', to: { path: '/reporting/order-status-report' } },
         { key: 'replacement_analysis_report', icon: 'mdi-find-replace', to: { path: '/reporting/replacement-analysis-report' } },
-        { key: 'sold_vehicle_analysis_report', icon: 'mdi-sim', to: { path: '/reporting/sold-vehicle-analysis-report' } }
+        { key: 'sold_vehicle_analysis_report', icon: 'mdi-sim', to: { path: '/reporting/sold-vehicle-analysis-report' } },
+        { key: 'mpg_report', icon: 'mdi-gas-station', to: { path: '/reporting/mpg-report' } }
       ]
     },
     {
