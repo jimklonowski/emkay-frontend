@@ -30,25 +30,28 @@ export default {
 }
 </script>
 
-<style scoped>
-.vehicle-search::before {
-  content: "";
-  display: block;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: 50% 50%;
-}
-.theme--dark .vehicle-search::before {
-  background-image: url(~@/assets/images/coveredcar--dark.jpg);
-  opacity: 0.5;
-}
-.theme--light .vehicle-search::before {
-  background-image: url(~@/assets/images/coveredcar--light.jpg);
-  opacity: 1.0;
+<style lang="scss" scoped>
+.vehicle-search {
+  &::before {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+
+    .theme--dark & {
+      background-image: url(~@/assets/images/coveredcar--dark.jpg);
+      opacity: 0.5;
+    }
+    .theme--light & {
+      background-image: url(~@/assets/images/coveredcar--light.jpg);
+      opacity: 1.0;
+    }
+  }
 }
 </style>

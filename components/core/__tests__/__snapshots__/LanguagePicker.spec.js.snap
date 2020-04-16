@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LanguagePicker renders properly 1`] = `"<div class=\\"v-menu\\"><button type=\\"button\\" class=\\"v-btn v-btn--flat v-btn--icon v-btn--round theme--light v-size--default\\" title=\\"language\\"><span class=\\"v-btn__content\\"><i aria-hidden=\\"true\\" class=\\"v-icon notranslate mdi mdi-web theme--light\\"></i></span></button></div>"`;

@@ -16,7 +16,7 @@ export const flatten = array => array.reduce((res, { center_code, center_name, c
 /**
  * Format Currency
  */
-export const formatCurrency = (value, minDigits = 2, maxDigits = 2) => {
+export const formatCurrency = (value = 0, minDigits = 2, maxDigits = 2) => {
   const formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: minDigits, maximumFractionDigits: maxDigits })
   return formatter.format(value)
 }

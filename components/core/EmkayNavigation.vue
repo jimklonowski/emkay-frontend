@@ -127,7 +127,7 @@
       </v-btn>
     </v-app-bar>
 
-    <messages-sidebar v-if="$auth.loggedIn" />
+    <messages-sidebar v-show="$auth.loggedIn" />
   </nav>
 </template>
 

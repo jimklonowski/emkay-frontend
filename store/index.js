@@ -5,8 +5,10 @@
 export const state = () => ({})
 
 export const actions = {
-  async nuxtServerInit ({ commit, dispatch }, { app, params, redirect, req, res, route }) {
+  async nuxtServerInit ({ commit, dispatch }, { app, params, redirect, req, res, route, $vuetify }) {
     if (process.server) {
+      // TODO: Restore dark mode if preference found in cookie
+      //
       app.$auth.fetchUser()
       if (app.$auth.loggedIn) {
         // initialize account store

@@ -26,74 +26,6 @@
             <v-row>
               <v-col cols="12" sm="6" lg="3">
                 <v-dialog
-                  ref="start_dialog"
-                  v-model="start_dialog"
-                  :return-value.sync="start"
-                  persistent
-                  width="290px"
-                  @keydown.esc="start_dialog = false"
-                >
-                  <template #activator="{ on }">
-                    <v-text-field
-                      :value="$moment(start).format('L')"
-                      :label="$t('start_date')"
-                      prepend-inner-icon="mdi-calendar"
-                      dense
-                      outlined
-                      readonly
-                      rounded
-                      v-on="on"
-                    />
-                  </template>
-                  <v-date-picker
-                    v-model="start"
-                    :locale="$moment.locale()"
-                    color="primary"
-                    header-color="primary"
-                    scrollable
-                  >
-                    <v-spacer />
-                    <v-btn text @click="start_dialog = false" v-text="$t('cancel')" />
-                    <v-btn text @click="$refs.start_dialog.save(start), updateQuery()" v-text="$t('ok')" />
-                  </v-date-picker>
-                </v-dialog>
-              </v-col>
-              <v-col cols="12" sm="6" lg="3">
-                <v-dialog
-                  ref="end_dialog"
-                  v-model="end_dialog"
-                  :return-value.sync="end"
-                  persistent
-                  width="290px"
-                  @keydown.esc="end_dialog = false"
-                >
-                  <template #activator="{ on }">
-                    <v-text-field
-                      :value="$moment(end).format('L')"
-                      :label="$t('end_date')"
-                      prepend-inner-icon="mdi-calendar"
-                      dense
-                      outlined
-                      readonly
-                      rounded
-                      v-on="on"
-                    />
-                  </template>
-                  <v-date-picker
-                    v-model="end"
-                    :locale="$moment.locale()"
-                    color="primary"
-                    header-color="primary"
-                    scrollable
-                  >
-                    <v-spacer />
-                    <v-btn text @click="end_dialog = false" v-text="$t('cancel')" />
-                    <v-btn text @click="$refs.end_dialog.save(end), updateQuery()" v-text="$t('ok')" />
-                  </v-date-picker>
-                </v-dialog>
-              </v-col>
-              <v-col cols="12" sm="6" lg="3">
-                <v-dialog
                   ref="centers_dialog"
                   v-model="centers_dialog"
                   max-width="650"
@@ -178,6 +110,16 @@
             {{ $t('no_search_results', { 'query': search }) }}
           </div>
         </template>
+
+        <template #item.vehicle_number="{ item }">
+          <vehicle-number-button :vehicle-number="item.vehicle_number" />
+        </template>
+        <template #item.license_plate_expiration_date="{ item }">
+          {{ item.license_plate_expiration_date | date }}
+        </template>
+        <template #item.in_service_date="{ item }">
+          {{ item.in_service_date | date }}
+        </template>
       </v-data-table>
     </v-skeleton-loader>
   </v-card>
@@ -193,12 +135,7 @@ export default {
   name: 'LicenseRenewalReport',
   mixins: [reportMixins],
   data: vm => ({
-    start_dialog: false,
-    end_dialog: false,
-    title: vm.$i18n.t('license_renewal_report'),
-
-    start: vm.$route.query.start || vm.$moment().subtract(30, 'days').format('YYYY-MM-DD'),
-    end: vm.$route.query.end || vm.$moment().format('YYYY-MM-DD')
+    title: vm.$i18n.t('license_renewal_report')
   }),
   computed: {
     /**
@@ -210,11 +147,14 @@ export default {
         'client_vehicle_number',
         'center_code',
         'center_name',
-        'driver_name',
+        'driver_first_name',
+        'driver_last_name',
         'in_service_date',
-        'year_make_model',
+        'model_year',
+        'vehicle_make',
+        'vehicle_model',
+        'state_province',
         'vin',
-        'license_plate_state_province',
         'license_plate_number',
         'license_plate_expiration_date',
         'renewal_status',
@@ -264,13 +204,22 @@ export default {
           text: this.$i18n.t('center_name'),
           value: 'center_name',
           class: 'report-column',
-          divider: true
+          divider: true,
+          width: 300
         },
         {
-          text: this.$i18n.t('driver_name'),
-          value: 'driver_name',
+          text: this.$i18n.t('driver_last_name'),
+          value: 'driver_last_name',
           class: 'report-column',
-          divider: true
+          divider: true,
+          width: 200
+        },
+        {
+          text: this.$i18n.t('driver_first_name'),
+          value: 'driver_first_name',
+          class: 'report-column',
+          divider: true,
+          width: 200
         },
         {
           text: this.$i18n.t('in_service_date'),
@@ -279,20 +228,34 @@ export default {
           divider: true
         },
         {
-          text: this.$i18n.t('year_make_model'),
-          value: 'year_make_model',
+          text: this.$i18n.t('model_year'),
+          value: 'model_year',
+          class: 'report-column',
+          divider: true
+        },
+        {
+          text: this.$i18n.t('vehicle_make'),
+          value: 'vehicle_make',
+          class: 'report-column',
+          divider: true,
+          width: 200
+        },
+        {
+          text: this.$i18n.t('vehicle_model'),
+          value: 'vehicle_model',
+          class: 'report-column',
+          divider: true,
+          width: 200
+        },
+        {
+          text: this.$i18n.t('state_province'),
+          value: 'state_province',
           class: 'report-column',
           divider: true
         },
         {
           text: this.$i18n.t('vin'),
           value: 'vin',
-          class: 'report-column',
-          divider: true
-        },
-        {
-          text: this.$i18n.t('license_plate_state_province'),
-          value: 'license_plate_state_province',
           class: 'report-column',
           divider: true
         },
@@ -311,18 +274,10 @@ export default {
         {
           text: this.$i18n.t('renewal_status'),
           value: 'renewal_status',
-          class: 'report-column'
+          class: 'report-column',
+          width: 250
         }
       ]
-    },
-    /**
-     * Query Parameters
-     */
-    query () {
-      return {
-        start: this.start,
-        end: this.end
-      }
     }
   },
   methods: {

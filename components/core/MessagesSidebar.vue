@@ -9,12 +9,12 @@
   >
     <template #prepend>
       <h1 class="pa-4 text-center">
-        Message Center
+        {{ $t('notification_center') }}
       </h1>
     </template>
     <v-list subheader>
       <v-subheader class="subtitle-1 mt-8 font-lato">
-        EMKAY Updates
+        {{ $t('emkay_updates') }}
       </v-subheader>
       <template v-for="(login_message, m) in login_messages">
         <v-list-item :key="`login_message-${m}`" link three-line @click="open(login_message.link)">
@@ -30,7 +30,7 @@
       </template>
 
       <v-subheader class="subtitle-1 mt-8 font-lato">
-        FLEET Messages
+        {{ $t('fleet_messages') }}
       </v-subheader>
       <template v-for="(fleet_message, m) in fleet_messages">
         <v-list-item :key="`fleet_message-${m}`" link two-line>
@@ -49,12 +49,12 @@
       </template>
       <div class="d-flex">
         <v-spacer />
-        <nuxt-link to="/fleet-messages" class="text-decoration-none subtitle-2 pa-2">
-          Fleet Messages
+        <nuxt-link :to="localePath({ path: '/account/fleet-messages' })" class="text-decoration-none subtitle-2 pa-2">
+          {{ $t('fleet_messages') }}
         </nuxt-link>
       </div>
       <v-subheader class="subtitle-1 mt-8 font-lato">
-        CRITICAL Alerts
+        {{ $t('critical_alerts') }}
       </v-subheader>
       <template v-for="(alert, a) in critical_alerts">
         <v-list-item :key="`alert-${a}`" link>

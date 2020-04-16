@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DarkModeToggle renders properly 1`] = `"<button type=\\"button\\" class=\\"v-btn v-btn--flat v-btn--icon v-btn--round theme--light v-size--default\\" title=\\"dark_mode\\"><span class=\\"v-btn__content\\"><i aria-hidden=\\"true\\" class=\\"v-icon notranslate mdi mdi-brightness-7 theme--light\\"></i></span></button>"`;

@@ -71,6 +71,7 @@ export default {
             backgroundColor: context => {
               if (context.dataIndex == null) { return null }
               const value = context.dataset.data[context.dataIndex].value
+              if (value === 0) { return '#FFFFFF' }
               // calculate the maximum count across each state, use as max parameter in color function
               const max = Math.max(...vehicleCounts)
               return interpolateSingleColor(value, max)
@@ -92,10 +93,10 @@ export default {
         maintainAspectRatio: false,
         responsive: true,
         scale: {
-          projection: this.usaCustomer ? 'albersUsa' : 'mercator'
+          projection: this.usaCustomer ? 'albersUsa' : 'albers'
         },
         showOutline: true,
-        showGraticule: true,
+        showGraticule: false,
         tooltips: {
           callbacks: {
             label: (tooltipItem, data) => {

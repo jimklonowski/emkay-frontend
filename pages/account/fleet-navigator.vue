@@ -34,7 +34,7 @@
             >
               <template #activator="{ on }">
                 <v-btn color="primary" depressed v-on="on">
-                  {{ hasFilters ? `${filterCount} ${$tc('filters_applied', filterCount)}` : $t('filters') }}
+                  {{ hasFilters ? `${$tc('filters_applied', filterCount)}` : $t('filters') }}
                 </v-btn>
               </template>
               <v-card>
@@ -46,7 +46,7 @@
                   </v-btn>
                 </v-toolbar>
                 <v-toolbar v-else color="error" dark>
-                  <v-avatar size="20" color="white error--text" class="mr-2" v-text="filterCount" />
+                  <!-- <v-avatar size="20" color="white error--text" class="mr-2" v-text="filterCount" /> -->
                   <v-toolbar-title>{{ $tc('filters_applied', filterCount) }}</v-toolbar-title>
                   <v-spacer />
                   <v-btn tabindex="-1" class="mr-2" small text @click="resetFilters">
@@ -143,7 +143,7 @@
               </v-card>
             </v-dialog>
             <v-spacer />
-            <v-btn-toggle v-model="dataviz" dense class="mr-2" mandatory>
+            <v-btn-toggle v-model="dataviz" dense class="mr-2">
               <v-btn color="primary" value="map">
                 <v-icon v-text="'mdi-earth'" />
               </v-btn>
@@ -346,7 +346,7 @@ export default {
     search: '',
     dataviz: 'bar-chart',
     show_filter_dialog: false,
-    sortFields: ['center_name', 'driver_last_name', 'in_service_date', 'model_year', 'vehicle_color', 'vehicle_make', 'vehicle_model', 'vehicle_number', 'vin'],
+    sortFields: ['center_name', 'driver_last_name', 'in_service_date', 'model_year', 'odometer', 'vehicle_make', 'vehicle_model', 'vehicle_number', 'vin'],
     sortBy: 'center_name',
     sortDesc: false
   }),

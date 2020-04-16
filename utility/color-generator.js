@@ -8,7 +8,7 @@ function calculatePoint (i, intervalSize, colorRangeInfo) {
   return useEndAsStart ? (colorEnd - (i * intervalSize)) : (colorStart + (i * intervalSize))
 }
 
-export function interpolateSingleColor (value, max, colorRangeInfo = { colorStart: 0, colorEnd: 1.0, useEndAsStart: false }, colorScale = interpolatePurples) {
+export function interpolateSingleColor (value, max, colorRangeInfo = { colorStart: 0.2, colorEnd: 1.0, useEndAsStart: false }, colorScale = interpolatePurples) {
   const { colorStart, colorEnd } = colorRangeInfo
   const colorRange = colorEnd - colorStart
   const intervalSize = colorRange / max
