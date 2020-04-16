@@ -33,17 +33,19 @@
                   dense
                   outlined
                   rounded
+                  @change="updateQuery()"
                 />
               </v-col>
               <v-col cols="auto">
                 <v-select
                   v-model="report_months"
-                  :items="[1,2,3,4,5,6,7,8,9,10,11,12]"
+                  :items="[12,11,10,9,8,7,6,5,4,3,2,1]"
                   :label="$t('number_of_months')"
                   :menu-props="{ bottom: true, offsetY: true }"
                   dense
                   outlined
                   rounded
+                  @change="updateQuery()"
                 />
               </v-col>
               <v-col cols="auto">
@@ -99,7 +101,7 @@
                 </v-dialog>
               </v-col>
             </v-row>
-            <v-row v-show="report_type === 'model'">
+            <v-row v-show="report_type === 'MODEL'">
               <v-col cols="auto">
                 <v-text-field
                   v-model="miles_driven"
@@ -109,12 +111,17 @@
                   dense
                   outlined
                   rounded
+                  @change="updateQuery()"
                 />
               </v-col>
               <v-col cols="auto">
-                <v-btn-toggle v-model="and_or" dense mandatory rounded>
-                  <v-btn>And</v-btn>
-                  <v-btn>Or</v-btn>
+                <v-btn-toggle v-model="and_or" dense mandatory rounded @change="updateQuery()">
+                  <v-btn value="AND">
+                    {{ $t('and') }}
+                  </v-btn>
+                  <v-btn value="OR">
+                    {{ $t('or') }}
+                  </v-btn>
                 </v-btn-toggle>
               </v-col>
               <v-col cols="auto">
@@ -126,6 +133,7 @@
                   dense
                   outlined
                   rounded
+                  @change="updateQuery()"
                 />
               </v-col>
             </v-row>
@@ -175,7 +183,7 @@
           {{ item.projected_odometer | number }}
         </template>
         <template #item.in_service_date="{ item }">
-          {{ item.in_service_date | number }}
+          {{ item.in_service_date | date }}
         </template>
         <template #item.rent="{ item }">
           {{ item.rent | currency }}
@@ -198,9 +206,9 @@ export default {
   name: 'ReplacementAnalysisReport',
   mixins: [reportMixins],
   data: vm => ({
-    and_or: 'and',
+    and_or: 'AND',
     report_months: 12,
-    report_type: 'standard',
+    report_type: 'STANDARD',
     miles_driven: 0,
     months_in_service: 0,
     start_dialog: false,
@@ -215,11 +223,11 @@ export default {
       return [
         {
           text: this.$i18n.t('standard'),
-          value: 'standard'
+          value: 'STANDARD'
         },
         {
           text: this.$i18n.t('model'),
-          value: 'model'
+          value: 'MODEL'
         }
       ]
     },
@@ -242,17 +250,17 @@ export default {
         'level_08',
         'level_09',
         'level_10',
-        'client_use_1',
-        'client_use_2',
-        'client_use_3',
-        'client_use_4',
-        'client_use_5',
         'lease_type',
         'driver_last_name',
         'driver_first_name',
         'model_year',
         'vehicle_make',
         'vehicle_model',
+        'client_use_1',
+        'client_use_2',
+        'client_use_3',
+        'client_use_4',
+        'client_use_5',
         'odometer',
         'odometer_date',
         'average_miles_per_month',
@@ -309,7 +317,48 @@ export default {
           text: this.$i18n.t('center_name'),
           value: 'center_name',
           class: 'report-column',
+          divider: true,
+          width: 300
+        },
+        {
+          text: this.$i18n.t('lease_type'),
+          value: 'lease_type',
+          class: 'report-column',
           divider: true
+        },
+        {
+          text: this.$i18n.t('driver_last_name'),
+          value: 'driver_last_name',
+          class: 'report-column',
+          divider: true,
+          width: 200
+        },
+        {
+          text: this.$i18n.t('driver_first_name'),
+          value: 'driver_first_name',
+          class: 'report-column',
+          divider: true,
+          width: 200
+        },
+        {
+          text: this.$i18n.t('model_year'),
+          value: 'model_year',
+          class: 'report-column',
+          divider: true
+        },
+        {
+          text: this.$i18n.t('vehicle_make'),
+          value: 'vehicle_make',
+          class: 'report-column',
+          divider: true,
+          width: 200
+        },
+        {
+          text: this.$i18n.t('vehicle_model'),
+          value: 'vehicle_model',
+          class: 'report-column',
+          divider: true,
+          width: 200
         },
         {
           text: this.$i18n.t('client_use_1'),
@@ -338,42 +387,6 @@ export default {
         {
           text: this.$i18n.t('client_use_5'),
           value: 'client_use_5',
-          class: 'report-column',
-          divider: true
-        },
-        {
-          text: this.$i18n.t('lease_type'),
-          value: 'lease_type',
-          class: 'report-column',
-          divider: true
-        },
-        {
-          text: this.$i18n.t('driver_last_name'),
-          value: 'driver_last_name',
-          class: 'report-column',
-          divider: true
-        },
-        {
-          text: this.$i18n.t('driver_first_name'),
-          value: 'driver_first_name',
-          class: 'report-column',
-          divider: true
-        },
-        {
-          text: this.$i18n.t('model_year'),
-          value: 'model_year',
-          class: 'report-column',
-          divider: true
-        },
-        {
-          text: this.$i18n.t('vehicle_make'),
-          value: 'vehicle_make',
-          class: 'report-column',
-          divider: true
-        },
-        {
-          text: this.$i18n.t('vehicle_model'),
-          value: 'vehicle_model',
           class: 'report-column',
           divider: true
         },
@@ -429,13 +442,15 @@ export default {
           text: this.$i18n.t('comment'),
           value: 'comment',
           class: 'report-column',
-          divider: true
+          divider: true,
+          width: 200
         },
         {
           text: this.$i18n.t('policy'),
           value: 'policy',
           class: 'report-column',
-          divider: true
+          divider: true,
+          width: 200
         },
         {
           text: this.$i18n.t('team_type'),

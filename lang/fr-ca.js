@@ -69,6 +69,7 @@ export default {
   allowed_daily_fuel_purcahses: "Achats quotidiens de carburant autorisés",
   amount: "Montant",
   an_error_occurred: "Une erreur est survenue",
+  and: "Et",
   approve_auto_detail: "Approuver les détails automatiques",
   approve_driver_orders: "Approuver les commandes de pilotes",
   approve_oil_change: "Approuver le changement d'huile",

@@ -1,6 +1,7 @@
 /* eslint-disable vue/require-prop-types */
 import Vue from 'vue'
 import 'chartjs-chart-geo'
+import 'chartjs-plugin-datalabels'
 import { Bar, Doughnut, Line, Pie, mixins, generateChart } from 'vue-chartjs'
 const { reactiveProp } = mixins
 

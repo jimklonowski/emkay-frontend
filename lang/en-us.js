@@ -69,6 +69,7 @@ export default {
   allowed_daily_fuel_purcahses: "Allowed Daily Fuel Purchases",
   amount: "Amount",
   an_error_occurred: "An error occurred",
+  and: "And",
   approve_auto_detail: "Approve Auto Detail",
   approve_driver_orders: "Approve Driver Orders",
   approve_oil_change: "Approve Oil Change",
