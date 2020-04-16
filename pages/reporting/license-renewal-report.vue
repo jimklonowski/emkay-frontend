@@ -110,6 +110,16 @@
             {{ $t('no_search_results', { 'query': search }) }}
           </div>
         </template>
+
+        <template #item.vehicle_number="{ item }">
+          <vehicle-number-button :vehicle-number="item.vehicle_number" />
+        </template>
+        <template #item.license_plate_expiration_date="{ item }">
+          {{ item.license_plate_expiration_date | date }}
+        </template>
+        <template #item.in_service_date="{ item }">
+          {{ item.in_service_date | date }}
+        </template>
       </v-data-table>
     </v-skeleton-loader>
   </v-card>
@@ -194,19 +204,22 @@ export default {
           text: this.$i18n.t('center_name'),
           value: 'center_name',
           class: 'report-column',
-          divider: true
+          divider: true,
+          width: 300
         },
         {
           text: this.$i18n.t('driver_last_name'),
           value: 'driver_last_name',
           class: 'report-column',
-          divider: true
+          divider: true,
+          width: 200
         },
         {
           text: this.$i18n.t('driver_first_name'),
           value: 'driver_first_name',
           class: 'report-column',
-          divider: true
+          divider: true,
+          width: 200
         },
         {
           text: this.$i18n.t('in_service_date'),
@@ -224,13 +237,15 @@ export default {
           text: this.$i18n.t('vehicle_make'),
           value: 'vehicle_make',
           class: 'report-column',
-          divider: true
+          divider: true,
+          width: 200
         },
         {
           text: this.$i18n.t('vehicle_model'),
           value: 'vehicle_model',
           class: 'report-column',
-          divider: true
+          divider: true,
+          width: 200
         },
         {
           text: this.$i18n.t('state_province'),
@@ -259,7 +274,8 @@ export default {
         {
           text: this.$i18n.t('renewal_status'),
           value: 'renewal_status',
-          class: 'report-column'
+          class: 'report-column',
+          width: 250
         }
       ]
     }

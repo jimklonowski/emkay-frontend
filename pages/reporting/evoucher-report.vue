@@ -110,7 +110,9 @@
             {{ $t('no_search_results', { 'query': search }) }}
           </div>
         </template>
-
+        <template #item.vehicle_number="{ item }">
+          <vehicle-number-button :vehicle-number="item.vehicle_number" />
+        </template>
         <template #item.odometer="{ item }">
           {{ item.odometer | number }}
         </template>
@@ -200,7 +202,22 @@ export default {
           text: this.$i18n.t('center_name'),
           value: 'center_name',
           class: 'report-column',
-          divider: true
+          divider: true,
+          width: 300
+        },
+        {
+          text: this.$i18n.t('driver_last_name'),
+          value: 'driver_last_name',
+          class: 'report-column',
+          divider: true,
+          width: 200
+        },
+        {
+          text: this.$i18n.t('driver_first_name'),
+          value: 'driver_first_name',
+          class: 'report-column',
+          divider: true,
+          width: 200
         },
         {
           text: this.$i18n.t('model_year'),
@@ -212,12 +229,14 @@ export default {
           text: this.$i18n.t('vehicle_make'),
           value: 'vehicle_make',
           class: 'report-column',
+          width: 200,
           divider: true
         },
         {
           text: this.$i18n.t('vehicle_model'),
           value: 'vehicle_model',
           class: 'report-column',
+          width: 200,
           divider: true
         },
         {
@@ -251,21 +270,10 @@ export default {
           divider: true
         },
         {
-          text: this.$i18n.t('driver_last_name'),
-          value: 'driver_last_name',
-          class: 'report-column',
-          divider: true
-        },
-        {
-          text: this.$i18n.t('driver_first_name'),
-          value: 'driver_first_name',
-          class: 'report-column',
-          divider: true
-        },
-        {
           text: this.$i18n.t('note'),
           value: 'note',
-          class: 'report-column'
+          class: 'report-column',
+          width: 250
         }
       ]
     }
