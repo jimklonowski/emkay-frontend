@@ -12,11 +12,11 @@
         <template v-if="$auth.loggedIn" #prepend>
           <v-list-item class="pa-4">
             <v-list-item-avatar color="primary darken-2 white--text">
-              {{ avatarText }}
+              {{ avatar_text }}
             </v-list-item-avatar>
             <v-list-item-content>
-              <v-list-item-title>{{ account }}</v-list-item-title>
-              <v-list-item-subtitle>{{ user }}</v-list-item-subtitle>
+              <v-list-item-title>{{ current_account }}</v-list-item-title>
+              <v-list-item-subtitle>{{ current_user }}</v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
           <v-divider />
@@ -58,30 +58,6 @@
               </v-list-item-content>
             </v-list-item>
           </template>
-          <!-- <v-list-group
-            v-for="(item, i) in sidebar_items"
-            :key="`menu-${i}`"
-            :to="localePath(item.to)"
-            exact
-            nuxt
-          >
-            <template #activator>
-              <v-list-item-action>
-                <v-icon v-text="item.icon" />
-              </v-list-item-action>
-              <v-list-item-content>
-                <v-list-item-title>{{ $t(item.key) }}</v-list-item-title>
-              </v-list-item-content>
-            </template>
-            <v-list-item
-              v-for="subItem in item.items"
-              :key="subItem.key"
-            >
-              <v-list-item-content>
-                <v-list-item-title v-text="$t(subItem.key)" />
-              </v-list-item-content>
-            </v-list-item>
-          </v-list-group> -->
         </v-list>
 
         <template v-if="$auth.loggedIn" #append>
@@ -133,7 +109,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import { account, ordering, reporting } from '@/static/mega-menus'
+import { account, ordering, reporting } from '@/assets/mega-menus'
 import DarkModeToggle from '@/components/core/DarkModeToggle'
 import LanguagePicker from '@/components/core/LanguagePicker'
 import MegaMenu from '@/components/core/MegaMenu'
@@ -148,18 +124,13 @@ export default {
   data: () => ({
     right_sidebar: false
   }),
-  menus: {
-    account,
-    ordering,
-    reporting
-  },
   computed: {
     ...mapGetters({
       login_messages: 'account/getLoginMessages'
     }),
-    accountMenu: vm => vm.$options.menus.account,
-    orderingMenu: vm => vm.$options.menus.ordering,
-    reportingMenu: vm => vm.$options.menus.reporting,
+    accountMenu: () => account,
+    orderingMenu: () => ordering,
+    reportingMenu: () => reporting,
     left_sidebar: {
       get () {
         return this.$store.getters['account/getLeftSidebar']
@@ -191,15 +162,11 @@ export default {
           ]
         },
         { key: 'ordering', icon: 'mdi-timetable', to: { path: '/ordering' } }
-        // { key: 'fleet_dashboard', icon: 'mdi-chart-areaspline', to: { path: '/fleet' } },
-        // { key: 'my_reports', icon: 'mdi-file-certificate', to: { path: '/my-reports' } },
-        // { key: 'reports', icon: 'mdi-file-chart-outline', to: { path: '/reports' } },
-        // { key: 'vehicle_dashboard', icon: 'mdi-car-cruise-control', to: { path: '/vehicle' } }
       ]
     },
-    account: vm => vm.$auth.user.account,
-    user: vm => vm.$auth.user.username,
-    avatarText: vm => vm.$auth.user.account && vm.$auth.user.account.substr(0, 2)
+    current_account: vm => vm.$auth.user.account,
+    current_user: vm => vm.$auth.user.username,
+    avatar_text: vm => vm.$auth.user.account && vm.$auth.user.account.substr(0, 2)
   },
   methods: {
     ...mapActions({

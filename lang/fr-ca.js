@@ -607,7 +607,7 @@ export default {
   more: "Plus",
   most_critical_alert: "Alerte la plus critique",
   moving_violations: "Déplacement des violations",
-  mpg_report: "Rapport KPL",
+  mpg_report: "Rapport L/100km",
   my_report: "Mon rapport",
   my_reports: "Mes rapports",
   name: "Nom",

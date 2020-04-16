@@ -71,15 +71,13 @@
 </template>
 
 <script>
-import { reporting } from '@/static/mega-menus'
+import { reporting } from '@/assets/mega-menus'
 export default {
   data: () => ({
     tab: 0
   }),
   computed: {
-    menu () {
-      return reporting
-    }
+    menu: () => reporting
   }
 }
 </script>

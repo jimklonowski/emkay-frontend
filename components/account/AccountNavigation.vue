@@ -71,15 +71,13 @@
 </template>
 
 <script>
-import { account } from '@/static/mega-menus'
+import { account } from '@/assets/mega-menus'
 export default {
   data: () => ({
     tab: 0
   }),
   computed: {
-    menu () {
-      return account
-    }
+    menu: () => account
   }
 }
 </script>
