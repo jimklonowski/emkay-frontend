@@ -38,9 +38,13 @@
   z-index: 4;
 
   .v-toolbar__title {
-    @extend .font-lato;
-    font-size: 2.5rem !important;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.25);
+    a {
+      @extend .font-lato;
+      font-size: 2.5rem !important;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.25);
+    }
+    text-align: center;
+    width: 100%;
   }
 }
 

@@ -17,18 +17,19 @@
         gradient="to top right, rgba(100,115,201,.7), rgba(25,32,72,.7)"
       />
     </template>
-    <v-toolbar-title>
+    <v-toolbar-title class="d-flex flex-column">
       <nuxt-link :to="localePath({ path: '/vehicle/dashboard' })" class="text-decoration-none white--text" v-text="$t('vehicle_dashboard')" />
-      <span class="caption" v-text="vehicle_number" />
+      <span class="font-weight-light caption" v-text="vehicle_number" />
     </v-toolbar-title>
 
     <v-spacer />
 
     <template #extension>
       <v-tabs
+        centered
+        fixed-tabs
         hide-slider
         show-arrows
-        left
         background-color="transparent"
         color="white"
       >

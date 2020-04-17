@@ -6,7 +6,7 @@
         <v-stepper-step :complete="step > 1" step="1" class="font-roboto">
           {{ step1Header }}
         </v-stepper-step>
-        <v-stepper-content step="1" class="ma-0 pa-0">
+        <v-stepper-content step="1">
           <v-container>
             <v-row>
               <v-col cols="12">
@@ -144,45 +144,42 @@
         <v-stepper-step :complete="step === 5" step="5" class="font-roboto" complete-icon="mdi-finance">
           {{ $t('my_report') }}
         </v-stepper-step>
-        <v-stepper-content step="5" class="ma-0 pa-0">
-          <v-card flat>
-            <v-divider />
-            <v-toolbar color="transparent" flat>
-              <v-toolbar-title>{{ model.report_title }}</v-toolbar-title>
-              <v-spacer />
-              <v-text-field
-                v-model="search"
-                :label="$t('search')"
-                prepend-inner-icon="mdi-magnify"
-                background-color="transparent"
-                class="mr-1"
-                clearable
-                dense
-                flat
-                hide-details
-                outlined
-                rounded
-                single-line
-                solo
-              />
-              <!-- Download as XLS button -->
-              <excel-downloader :download-fields="downloadFields" :items="report_data" :export-name="exportName" />
-            </v-toolbar>
-            <v-divider />
-            <!-- Datatable -->
-            <v-skeleton-loader :loading="report_loading" type="table">
-              <v-data-table
-                :items="report_data"
-                :headers="report_headers"
-                :items-per-page="25"
-                :loading="report_loading"
-                :mobile-breakpoint="0"
-                :search="search"
-                outlined
-                class="striped"
-              />
-            </v-skeleton-loader>
-          </v-card>
+        <v-stepper-content step="5">
+          <v-toolbar color="primary" dark>
+            <v-toolbar-title>{{ model.report_title }}</v-toolbar-title>
+            <v-spacer />
+            <v-text-field
+              v-model="search"
+              :label="$t('search')"
+              prepend-inner-icon="mdi-magnify"
+              background-color="transparent"
+              class="mr-1"
+              clearable
+              dense
+              flat
+              hide-details
+              outlined
+              rounded
+              single-line
+              solo
+            />
+            <!-- Download as XLS button -->
+            <excel-downloader :download-fields="downloadFields" :items="report_data" :export-name="exportName" />
+          </v-toolbar>
+          <v-divider />
+          <!-- Datatable -->
+          <v-skeleton-loader :loading="report_loading" type="table">
+            <v-data-table
+              :items="report_data"
+              :headers="report_headers"
+              :items-per-page="25"
+              :loading="report_loading"
+              :mobile-breakpoint="0"
+              :search="search"
+              outlined
+              class="striped"
+            />
+          </v-skeleton-loader>
         </v-stepper-content>
       </v-stepper>
     </v-card-text>

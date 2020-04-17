@@ -82,7 +82,7 @@
       app
     >
       <v-app-bar-nav-icon aria-label="Open Sidebar" @click="toggleLeftSidebar" />
-      <v-toolbar-title v-text="$t('emkay')" />
+      <v-toolbar-title v-show="$vuetify.breakpoint.smAndUp" v-text="$t('emkay')" />
 
       <v-spacer />
 

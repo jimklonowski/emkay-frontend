@@ -94,9 +94,6 @@ export default {
       evoucher: 'vehicle-dashboard/getEvoucher',
       vehicle_number: 'vehicle-dashboard/getVehicleNumber'
     }),
-    evoucherServices () {
-      return this.evoucher && this.evoucher.services && this.evoucher.services.filter(Boolean).join(' :: ')
-    },
     hasEvoucher: vm => Object.keys(vm.evoucher).length > 0,
     currentOdometerDate: vm => vm.$options.filters.date(vm.evoucher.odometer_date || vm.$moment()),
     currentOdometerText: vm => vm.$i18n.tc('formatters.miles', vm.$options.filters.number(vm.evoucher.odometer)),

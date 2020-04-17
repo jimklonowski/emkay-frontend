@@ -19,14 +19,14 @@
         />
       </template>
       <v-toolbar-title>
-        <nuxt-link :to="localePath({ path: '/account' })" class="text-decoration-none white--text">
-          {{ $t('account_management') }}
-        </nuxt-link>
+        <nuxt-link :to="localePath({ path: '/account' })" class="text-decoration-none white--text" v-text="$t('account_management')" />
       </v-toolbar-title>
       <template #extension>
         <v-tabs
           v-model="tab"
           :dark="false"
+          centered
+          fixed-tabs
           show-arrows
           left
           background-color="transparent"
@@ -41,13 +41,13 @@
       </template>
     </v-app-bar>
     <v-card :style="$vuetify.theme.dark ? 'border-bottom: thin solid rgba(255, 255, 255, 0.12)' : 'border-bottom: thin solid rgba(0, 0, 0, .12)'" flat tile>
-      <v-container>
+      <v-container fluid>
         <v-row>
           <v-col cols="12">
-            <v-subheader v-text="$t('select_an_action')" />
+            <!-- <v-subheader v-text="$t('select_an_action')" /> -->
             <v-tabs-items v-model="tab" style="background-color:transparent;">
               <v-tab-item v-for="(category, c) in menu.categories" :key="`tabitem-${c}`">
-                <v-flex>
+                <v-flex class="text-center">
                   <v-chip
                     v-for="(action, a) in category.items"
                     :key="`action-${c}-${a}`"

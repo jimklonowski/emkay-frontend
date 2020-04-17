@@ -20,7 +20,7 @@ export default {
   props: {
     color: {
       type: String,
-      default: 'primary'
+      default: undefined
     },
     downloadFields: {
       type: Object,
