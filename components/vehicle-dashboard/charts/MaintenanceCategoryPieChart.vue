@@ -54,8 +54,9 @@ export default {
           display: true,
           position: 'bottom',
           labels: {
+            boxWidth: 16,
             fontFamily: 'Roboto Condensed, sans-serif',
-            fontSize: 14
+            fontSize: 13
           }
         },
         tooltips: {

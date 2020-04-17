@@ -8,6 +8,9 @@ export default {
     on_or_before: "The field {0} must be on or before {1}",
     not_past: "The field {0} cannot be in the past"
   },
+  formatters: {
+    miles: '{n} Miles'
+  },
   sunday: "Sunday",
   monday: "Monday",
   tuesday: "Tuesday",
@@ -88,6 +91,7 @@ export default {
   authorization_profile: "Authorization Profile",
   authorization_profile_detail: "Authorization Profile Detail",
   authorization_profile_id: "Authorization Profile ID",
+  authorized_only_on_vin: "Authorized only on VIN",
   auto_send: "Auto Send",
   automotive_links: "Automotive Links",
   average_duration_phone_usage: "Average Duration Phone Usage",
@@ -352,7 +356,13 @@ export default {
   estimated_distance: "Estimated Distance",
   ev_charging_locations: "EV Charging Locations",
   evoucher: "eVoucher",
+  evoucher_disregard_message: "Please disregard this notice if you have already completed this scheduled service.",
+  evoucher_header: "Notifications of Maintenance Interval Approaching",
+  evoucher_instruction_header: "Instructions to All National Account Vendors, Independent Shops, and Dealerships",
+  evoucher_instruction_message: "All National Account Vendors, Independent Shops, and Dealerships must call <strong>EMKAY at 1-800-621-2001</strong> prior to performing any work to speak with one of <strong>EMKAY's ASE Certified Mechanics</strong> to obtain a <strong>Repair Order Approval</strong> to make payment arrangements.",
+  evoucher_message: "Your vehicle is managed by EMKAY's Maintenance Control Program. Our records indicate that your vehicle has {miles} as of {date}, and we estimate that it is approaching the next scheduled maintenance interval.",
   evoucher_report: "eVoucher Report",
+  evoucher_services_header: "The following pre-approved services should be performed at or before reaching: ",
   exception: "Exception",
   exceptions: "Exceptions",
   excess_charge: "Excess Charge",

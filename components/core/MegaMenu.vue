@@ -18,8 +18,13 @@
         small
         v-on="on"
       >
-        {{ $t(menu.title) }}
-        <v-icon v-text="'mdi-chevron-down'" />
+        <span v-show="$vuetify.breakpoint.smAndDown">
+          <v-icon v-text="menu.icon" />
+        </span>
+        <span v-show="$vuetify.breakpoint.mdAndUp">
+          {{ $t(menu.title) }}
+          <v-icon v-text="'mdi-chevron-down'" />
+        </span>
       </v-btn>
     </template>
     <v-card>

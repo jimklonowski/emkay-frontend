@@ -27,6 +27,8 @@
         <v-tabs
           v-model="tab"
           :dark="false"
+          centered
+          fixed-tabs
           show-arrows
           left
           background-color="transparent"
@@ -41,13 +43,13 @@
       </template>
     </v-app-bar>
     <v-card :style="$vuetify.theme.dark ? 'border-bottom: thin solid rgba(255, 255, 255, 0.12)' : 'border-bottom: thin solid rgba(0, 0, 0, .12)'" flat tile>
-      <v-container>
+      <v-container fluid>
         <v-row>
           <v-col cols="12">
-            <v-subheader v-text="$t('select_a_report')" />
+            <!-- <v-subheader v-text="$t('select_a_report')" /> -->
             <v-tabs-items v-model="tab" style="background-color:transparent;">
               <v-tab-item v-for="(category, c) in menu.categories" :key="`tabitem-${c}`">
-                <v-flex>
+                <v-flex class="text-center">
                   <v-chip
                     v-for="(report, r) in category.items"
                     :key="`report-${c}-${r}`"
@@ -71,15 +73,13 @@
 </template>
 
 <script>
-import { reporting } from '@/static/mega-menus'
+import { reporting } from '@/assets/mega-menus'
 export default {
   data: () => ({
     tab: 0
   }),
   computed: {
-    menu () {
-      return reporting
-    }
+    menu: () => reporting
   }
 }
 </script>

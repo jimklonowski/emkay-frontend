@@ -23,9 +23,9 @@
           {{ $t('my_reports') }}
         </nuxt-link>
       </v-toolbar-title>
-      <template #extension>
+      <!-- <template #extension>
         <div class="body-2 font-weight-light">(i18n)Load a saved report or build your own!</div>
-      </template>
+      </template> -->
     </v-app-bar>
     <!-- <v-card :style="$vuetify.theme.dark ? 'border-bottom: thin solid rgba(255, 255, 255, 0.12)' : 'border-bottom: thin solid rgba(0, 0, 0, .12)'" flat tile>
       <v-expansion-panels v-model="panels_expanded">

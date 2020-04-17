@@ -1,41 +1,42 @@
 <template>
   <client-only>
-    <donut-chart
+    <pie-chart
       :data="chartData"
       :chart-data="chartData"
       :options="chartOptions"
-      :styles="chartStyles"
+      :style="chartStyles"
     />
   </client-only>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import { computeTotalByKey } from '@/utility/helpers'
 import { interpolateColors } from '@/utility/color-generator'
-
 export default {
+  props: {
+    items: {
+      type: Array,
+      required: true
+    },
+    field: {
+      type: String,
+      required: true
+    }
+  },
   computed: {
     /**
-     * Vuex Getters
-     */
-    ...mapGetters({
-      fuel_history: 'vehicle-dashboard/getFuelHistory'
-    }),
-    /**
-     * Chartjs data.  Needs data, labels, and colors
+     * Chartjs data. Needs data, labels, and colors
      */
     chartData () {
       const data = []
 
-      const labels = this.fuel_history
-        .map(x => x.fuel_company_name)
+      const labels = this.items
+        .map(x => { return x[this.field] })
         .filter((item, index, array) => array.indexOf(item) === index)
         .sort()
 
       labels.forEach(label => {
-        const filteredData = this.fuel_history.filter(x => x.fuel_company_name === label)
-        data.push(computeTotalByKey(filteredData, 'amount'))
+        const count = this.items.filter(x => x[this.field] === label).length
+        data.push(count)
       })
 
       const backgroundColor = interpolateColors(labels.length)
@@ -60,13 +61,6 @@ export default {
             fontSize: 13
           }
         },
-        tooltips: {
-          callbacks: {
-            label: (tooltipItem, data) => {
-              return `${data.labels[tooltipItem.index]}: ${this.$options.filters.currency(data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index])}`
-            }
-          }
-        },
         maintainAspectRatio: false,
         responsive: true,
         title: {
@@ -74,7 +68,7 @@ export default {
           fontFamily: 'Lato, sans-serif',
           fontSize: 16,
           fontStyle: 'normal',
-          text: this.$i18n.t('fuel_companies')
+          text: this.$i18n.t(this.field)
         }
       }
     },
@@ -83,7 +77,7 @@ export default {
      */
     chartStyles () {
       return {
-        height: '256px',
+        height: '300px',
         position: 'relative'
       }
     }

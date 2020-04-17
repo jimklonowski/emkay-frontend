@@ -6,6 +6,7 @@ const getDefaultState = () => ({
   documents: [],
   driver_details: {},
   driver_number: null,
+  evoucher: {},
   expense_summary: {},
   expense_summary_loading: false,
   fuel_history: [],
@@ -73,6 +74,20 @@ export const actions = {
     } catch (error) {
       console.error(`[vuex error][fetchDriverDetails]: ${error.message}`)
       commit('setDriverDetails', {})
+    }
+  },
+  /**
+   * Fetch Evoucher
+   * @param {*} vehicle Vehicle Number
+   */
+  async fetchEvoucher ({ commit }, { vehicle }) {
+    try {
+      const { data: { success, message, data } } = await this.$axios.get('/vehicle/evoucher', { params: { vehicle } })
+      if (!success) { throw new Error(message) }
+      commit('setEvoucher', data)
+    } catch (error) {
+      console.error(`[vuex error][fetchEvoucher]: ${error.message}`)
+      commit('setEvoucher', {})
     }
   },
   /**
@@ -405,6 +420,7 @@ export const mutations = {
   setDocuments: set('documents'),
   setDriverDetails: set('driver_details'),
   setDriverNumber: set('driver_number'),
+  setEvoucher: set('evoucher'),
   setExpenseSummary: set('expense_summary'),
   setExpenseSummaryLoading: set('expense_summary_loading'),
   setFuelHistory: set('fuel_history'),
@@ -432,6 +448,7 @@ export const getters = {
   getDriverDetails: state => state.driver_details,
   getDriverName: state => [state.driver_details.first_name, state.driver_details.last_name].filter(Boolean).join(' '),
   getDriverNumber: state => state.driver_number,
+  getEvoucher: state => state.evoucher,
   getExpenseSummary: state => state.expense_summary,
   getExpenseSummaryLoading: state => state.expense_summary_loading,
   getFuelHistory: state => state.fuel_history,

@@ -1,6 +1,6 @@
 {
   "name": "emkay-frontend",
-  "version": "0.9.10",
+  "version": "0.9.11",
   "description": "EMKAY Nuxt Frontend",
   "author": "JCK",
   "private": true,
@@ -13,7 +13,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "@nuxtjs/auth": "^4.9.0",
+    "@nuxtjs/auth": "^4.9.1",
     "@nuxtjs/axios": "^5.9.7",
     "@nuxtjs/dotenv": "^1.4.0",
     "@nuxtjs/moment": "^1.6.0",

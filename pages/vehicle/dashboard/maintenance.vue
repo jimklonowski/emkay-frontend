@@ -36,14 +36,17 @@
 <script>
 import { mapGetters } from 'vuex'
 import MaintenanceHistoryTable from '@/components/vehicle-dashboard/datatables/MaintenanceHistoryTable'
-import Evoucher from '@/components/vehicle-dashboard/panels/Evoucher.vue'
 import ChartLoading from '@/components/charts/ChartLoading'
 export default {
   name: 'VehicleMaintenance',
   layout: 'vehicle-dashboard',
   components: {
     MaintenanceHistoryTable,
-    Evoucher,
+    evoucher: () => ({
+      component: import(/* webpackChunkName: "Evoucher" */ '@/components/vehicle-dashboard/panels/Evoucher.vue'),
+      loading: ChartLoading,
+      delay: 0
+    }),
     'maintenance-category-pie-chart': () => ({
       component: import(/* webpackChunkName: "MaintenanceCategoryPieChart" */'@/components/vehicle-dashboard/charts/MaintenanceCategoryPieChart.vue'),
       loading: ChartLoading,
@@ -73,7 +76,9 @@ export default {
    * Clear the query and hash on mounted
    */
   mounted () {
-    this.$router.replace({ query: undefined, hash: undefined })
+    if (this.$route.hash.length > 0 || Object.keys(this.$route.query).length > 0) {
+      this.$router.replace({ query: undefined, hash: undefined })
+    }
   },
   /**
    * Page meta

@@ -1,6 +1,9 @@
 /* eslint-disable quotes */
 // prettier-ignore
 export default {
+  formatters: {
+    miles: '{n} Kilometers'
+  },
   average_miles_per_month: "Average Kilometers Per Month",
   average_mpg: "Average L/100km",
   average_price_per_gallon: "Average Price Per Litre",
@@ -25,7 +28,7 @@ export default {
   miles_driven: "Kilometers Driven",
   miles_per_month: "0 Kilometers per Month | 1 Kilometer per Month | {n} Kilometers per Month",
   miles_since_last_oil_change: "Kilometers Since Last Oil Change",
-  mpg_report: "KPL Report",
+  mpg_report: "L/100km Report",
   personal_miles: "Personal Kilometers",
   standard_mpg: "Standard L/100km",
   state: "Province",
