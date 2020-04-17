@@ -362,7 +362,7 @@ export default {
   evoucher_instruction_message: "All National Account Vendors, Independent Shops, and Dealerships must call <strong>EMKAY at 1-800-621-2001</strong> prior to performing any work to speak with one of <strong>EMKAY's ASE Certified Mechanics</strong> to obtain a <strong>Repair Order Approval</strong> to make payment arrangements.",
   evoucher_message: "Your vehicle is managed by EMKAY's Maintenance Control Program. Our records indicate that your vehicle has {miles} as of {date}, and we estimate that it is approaching the next scheduled maintenance interval.",
   evoucher_report: "eVoucher Report",
-  evoucher_services_header: "The following pre-approved services should be performed at or before reaching: ",
+  evoucher_services_header: "The following pre-approved services should be performed at or before reaching {miles}",
   exception: "Exception",
   exceptions: "Exceptions",
   excess_charge: "Excess Charge",

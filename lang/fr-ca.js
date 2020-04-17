@@ -361,7 +361,7 @@ export default {
   evoucher_instruction_header: "Instructions à tous les fournisseurs de comptes nationaux, magasins indépendants et concessionnaires",
   evoucher_instruction_message: "Tous les fournisseurs de comptes nationaux, les magasins indépendants et les concessionnaires doivent appeler <strong>EMKAY au 1-800-621-2001</strong> avant d'effectuer tout travail pour parler avec l'un des <strong>Mécaniciens certifiés ASE d'EMKAY</strong> à obtenir une <strong>approbation de l'ordre de réparation</strong> pour prendre des dispositions de paiement.",
   evoucher_report: "Rapport eVoucher",
-  evoucher_services_header: "Les services pré-approuvés suivants doivent être exécutés au plus tard au:",
+  evoucher_services_header: "Les services pré-approuvés suivants doivent être exécutés au plus tard au {miles}",
   exception: "Exception",
   exceptions: "Des exceptions",
   excess_charge: "Frais supplémentaires",

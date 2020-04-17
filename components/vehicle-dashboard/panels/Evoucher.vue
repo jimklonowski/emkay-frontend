@@ -8,8 +8,12 @@
         <!-- eslint-disable-next-line vue/no-v-html -->
         <!-- <p class="body-2 mx-4 text-justify" v-html="$tc('evoucher_message', [currentOdometerText, currentOdometerDate])" /> -->
         <i18n path="evoucher_message" tag="p" class="body-2 mx-4 text-justify">
-          <span place="miles"><strong>{{ currentOdometerText }}</strong></span>
-          <span place="date"><strong>{{ currentOdometerDate }}</strong></span>
+          <template #miles>
+            <strong>{{ currentOdometerText }}</strong>
+          </template>
+          <template #date>
+            <strong>{{ currentOdometerDate }}</strong>
+          </template>
         </i18n>
         <v-subheader class="justify-center">
           {{ $t('evoucher_disregard_message') }}
@@ -17,7 +21,11 @@
 
         <v-card class="ma-8" outlined>
           <v-card-title class="body-2 font-weight-light">
-            {{ $t('evoucher_services_header') }} <strong class="ml-2">{{ $tc('formatters.miles', $options.filters.number(evoucher.next_pm_odometer)) }}</strong>.
+            <i18n path="evoucher_services_header" tag="span">
+              <template #miles>
+                <strong class="ml-2">{{ nextOdometerText }}</strong>
+              </template>
+            </i18n>
           </v-card-title>
           <v-divider />
           <v-card-text>
