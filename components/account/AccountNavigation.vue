@@ -15,7 +15,7 @@
       <template #img="{ props }">
         <v-img
           v-bind="props"
-          gradient="to top right, rgba(100,115,201,.7), rgba(25,32,72,.7)"
+          gradient="to top, rgba(100,115,201,.8), rgba(25,32,72,.8)"
         />
       </template>
       <v-toolbar-title>

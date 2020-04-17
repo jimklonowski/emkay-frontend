@@ -88,7 +88,9 @@ export default {
     // Doc: https://github.com/nuxt-community/vuetify-module
     '@nuxtjs/vuetify',
     // Doc: https://github.com/nuxt-community/analytics-module
-    '@nuxtjs/google-analytics'
+    '@nuxtjs/google-analytics',
+    // Doc: https://github.com/aceforth/nuxt-optimized-images
+    '@aceforth/nuxt-optimized-images'
   ],
   /*
   ** Nuxt.js modules
@@ -188,6 +190,13 @@ export default {
     locales: ['fr-ca', 'en-ca'],
     // This doesn't work.  Setting $nuxt.$moment.suppressDeprecationWarnings = true does work.
     suppressDeprecationWarnings: true
+  },
+  /**
+   * nuxt-optimized-images config
+   * See: https://github.com/aceforth/nuxt-optimized-images
+   */
+  optimizedImages: {
+    optimizeImages: true
   },
   /*
   ** vuetify module configuration

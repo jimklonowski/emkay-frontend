@@ -24,8 +24,8 @@
             <p class="caption">
               {{ evoucher.special_text }}
             </p>
-            <v-list flat dense>
-              <v-list-item v-for="(service, s) in evoucher.services" :key="`service-${s}`">
+            <v-list flat>
+              <v-list-item v-for="(service, s) in evoucher.service" :key="`service-${s}`">
                 <v-list-item-title v-text="service" />
               </v-list-item>
             </v-list>
@@ -84,8 +84,9 @@ export default {
    * Fetch eVoucher
    */
   async fetch () {
-    await this.fetchEvoucher()
+    await this.fetchEvoucher({ vehicle: this.vehicle_number })
   },
+  fetchOnServer: false,
   computed: {
     /**
      * Vuex Getters
