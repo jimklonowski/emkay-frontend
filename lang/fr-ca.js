@@ -8,6 +8,9 @@ export default {
     on_or_before: "Le champ {0} doit être au plus tard le {1}",
     not_past: "Le champ {0} ne peut pas être dans le passé"
   },
+  formatters: {
+    miles: '{n} Kilomètres'
+  },
   sunday: "Dimanche",
   monday: "Lundi",
   tuesday: "Mardi",
@@ -88,6 +91,7 @@ export default {
   authorization_profile: "Profil d'autorisation",
   authorization_profile_detail: "Détails du profil d'autorisation",
   authorization_profile_id: "ID du profil d'autorisation",
+  authorized_only_on_vin: "Autorisé uniquement sur VIN",
   auto_send: "Envoi automatique",
   automotive_links: "Liens automobiles",
   average_duration_phone_usage: "Durée moyenne d'utilisation du téléphone",
@@ -352,7 +356,12 @@ export default {
   estimated_distance: "Distance estimée",
   ev_charging_locations: "Emplacements de recharge EV",
   evoucher: "Evoucher",
+  evoucher_disregard_message: "Veuillez ignorer cet avis si vous avez déjà effectué ce service planifié.",
+  evoucher_header: "Notifications d'intervalle de maintenance approchant",
+  evoucher_instruction_header: "Instructions à tous les fournisseurs de comptes nationaux, magasins indépendants et concessionnaires",
+  evoucher_instruction_message: "Tous les fournisseurs de comptes nationaux, les magasins indépendants et les concessionnaires doivent appeler <strong>EMKAY au 1-800-621-2001</strong> avant d'effectuer tout travail pour parler avec l'un des <strong>Mécaniciens certifiés ASE d'EMKAY</strong> à obtenir une <strong>approbation de l'ordre de réparation</strong> pour prendre des dispositions de paiement.",
   evoucher_report: "Rapport eVoucher",
+  evoucher_services_header: "Les services pré-approuvés suivants doivent être exécutés au plus tard au:",
   exception: "Exception",
   exceptions: "Des exceptions",
   excess_charge: "Frais supplémentaires",

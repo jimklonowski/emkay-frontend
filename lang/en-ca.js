@@ -1,6 +1,9 @@
 /* eslint-disable quotes */
 // prettier-ignore
 export default {
+  formatters: {
+    miles: '{n} Kilometers'
+  },
   average_miles_per_month: "Average Kilometers Per Month",
   average_mpg: "Average L/100km",
   average_price_per_gallon: "Average Price Per Litre",
