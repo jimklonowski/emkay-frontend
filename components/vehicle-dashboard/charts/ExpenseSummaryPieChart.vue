@@ -40,12 +40,8 @@ export default {
      */
     ...mapGetters({
       expense_summary: 'vehicle-dashboard/getExpenseSummary',
-      total_costs: 'vehicle-dashboard/getTotalCosts',
-      total_cpm: 'vehicle-dashboard/getTotalCPM',
       total_fixed: 'vehicle-dashboard/getTotalFixed',
-      total_fixed_cpm: 'vehicle-dashboard/getTotalFixedCPM',
       total_variable: 'vehicle-dashboard/getTotalVariable',
-      total_variable_cpm: 'vehicle-dashboard/getTotalVariableCPM',
       vehicle_number: 'vehicle-dashboard/getVehicleNumber'
     }),
     /**
