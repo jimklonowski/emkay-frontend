@@ -183,13 +183,9 @@
         </v-toolbar>
         <v-card v-if="dataviz" outlined rounded class="ma-4 mt-6">
           <v-card-text>
-            <v-skeleton-loader :loading="$fetchState.pending" type="image">
-              <inventory-bar-chart v-if="dataviz === 'bar' && chartable" :items="filteredItems" :field="sortBy" />
-              <inventory-pie-chart v-if="dataviz === 'pie' && chartable" :items="filteredItems" :field="sortBy" />
-              <inventory-geo-map v-else-if="dataviz === 'map'" :items="filteredItems" />
-              <!-- <chart-loading v-else-if="dataviz === 'bubble-map'" title="TODO: Bubble Map" /> -->
-              <!-- <inventory-bubble-map v-else-if="dataviz === 'bubble-map'" :items="filteredItems" /> -->
-            </v-skeleton-loader>
+            <inventory-bar-chart v-if="dataviz === 'bar' && chartable" :items="filteredItems" :field="sortBy" />
+            <inventory-pie-chart v-else-if="dataviz === 'pie' && chartable" :items="filteredItems" :field="sortBy" />
+            <inventory-geo-map v-else-if="dataviz === 'map'" :items="filteredItems" />
           </v-card-text>
         </v-card>
       </template>
