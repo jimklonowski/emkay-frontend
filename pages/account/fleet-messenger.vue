@@ -17,7 +17,7 @@
       </v-tab-item>
       <v-tab-item>
         <v-card-text>
-          TODO: manage distribution lists
+          <distribution-lists />
         </v-card-text>
       </v-tab-item>
       <v-tab-item>
@@ -35,14 +35,25 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+import DistributionLists from '@/components/account/fleet-messenger/DistributionLists'
 import NewMessage from '@/components/account/fleet-messenger/NewMessage'
 export default {
   name: 'FleetMessenger',
   components: {
+    DistributionLists,
     NewMessage
+  },
+  async fetch () {
+    await this.fetchDrivers()
   },
   data: () => ({
     tab: 0
-  })
+  }),
+  methods: {
+    ...mapActions({
+      fetchDrivers: 'drivers/fetchDrivers'
+    })
+  }
 }
 </script>
