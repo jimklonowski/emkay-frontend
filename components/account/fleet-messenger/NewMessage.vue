@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row>
-      <v-col cols="12" sm="9" order="2" order-sm="1">
+      <v-col cols="12" md="7" lg="8" order="2" order-md="1">
         <v-card outlined>
           <v-card-text>
             <v-btn-toggle v-model="message_type" class="mb-8" mandatory dense>
@@ -68,26 +68,38 @@
           </v-card-actions>
         </v-card>
       </v-col>
-      <v-col cols="12" sm="3" order="1" order-sm="2">
-        <v-btn-toggle v-model="contacts_type" mandatory>
-          <v-btn value="drivers">
-            {{ $t('drivers') }}
-          </v-btn>
-          <v-btn value="distribution_lists">
-            {{ $t('distribution_lists') }}
-          </v-btn>
-        </v-btn-toggle>
-        <v-list v-if="contacts_type === 'drivers'" max-height="650" style="overflow:auto;" dense shaped>
-          <v-list-item-group v-model="recipients" multiple>
-            <v-list-item v-for="(driver, d) in drivers" :key="`driver-${d}`" :value="driver" link active-class="primary--text text--accent-4">
-              <v-list-item-title>{{ [driver.first_name, driver.last_name].filter(Boolean).join(' ') }}</v-list-item-title>
-              <v-list-item-subtitle>{{ driver.email }}</v-list-item-subtitle>
-            </v-list-item>
-          </v-list-item-group>
-        </v-list>
-        <v-list v-else-if="contacts_type === 'distribution_lists'">
-          TODO: distribution lists
-        </v-list>
+      <v-col cols="12" md="5" lg="4" order="1" order-md="2">
+        <v-card outlined>
+          <v-card-actions>
+            <v-btn-toggle
+              v-model="contacts_type"
+              background-color="transparent"
+              mandatory
+              dense
+              class="v-btn--block justify-center"
+            >
+              <v-btn value="drivers">
+                {{ $t('drivers') }}
+              </v-btn>
+              <v-btn value="distribution_lists">
+                {{ $t('distribution_lists') }}
+              </v-btn>
+            </v-btn-toggle>
+          </v-card-actions>
+          <v-card-text>
+            <v-list v-if="contacts_type === 'drivers'" max-height="650" style="overflow:auto;" dense shaped>
+              <v-list-item-group v-model="recipients" multiple>
+                <v-list-item v-for="(driver, d) in filteredDrivers" :key="`driver-${d}`" :value="driver" link active-class="primary--text text--accent-4">
+                  <v-list-item-title>{{ [driver.first_name, driver.last_name].filter(Boolean).join(' ') }}</v-list-item-title>
+                  <v-list-item-subtitle>{{ driver.email }}</v-list-item-subtitle>
+                </v-list-item>
+              </v-list-item-group>
+            </v-list>
+            <v-list v-else-if="contacts_type === 'distribution_lists'">
+              TODO: distribution lists
+            </v-list>
+          </v-card-text>
+        </v-card>
       </v-col>
     </v-row>
   </v-container>
@@ -106,7 +118,10 @@ export default {
   computed: {
     ...mapGetters({
       drivers: 'drivers/getDrivers'
-    })
+    }),
+    filteredDrivers () {
+      return this.drivers.filter(x => this.checkDriver(x))
+    }
   },
   methods: {
     addRecipient (item) {
@@ -117,6 +132,11 @@ export default {
     removeRecipient (item) {
       this.recipients.splice(this.recipients.indexOf(item), 1)
       this.recipients = [...this.recipients]
+    },
+    checkDriver (item) {
+      if (!item.reference_number) { return false }
+      if (!item.last_name && !item.first_name) { return false }
+      return true
     }
   }
 }

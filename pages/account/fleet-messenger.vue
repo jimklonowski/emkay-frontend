@@ -3,13 +3,13 @@
     <v-card-title class="font-lato">
       {{ $t('fleet_messenger') }}
     </v-card-title>
-    <v-tabs v-model="tab" grow centered>
+    <v-tabs v-model="tab" background-color="transparent" grow centered>
       <v-tab>{{ $t('new_message') }}</v-tab>
       <v-tab>{{ $t('distribution_lists') }}</v-tab>
       <v-tab>{{ $t('chat') }}</v-tab>
       <v-tab>{{ $t('history') }}</v-tab>
     </v-tabs>
-    <v-tabs-items v-model="tab">
+    <v-tabs-items v-model="tab" style="background-color:transparent;">
       <v-tab-item>
         <v-card-text>
           <new-message />
