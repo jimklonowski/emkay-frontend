@@ -88,3 +88,41 @@
     font-size: 1.5rem;
   }
 }
+
+
+/* Scrollbars */
+.theme--light {
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
+  &::-webkit-scrollbar-track {
+    background: #e6e6e6;
+    // border-left: 1px solid #dadada;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #b0b0b0;
+    // border: 3px solid #e6e6e6;
+    // border-radius: 6px;
+    &:hover {
+      background: #673ab7;
+    }
+  }
+}
+
+.theme--dark {
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
+  &::-webkit-scrollbar-track {
+    background: #272727;
+    // border-left: 1px solid #2c2c2c;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #3e3e3e;
+    // border: 3px solid #202020;
+    // border-radius: 6px;
+    &:hover {
+      background: #9575cd;
+    }
+  }
+}
