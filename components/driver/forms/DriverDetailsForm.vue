@@ -66,7 +66,7 @@
                         :error-messages="errors"
                         dense
                         outlined
-                        @blur="address_validated = false"
+                        @change="invalidateAddress"
                       />
                     </ValidationProvider>
                   </v-col>
@@ -78,7 +78,7 @@
                         :error-messages="errors"
                         dense
                         outlined
-                        @blur="address_validated = false"
+                        @change="invalidateAddress"
                       />
                     </ValidationProvider>
                   </v-col>
@@ -90,7 +90,7 @@
                         :error-messages="errors"
                         dense
                         outlined
-                        @blur="address_validated = false"
+                        @change="invalidateAddress"
                       />
                     </ValidationProvider>
                   </v-col>
@@ -102,7 +102,7 @@
                         :error-messages="errors"
                         dense
                         outlined
-                        @blur="address_validated = false"
+                        @change="invalidateAddress"
                       />
                     </ValidationProvider>
                   </v-col>
@@ -114,7 +114,7 @@
                         :error-messages="errors"
                         dense
                         outlined
-                        @blur="address_validated = false"
+                        @change="invalidateAddress"
                       />
                     </ValidationProvider>
                   </v-col>
@@ -126,7 +126,7 @@
                         :error-messages="errors"
                         dense
                         outlined
-                        @blur="address_validated = false"
+                        @change="invalidateAddress"
                       />
                     </ValidationProvider>
                   </v-col>
@@ -389,8 +389,12 @@ export default {
       this.model.postal_code = address.postalCode
       this.address_validated = true
     },
+    invalidateAddress () {
+      this.address_validated = false
+      this.validated_addresses = []
+    },
     async validateAddress () {
-      const { data: { data, meta } } = await this.$axios.post('/vertex/address', {
+      const { data: { data } } = await this.$axios.post('/vertex/address', {
         postalAddress: {
           streetAddress1: this.model.address_1,
           streetAddress2: this.model.address_2,
@@ -402,13 +406,13 @@ export default {
         },
         asOfDate: ''
       })
-      console.log(meta)
+      // console.log(meta)
       const results = data.lookupResults
       if (results[0] === undefined || results[0].postalAddresses === undefined) {
         console.error('address not found!')
       } else {
         console.log('addresses found!')
-        console.log(results[0].postalAddresses[0])
+        // console.log(results[0].postalAddresses[0])
         this.validated_addresses = results[0].postalAddresses
       }
       this.address_dialog = true
