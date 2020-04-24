@@ -213,6 +213,7 @@ export default {
   cost_per_mile: "Cost Per Mile",
   cost_per_month: "Cost Per Month",
   cost_per_unit: "Cost Per Unit",
+  county: "County",
   coupon: "Coupon",
   coupon_book_number: "Coupon Book Number",
   cpm: "Cost Per Mile",

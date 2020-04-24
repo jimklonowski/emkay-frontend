@@ -66,6 +66,7 @@
                         :error-messages="errors"
                         dense
                         outlined
+                        @blur="address_validated = false"
                       />
                     </ValidationProvider>
                   </v-col>
@@ -77,6 +78,7 @@
                         :error-messages="errors"
                         dense
                         outlined
+                        @blur="address_validated = false"
                       />
                     </ValidationProvider>
                   </v-col>
@@ -88,6 +90,7 @@
                         :error-messages="errors"
                         dense
                         outlined
+                        @blur="address_validated = false"
                       />
                     </ValidationProvider>
                   </v-col>
@@ -99,6 +102,7 @@
                         :error-messages="errors"
                         dense
                         outlined
+                        @blur="address_validated = false"
                       />
                     </ValidationProvider>
                   </v-col>
@@ -110,6 +114,7 @@
                         :error-messages="errors"
                         dense
                         outlined
+                        @blur="address_validated = false"
                       />
                     </ValidationProvider>
                   </v-col>
@@ -121,6 +126,7 @@
                         :error-messages="errors"
                         dense
                         outlined
+                        @blur="address_validated = false"
                       />
                     </ValidationProvider>
                   </v-col>
@@ -221,6 +227,50 @@
             </v-row>
           </v-container>
         </v-card-text>
+        <v-dialog v-model="address_dialog" max-width="850">
+          <v-card>
+            <v-toolbar flat>
+              <v-toolbar-title v-text="$t('address')" />
+              <v-spacer />
+            </v-toolbar>
+            <v-divider />
+            <v-card-text>
+              <v-row>
+                <v-col cols="12" md="6">
+                  <v-list>
+                    <v-subheader>Entered Address</v-subheader>
+                    <v-list-item>
+                      <v-list-item-content>
+                        <span v-text="model.address_1" />
+                        <span v-text="model.address_2" />
+                        <span v-text="cityStateZip(model.city, model.state_province, model.postal_code)" />
+                        <span v-text="model.county" />
+                        <!-- <p v-text="model.country" /> -->
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-list>
+                </v-col>
+                <v-col cols="12" md="6">
+                  <v-list>
+                    <v-subheader>Addresses Found</v-subheader>
+                    <template v-for="(address, a) in validated_addresses">
+                      <v-list-item :key="`address-${a}`" title="Use this address" link @click="replaceAddress(address)">
+                        <v-list-item-content>
+                          <span v-text="address.streetAddress1" />
+                          <span v-text="address.streetAddress2" />
+                          <span v-text="cityStateZip(address.city, address.mainDivision, address.postalCode)" />
+                          <span v-text="address.subDivision" />
+                          <!-- <p v-text="address.country" /> -->
+                        </v-list-item-content>
+                      </v-list-item>
+                      <v-divider :key="`divider-${a}`" />
+                    </template>
+                  </v-list>
+                </v-col>
+              </v-row>
+            </v-card-text>
+          </v-card>
+        </v-dialog>
         <v-divider />
         <slot name="actions">
           <v-card-actions>
@@ -228,7 +278,10 @@
             <v-fade-transition>
               <span v-show="hasChanges" v-if="driverId" class="font-italic text--disabled caption px-2">{{ $t('unsaved_changes') }}</span>
             </v-fade-transition>
-            <v-btn :disabled="!hasChanges" type="submit" color="primary" depressed>
+            <!-- <v-btn :disabled="!hasChanges" type="submit" color="primary" depressed>
+              {{ $t('save') }}
+            </v-btn> -->
+            <v-btn type="submit" color="primary" depressed>
               {{ $t('save') }}
             </v-btn>
           </v-card-actions>
@@ -250,8 +303,11 @@ export default {
     }
   },
   data: () => ({
+    address_dialog: false,
+    address_validated: false,
     loading: false,
-    model: {}
+    model: {},
+    validated_addresses: []
   }),
   computed: {
     ...mapGetters({
@@ -300,6 +356,10 @@ export default {
       addDriver: 'drivers/addDriver',
       updateDriver: 'drivers/updateDriver'
     }),
+    cityStateZip (city, state, zip) {
+      const city_state = [city, state].filter(Boolean).join(', ')
+      return [city_state, zip].filter(Boolean).join(' ')
+    },
     async populateModel (id) {
       if (id) {
         try {
@@ -319,9 +379,48 @@ export default {
       this.$refs.driverForm.reset()
       this.$emit('close')
     },
+    replaceAddress (address) {
+      this.address_dialog = false
+      this.model.address_1 = address.streetAddress1
+      this.model.address_2 = address.streetAddress2
+      this.model.city = address.city
+      this.model.county = address.subDivision
+      this.model.state_province = address.mainDivision
+      this.model.postal_code = address.postalCode
+      this.address_validated = true
+    },
+    async validateAddress () {
+      const { data: { data, meta } } = await this.$axios.post('/vertex/address', {
+        postalAddress: {
+          streetAddress1: this.model.address_1,
+          streetAddress2: this.model.address_2,
+          city: this.model.city,
+          mainDivision: this.model.state_province,
+          subDivision: this.model.county,
+          postalCode: this.model.postal_code,
+          country: this.model.country
+        },
+        asOfDate: ''
+      })
+      console.log(meta)
+      const results = data.lookupResults
+      if (results[0] === undefined || results[0].postalAddresses === undefined) {
+        console.error('address not found!')
+      } else {
+        console.log('addresses found!')
+        console.log(results[0].postalAddresses[0])
+        this.validated_addresses = results[0].postalAddresses
+      }
+      this.address_dialog = true
+    },
     async submitDriver () {
       try {
         this.loading = true
+        if (!this.address_validated) {
+          this.loading = false
+          await this.validateAddress()
+          return
+        }
         if (this.driverId) {
           // updating existing driver
           await this.updateDriver(this.model)
