@@ -1,6 +1,6 @@
 <template>
   <ValidationObserver ref="driverForm" v-slot="{ handleSubmit }">
-    <v-form @submit.prevent="handleSubmit(submitDriver)">
+    <v-form autocomplete="off" @submit.prevent="handleSubmit(submitDriver)">
       <v-card :loading="loading" outlined>
         <v-card-title>
           <slot name="title">
@@ -58,7 +58,7 @@
                       />
                     </ValidationProvider>
                   </v-col>
-                  <v-col cols="12" md="6">
+                  <v-col cols="12">
                     <ValidationProvider v-slot="{ errors }" :name="$t('driver_address_1')" rules="max:30">
                       <v-text-field
                         v-model="model.address_1"
@@ -70,7 +70,7 @@
                       />
                     </ValidationProvider>
                   </v-col>
-                  <v-col cols="12" md="6">
+                  <v-col cols="12">
                     <ValidationProvider v-slot="{ errors }" :name="$t('driver_address_2')" rules="max:30">
                       <v-text-field
                         v-model="model.address_2"
@@ -82,7 +82,7 @@
                       />
                     </ValidationProvider>
                   </v-col>
-                  <v-col cols="12" md="5">
+                  <v-col cols="12" md="6">
                     <ValidationProvider v-slot="{ errors }" :name="$t('driver_city')" rules="max:25">
                       <v-text-field
                         v-model="model.city"
@@ -94,8 +94,16 @@
                       />
                     </ValidationProvider>
                   </v-col>
-                  <v-col cols="6" md="3">
-                    <ValidationProvider v-slot="{ errors }" :name="$t('driver_state_province')" rules="alpha|max:2">
+                  <v-col cols="12" md="6">
+                    <!-- <state-province-picker v-model="model.state_province" autocomplete="off" @change="invalidateAddress" /> -->
+                    <v-autocomplete
+                      v-model="model.state_province"
+                      :items="states_provinces"
+                      dense
+                      outlined
+                      @change="invalidateAddress"
+                    />
+                    <!-- <ValidationProvider v-slot="{ errors }" :name="$t('driver_state_province')" rules="alpha">
                       <v-text-field
                         v-model="model.state_province"
                         :label="$t('driver_state_province')"
@@ -104,9 +112,9 @@
                         outlined
                         @change="invalidateAddress"
                       />
-                    </ValidationProvider>
+                    </ValidationProvider> -->
                   </v-col>
-                  <v-col cols="6" md="4">
+                  <v-col cols="12" md="6">
                     <ValidationProvider v-slot="{ errors }" :name="$t('driver_postal_code')" rules="max:10">
                       <v-text-field
                         v-model="model.postal_code"
@@ -118,7 +126,7 @@
                       />
                     </ValidationProvider>
                   </v-col>
-                  <v-col cols="6">
+                  <v-col cols="12" md="6">
                     <ValidationProvider v-slot="{ errors }" :name="$t('driver_county')" rules="max:25">
                       <v-text-field
                         v-model="model.county"
@@ -130,7 +138,7 @@
                       />
                     </ValidationProvider>
                   </v-col>
-                  <v-col cols="6">
+                  <v-col cols="12">
                     <ValidationProvider v-slot="{ errors }" :name="$t('driver_email_address')" rules="email|max:60">
                       <v-text-field
                         v-model="model.email"
@@ -252,8 +260,14 @@
                 </v-col>
                 <v-col cols="12" md="6">
                   <v-list>
-                    <v-subheader>Addresses Found</v-subheader>
-                    <template v-for="(address, a) in validated_addresses">
+                    <v-subheader>Full Addresses Found</v-subheader>
+                    <template v-if="validated_addresses.length === 0">
+                      <v-list-item>
+                        <v-list-item-content>No addresses found</v-list-item-content>
+                      </v-list-item>
+                      <!-- <v-divider /> -->
+                    </template>
+                    <template v-for="(address, a) in validated_addresses" v-else>
                       <v-list-item :key="`address-${a}`" title="Use this address" link @click="replaceAddress(address)">
                         <v-list-item-content>
                           <span v-text="address.streetAddress1" />
@@ -264,6 +278,20 @@
                         </v-list-item-content>
                       </v-list-item>
                       <v-divider :key="`divider-${a}`" />
+                    </template>
+                    <template v-if="fuzzy_addresses.length > 0">
+                      <v-subheader>Partial Addresses Found</v-subheader>
+                      <template v-for="(address, a) in fuzzy_addresses">
+                        <v-list-item :key="`faddress-${a}`" title="Use this address" link @click="fuzzyReplace(address)">
+                          <v-list-item-content>
+                            <span v-text="address.streetAddress1" />
+                            <span v-text="address.streetAddress2" />
+                            <span v-text="cityStateZip(address.city, address.mainDivision, address.postalCode)" />
+                            <span v-text="address.subDivision" />
+                          </v-list-item-content>
+                        </v-list-item>
+                        <v-divider :key="`fdivider-${a}`" />
+                      </template>
                     </template>
                   </v-list>
                 </v-col>
@@ -295,6 +323,8 @@
 import { mapActions, mapGetters } from 'vuex'
 import { SnotifyPosition } from 'vue-snotify'
 import isEqual from 'lodash.isequal'
+import state_abbreviations from '@/assets/json/state_abbreviations'
+import province_abbreviations from '@/assets/json/province_abbreviations'
 export default {
   props: {
     driverId: {
@@ -307,6 +337,7 @@ export default {
     address_validated: false,
     loading: false,
     model: {},
+    fuzzy_addresses: [],
     validated_addresses: []
   }),
   computed: {
@@ -315,6 +346,16 @@ export default {
       driver: 'drivers/getDriver',
       vehicle_history: 'drivers/getVehicleHistory'
     }),
+    states: () => Object.entries(state_abbreviations).map(([value, text]) => ({ text, value })),
+    provinces: () => Object.entries(province_abbreviations).map(([value, text]) => ({ text, value })),
+    states_provinces () {
+      const list = []
+      list.push({ header: 'USA', divider: true })
+      list.push(...this.states)
+      list.push({ header: 'CAN', divider: true })
+      list.push(...this.provinces)
+      return list
+    },
     defaultItem () {
       return {
         reference_number: '',
@@ -326,6 +367,7 @@ export default {
         state_province: '',
         postal_code: '',
         county: '',
+        driver_country: '',
         phone: '',
         mobile: '',
         email: '',
@@ -356,6 +398,14 @@ export default {
       addDriver: 'drivers/addDriver',
       updateDriver: 'drivers/updateDriver'
     }),
+    stateAbbreviationToName (abbreviation) {
+      const item = this.states.find(x => x.value === abbreviation) || this.provinces.find(x => x.value === abbreviation)
+      return item.text
+    },
+    stateNameToAbbreviation (name) {
+      const item = this.states.find(x => x.text.toUpperCase() === name.toUpperCase()) || this.provinces.find(x => x.text.toUpperCase() === name.toUpperCase())
+      return item.value
+    },
     cityStateZip (city, state, zip) {
       const city_state = [city, state].filter(Boolean).join(', ')
       return [city_state, zip].filter(Boolean).join(' ')
@@ -381,41 +431,68 @@ export default {
     },
     replaceAddress (address) {
       this.address_dialog = false
+      // // copy the clicked-on address into the form
+      // // i dont like the vertex responses, need to figure out the best way to do this
       this.model.address_1 = address.streetAddress1
       this.model.address_2 = address.streetAddress2
       this.model.city = address.city
-      this.model.county = address.subDivision
       this.model.state_province = address.mainDivision
       this.model.postal_code = address.postalCode
+      this.model.county = address.subDivision
+      this.model.country = address.country
+
+      this.address_validated = true
+    },
+    fuzzyReplace (address) {
+      this.address_dialog = false
+      this.model.city = address.city
+      this.model.state_province = this.stateNameToAbbreviation(address.mainDivision)
+      this.model.county = address.subDivision
+      // this.model.postal_code =
       this.address_validated = true
     },
     invalidateAddress () {
       this.address_validated = false
       this.validated_addresses = []
+      this.fuzzy_addresses = []
     },
     async validateAddress () {
-      this.model.country = 'CAN'
+      this.invalidateAddress()
       const { data: { data } } = await this.$axios.post('/vertex/address', {
         postalAddress: {
           streetAddress1: this.model.address_1,
           streetAddress2: this.model.address_2,
           city: this.model.city,
-          mainDivision: this.model.state_province,
+          mainDivision: this.stateAbbreviationToName(this.model.state_province),
           subDivision: this.model.county,
           postalCode: this.model.postal_code,
-          country: this.model.country
+          country: this.model.driver_country
         },
-        asOfDate: ''
+        asOfDate: this.$moment().format('YYYY-MM-DD')
       })
       // console.log(meta)
       const results = data.lookupResults
-      if (results[0] === undefined || results[0].postalAddresses === undefined) {
-        console.error('address not found!')
-      } else {
-        console.log('addresses found!')
-        // console.log(results[0].postalAddresses[0])
-        this.validated_addresses = results[0].postalAddresses
-      }
+      results.forEach(result => {
+        if (result === undefined) {
+          console.error('Address not found!')
+        } else if (result.postalAddresses !== undefined) {
+          this.validated_addresses.push(...result.postalAddresses)
+        } else {
+          // no postal addresses found, check individual jurisdictions validations
+          // const jurisdictions = result.jurisdictions.map(x => { return { [x.jurisdictionLevel]: x.value } })
+          const jurisdictions = result.jurisdictions.reduce((obj, item) => Object.assign(obj, { [item.jurisdictionLevel]: item.value }), {})
+
+          const fuzzy_address = {
+            streetAddress1: this.model.address_1,
+            streetAddress2: this.model.address_2,
+            city: jurisdictions.CITY,
+            mainDivision: jurisdictions.COUNTRY === 'UNITED STATES' ? jurisdictions.STATE : jurisdictions.PROVINCE,
+            subDivision: jurisdictions.COUNTY,
+            country: jurisdictions.COUNTRY === 'UNITED STATES' ? 'USA' : 'CAN'
+          }
+          this.fuzzy_addresses.push(fuzzy_address)
+        }
+      })
       this.address_dialog = true
     },
     async submitDriver () {

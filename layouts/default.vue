@@ -16,6 +16,7 @@ import EmkayNavigation from '@/components/core/EmkayNavigation'
 import EmkayFooter from '@/components/core/EmkayFooter'
 import { htmlLang } from '@/mixins/meta'
 export default {
+  name: 'Default',
   components: {
     EmkayNavigation,
     EmkayFooter
