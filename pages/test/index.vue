@@ -11,6 +11,11 @@
           <add-or-edit-driver-form driver-number="271967" @close="dialog = false" />
         </v-dialog>
       </v-col>
+      <v-col cols="12">
+        <v-btn @click="lookupZipCode">
+          Validate
+        </v-btn>
+      </v-col>
     </v-row>
     <v-row>
       <v-col cols="12">
