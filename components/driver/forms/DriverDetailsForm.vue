@@ -59,7 +59,7 @@
                     </ValidationProvider>
                   </v-col>
                   <v-col cols="12" md="6">
-                    <ValidationProvider v-slot="{ errors }" :name="$t('driver_address_1')" rules="required|max:30">
+                    <ValidationProvider v-slot="{ errors }" :name="$t('driver_address_1')" rules="max:30">
                       <v-text-field
                         v-model="model.address_1"
                         :label="$t('driver_address_1')"
@@ -83,7 +83,7 @@
                     </ValidationProvider>
                   </v-col>
                   <v-col cols="12" md="5">
-                    <ValidationProvider v-slot="{ errors }" :name="$t('driver_city')" rules="required|max:25">
+                    <ValidationProvider v-slot="{ errors }" :name="$t('driver_city')" rules="max:25">
                       <v-text-field
                         v-model="model.city"
                         :label="$t('driver_city')"
@@ -95,7 +95,7 @@
                     </ValidationProvider>
                   </v-col>
                   <v-col cols="6" md="3">
-                    <ValidationProvider v-slot="{ errors }" :name="$t('driver_state_province')" rules="required|alpha|max:2">
+                    <ValidationProvider v-slot="{ errors }" :name="$t('driver_state_province')" rules="alpha|max:2">
                       <v-text-field
                         v-model="model.state_province"
                         :label="$t('driver_state_province')"
@@ -107,7 +107,7 @@
                     </ValidationProvider>
                   </v-col>
                   <v-col cols="6" md="4">
-                    <ValidationProvider v-slot="{ errors }" :name="$t('driver_postal_code')" rules="required|max:10">
+                    <ValidationProvider v-slot="{ errors }" :name="$t('driver_postal_code')" rules="max:10">
                       <v-text-field
                         v-model="model.postal_code"
                         :label="$t('driver_postal_code')"
@@ -394,6 +394,7 @@ export default {
       this.validated_addresses = []
     },
     async validateAddress () {
+      this.model.country = 'CAN'
       const { data: { data } } = await this.$axios.post('/vertex/address', {
         postalAddress: {
           streetAddress1: this.model.address_1,
