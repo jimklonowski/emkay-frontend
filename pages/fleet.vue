@@ -32,7 +32,7 @@ export default {
     title: vm.$i18n.t('fleet_dashboard')
   }),
   computed: {
-    fleetDashboardUrl: vm => `${process.env.FLEET_DASHBOARD_URL}/Authorize?customer=${vm.$auth.user.account}&username=${vm.$auth.user.username}`
+    fleetDashboardUrl: vm => `${process.env.FLEET_DASHBOARD_URL_DEV}/Authorize?customer=${vm.$auth.user.account}&username=${vm.$auth.user.username}`
   },
   mounted () {
     this.src = this.fleetDashboardUrl

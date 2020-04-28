@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@nuxtjs/auth": "^4.9.1",
-    "@nuxtjs/axios": "^5.10.1",
+    "@nuxtjs/axios": "^5.10.2",
     "@nuxtjs/dotenv": "^1.4.0",
     "@nuxtjs/moment": "^1.6.0",
     "chart.js": "^2.9.3",

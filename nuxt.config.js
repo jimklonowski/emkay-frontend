@@ -39,14 +39,16 @@ export default {
   },
   vue: {
     config: {
-      devtools: true, // turn this off for production
+      // devtools: true, // turn this off for production
+      devtools: process.env.NODE_ENV !== 'production',
       performance: true,
-      productionTip: true,
+      productionTip: process.env.NODE_ENV !== 'production',
       silent: false
     }
   },
   router: {
-    base: process.env.NODE_ENV === 'production' ? '/nuxt/' : '/'
+    // base: process.env.NODE_ENV === 'production' ? '/emkay/' : '/'
+    base: '/'
   },
   /*
   ** Customize the progress-bar color
@@ -114,8 +116,8 @@ export default {
   ** See https://axios.nuxtjs.org/options
   */
   axios: {
-    baseURL: process.env.BASE_URL,
-    browserBaseURL: process.env.BASE_URL,
+    baseURL: process.env.NODE_ENV === 'production' ? process.env.BASE_URL : process.env.BASE_URL_DEV,
+    browserBaseURL: process.env.NODE_ENV === 'production' ? process.env.BASE_URL : process.env.BASE_URL_DEV,
     credentials: true
   },
   /*
@@ -151,7 +153,9 @@ export default {
   */
   env: {
     BASE_URL: process.env.BASE_URL,
+    BASE_URL_DEV: process.env.BASE_URL_DEV,
     FLEET_DASHBOARD_URL: process.env.FLEET_DASHBOARD_URL,
+    FLEET_DASHBOARD_URL_DEV: process.env.FLEET_DASHBOARD_URL,
     GA_ID: process.env.GA_ID
   },
   /*
