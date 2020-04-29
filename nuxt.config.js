@@ -29,6 +29,9 @@ export default {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
   },
+  generate: {
+    dir: process.env.NODE_ENV === 'production' ? 'dist' : 'dist-test'
+  },
   server: {
     port: 3000,
     host: '127.0.0.1',
