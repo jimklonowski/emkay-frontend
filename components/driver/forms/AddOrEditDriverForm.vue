@@ -61,6 +61,7 @@
                       :error-messages="errors"
                       dense
                       outlined
+                      @change="invalidateAddress"
                     />
                   </ValidationProvider>
                 </v-col>
@@ -72,6 +73,7 @@
                       :error-messages="errors"
                       dense
                       outlined
+                      @change="invalidateAddress"
                     />
                   </ValidationProvider>
                 </v-col>
@@ -83,6 +85,7 @@
                       :error-messages="errors"
                       dense
                       outlined
+                      @change="invalidateAddress"
                     />
                   </ValidationProvider>
                 </v-col>
@@ -94,6 +97,7 @@
                       :error-messages="errors"
                       dense
                       outlined
+                      @change="invalidateAddress"
                     />
                   </ValidationProvider>
                 </v-col>
@@ -105,6 +109,7 @@
                       :error-messages="errors"
                       dense
                       outlined
+                      @change="invalidateAddress"
                     />
                   </ValidationProvider>
                 </v-col>
@@ -116,6 +121,7 @@
                       :error-messages="errors"
                       dense
                       outlined
+                      @change="invalidateAddress"
                     />
                   </ValidationProvider>
                 </v-col>
@@ -210,6 +216,65 @@
           </v-tab-item>
         </v-tabs-items>
       </v-card-text>
+      <v-dialog v-model="address_dialog" max-width="750">
+        <v-card>
+          <v-toolbar flat>
+            <v-toolbar-title v-text="$t('address')" />
+            <v-spacer />
+          </v-toolbar>
+          <v-divider />
+          <v-card-text>
+            <v-row>
+              <v-col cols="12" md="6">
+                <v-list>
+                  <v-subheader>Entered Address</v-subheader>
+                  <v-list-item>
+                    <v-list-item-content>
+                      <span v-text="model.address_1" />
+                      <span v-text="model.address_2" />
+                      <span v-text="cityStateZip(model.city, model.state_province, model.postal_code)" />
+                      <span v-text="model.county" />
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-list>
+              </v-col>
+              <v-col cols="12" md="6">
+                <v-list>
+                  <v-subheader>Full Addresses Found</v-subheader>
+                  <template v-if="validated_addresses.length === 0">
+                    <v-list-item>No Addresses Found</v-list-item>
+                  </template>
+                  <template v-for="(address, a) in validated_addresses" v-else>
+                    <v-list-item :key="`address-${a}`" title="Use this address" link @click="replaceAddress(address)">
+                      <v-list-item-content>
+                        <span v-text="address.streetAddress1" />
+                        <span v-text="address.streetAddress2" />
+                        <span v-text="cityStateZip(address.city, address.mainDivision, address.postalCode)" />
+                        <span v-text="address.subDivision" />
+                      </v-list-item-content>
+                    </v-list-item>
+                    <v-divider :key="`divider-${a}`" />
+                  </template>
+                  <template v-if="fuzzy_addresses.length > 0">
+                    <v-subheader>Partial Addresses Found</v-subheader>
+                    <template v-for="(address, a) in fuzzy_addresses">
+                      <v-list-item :key="`faddress-${a}`" title="Use this address" link @click="replaceAddress(address)">
+                        <v-list-item-content>
+                          <span v-text="address.streetAddress1" />
+                          <span v-text="address.streetAddress2" />
+                          <span v-text="cityStateZip(address.city, address.mainDivision, address.postalCode)" />
+                          <span v-text="address.subDivision" />
+                        </v-list-item-content>
+                      </v-list-item>
+                      <v-divider :key="`fdivider-${a}`" />
+                    </template>
+                  </template>
+                </v-list>
+              </v-col>
+            </v-row>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
       <v-card-actions>
         <v-btn
           color="primary"
@@ -232,6 +297,7 @@ import { mapActions, mapGetters } from 'vuex'
 import { SnotifyPosition } from 'vue-snotify'
 // import { stateNameToAbbreviation } from '@/utility/geography'
 import StateProvincePicker from '@/components/core/StateProvincePicker'
+import { cityStateZip, stateNameToAbbreviation } from '@/utility/geography'
 export default {
   components: { StateProvincePicker },
   props: {
@@ -251,6 +317,10 @@ export default {
   },
   fetchOnServer: false,
   data: () => ({
+    address_validated: false,
+    address_dialog: false,
+    fuzzy_addresses: [],
+    validated_addresses: [],
     loading: false,
     postal_code_search: '',
     postal_code_search_results: [],
@@ -264,6 +334,7 @@ export default {
     }),
     defaultModel () {
       return {
+        tax_area_id: '',
         employee_id: '',
         reference_number: '',
         first_name: '',
@@ -296,49 +367,119 @@ export default {
     ...mapActions({
       fetchDriver: 'drivers/fetchDriver'
     }),
+    cityStateZip,
     close () {
       this.$refs.driverForm.reset()
+      this.invalidateAddress()
       this.$emit('close')
     },
-    // async lookupZipCode () {
-    //   try {
-    //     this.loading = true
-    //     this.postal_code_search_results = []
-    //     const { data: { data } } = await this.$axios.post('/vertex/address', {
-    //       postalAddress: {
-    //         postalCode: this.postal_code_search,
-    //         country: this.model.country
-    //       },
-    //       asOfDate: this.$moment().format('YYYY-MM-DD')
-    //     })
-    //     const results = data.lookupResults.filter(x => x.confidenceIndicator >= 70)
-    //     results.forEach(result => {
-    //       const parts = result.jurisdictions.reduce((obj, item) => Object.assign(obj, { [item.jurisdictionLevel]: item.value }), {})
-    //       // add a city/state result if it contains at least CITY/STATE/COUNTRY and confidenceIndicator sufficiently high
-    //       if (
-    //         Object.prototype.hasOwnProperty.call(parts, 'COUNTRY') &&
-    //         Object.prototype.hasOwnProperty.call(parts, 'CITY') &&
-    //         (Object.prototype.hasOwnProperty.call(parts, 'STATE') || Object.prototype.hasOwnProperty.call(parts, 'PROVINCE'))
-    //       ) {
-    //         const state_province = parts.COUNTRY === 'UNITED STATES' ? parts.STATE : parts.PROVINCE
-    //         this.postal_code_search_results.push({
-    //           confidence: result.confidenceIndicator,
-    //           country: parts.COUNTRY,
-    //           city: parts.CITY,
-    //           postal_code: this.model.postal_code,
-    //           state_province: stateNameToAbbreviation(state_province),
-    //           county: parts.COUNTY
-    //         })
-    //       }
-    //     })
-    //   } catch (error) {
-    //     this.$snotify.error('ERROR!', error.message)
-    //   } finally {
-    //     this.loading = false
-    //   }
-    // },
+    invalidateAddress () {
+      this.address_validated = false
+      this.validated_addresses = []
+      this.fuzzy_addresses = []
+    },
+    replaceAddress (address) {
+      this.model.tax_area_id = address.taxAreaId
+      this.model.address_1 = address.streetAddress1
+      this.model.address_2 = address.streetAddress2
+      this.model.city = address.city
+      this.model.state_province = address.mainDivision
+      this.model.postal_code = address.postalCode
+      this.model.county = address.subDivision
+      this.model.country = address.country
+      this.address_validated = true
+      this.address_dialog = false
+    },
+    async validateAddress () {
+      const { data: { data } } = await this.$axios.post('/vertex/address', {
+        postalAddress: {
+          streetAddress1: this.model.address_1,
+          streetAddress2: this.model.address_2,
+          city: this.model.city,
+          mainDivision: this.model.state_province,
+          subDivision: this.model.county,
+          postalCode: this.model.postal_code,
+          country: this.model.driver_country
+        },
+        asOfDate: this.$moment().format('YYYY-MM-DD')
+      })
+      // iterate vertex results
+      const results = data.lookupResults.filter(x => x.confidenceIndicator >= 70)
+      results.forEach(result => {
+        const taxAreaId = result.taxAreaId
+        if (result.postalAddresses) {
+          // if there is a postalAddresses array, we are good
+          result.postalAddresses.forEach(address => {
+            // add the taxareaid to the address object then add to list of validated addresses to choose from
+            this.validated_addresses.push({
+              ...address,
+              taxAreaId
+            })
+          })
+        } else {
+          // vertex might have validated the city/state/country and given a taxareaid, but not validated the address.  create a fuzzy-result
+          const parts = result.jurisdictions.reduce((obj, item) => Object.assign(obj, { [item.jurisdictionLevel]: item.value }), {})
+          const state_province = parts.COUNTRY === 'UNITED STATES' ? parts.STATE : parts.PROVINCE
+
+          this.fuzzy_addresses.push({
+            streetAddress1: this.model.address_1,
+            streetAddress2: this.model.address_2,
+            city: parts.CITY,
+            mainDivision: stateNameToAbbreviation(state_province),
+            subDivision: parts.COUNTY,
+            postalCode: this.model.postal_code,
+            country: parts.COUNTRY === 'UNITED STATES' ? 'USA' : 'CAN',
+            taxAreaId
+          })
+        }
+      })
+      this.address_dialog = true
+    },
+    /*
+    async lookupZipCode () {
+      try {
+        this.loading = true
+        this.postal_code_search_results = []
+        const { data: { data } } = await this.$axios.post('/vertex/address', {
+          postalAddress: {
+            postalCode: this.postal_code_search,
+            country: this.model.country
+          },
+          asOfDate: this.$moment().format('YYYY-MM-DD')
+        })
+        const results = data.lookupResults.filter(x => x.confidenceIndicator >= 70)
+        results.forEach(result => {
+          const parts = result.jurisdictions.reduce((obj, item) => Object.assign(obj, { [item.jurisdictionLevel]: item.value }), {})
+          // add a city/state result if it contains at least CITY/STATE/COUNTRY and confidenceIndicator sufficiently high
+          if (
+            Object.prototype.hasOwnProperty.call(parts, 'COUNTRY') &&
+            Object.prototype.hasOwnProperty.call(parts, 'CITY') &&
+            (Object.prototype.hasOwnProperty.call(parts, 'STATE') || Object.prototype.hasOwnProperty.call(parts, 'PROVINCE'))
+          ) {
+            const state_province = parts.COUNTRY === 'UNITED STATES' ? parts.STATE : parts.PROVINCE
+            this.postal_code_search_results.push({
+              confidence: result.confidenceIndicator,
+              country: parts.COUNTRY,
+              city: parts.CITY,
+              postal_code: this.model.postal_code,
+              state_province: stateNameToAbbreviation(state_province),
+              county: parts.COUNTY
+            })
+          }
+        })
+      } catch (error) {
+        this.$snotify.error('ERROR!', error.message)
+      } finally {
+        this.loading = false
+      }
+    },
+    */
     async submitDriver () {
       try {
+        if (!this.address_validated) {
+          await this.validateAddress()
+          return
+        }
         this.loading = true
         if (this.driverNumber) {
           // updating existing driver

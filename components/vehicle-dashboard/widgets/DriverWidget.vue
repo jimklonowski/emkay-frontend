@@ -6,7 +6,7 @@
       </v-avatar>
       <v-toolbar-title v-text="title" />
       <v-spacer />
-      <v-dialog v-model="dialog" max-width="850" scrollable>
+      <v-dialog v-model="dialog" max-width="850" persistent scrollable>
         <template #activator="{ on }">
           <v-btn icon :title="$t('edit_driver')" v-on="on">
             <v-icon v-text="'mdi-account-cog'" />

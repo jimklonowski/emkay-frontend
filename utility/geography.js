@@ -25,3 +25,8 @@ export function stateNameToAbbreviation (name) {
   const result = lookup.find(x => x.name.toUpperCase() === name.toUpperCase())
   return result.abbreviation
 }
+
+export function cityStateZip (city, state, zip) {
+  const city_state = [city, state].filter(Boolean).join(', ')
+  return [city_state, zip].filter(Boolean).join(' ')
+}
