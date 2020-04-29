@@ -70,6 +70,7 @@ export const actions = {
       const { data: { success, message, data } } = await this.$axios.get('/vehicle/driver-details', { params: { vehicle } })
       if (!success) { throw new Error(message) }
       commit('setDriverDetails', data)
+      commit('drivers/setDriver', data, { root: true })
       commit('setDriverNumber', data.reference_number)
     } catch (error) {
       console.error(`[vuex error][fetchDriverDetails]: ${error.message}`)
