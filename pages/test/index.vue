@@ -11,10 +11,75 @@
           <add-or-edit-driver-form driver-number="271967" @close="dialog = false" />
         </v-dialog>
       </v-col>
+    </v-row>
+    <v-row>
       <v-col cols="12">
-        <v-btn @click="lookupZipCode">
-          Validate
+        <v-btn-toggle v-model="country" mandatory @change="reset, postal_code = ''">
+          <v-btn value="USA">
+            USA
+          </v-btn>
+          <v-btn value="CAN">
+            CAN
+          </v-btn>
+        </v-btn-toggle>
+        <v-subheader>Look Up City, State/Province, County with Postal Code</v-subheader>
+        <!-- <v-text-field v-model="postal_code" :label="$t('postal_code')" hint="Look Up" persistent-hint outlined>
+          <template #message="{ message }">
+            <v-btn x-small text @click="lookupZipCode">
+              {{ message }}
+            </v-btn>
+          </template>
+        </v-text-field> -->
+      </v-col>
+      <v-col cols="12">
+        <v-autocomplete
+          :label="$t('postal_code')"
+          :menu-props="{ bottom: true, offsetY: true }"
+          :search-input.sync="postal_code"
+          :items="postal_code_results"
+          item-value="postal_code"
+          item-text="postal_code"
+          no-filter
+          outlined
+        >
+          <template #item="{ item, on }">
+            <v-list-item link v-on="on" @click="populateAddressForm(item)">
+              <v-list-item-content>
+                {{ item.city }}, {{ item.state_province }} {{ item.postal_code }} {{ item.county }}
+              </v-list-item-content>
+              <v-list-item-action>
+                <v-list-item-action-text>{{ item.confidence }} %</v-list-item-action-text>
+              </v-list-item-action>
+            </v-list-item>
+          </template>
+        </v-autocomplete>
+      </v-col>
+      <v-col cols="12">
+        <v-text-field v-model="address_1" :label="$t('address_1')" outlined />
+      </v-col>
+      <v-col cols="12">
+        <v-text-field v-model="address_2" :label="$t('address_2')" outlined />
+      </v-col>
+      <v-col cols="12">
+        <v-text-field v-model="city" :label="$t('city')" outlined />
+      </v-col>
+      <v-col cols="12">
+        <v-text-field v-model="state_province" :label="$t('state_province')" outlined />
+      </v-col>
+      <v-col cols="12">
+        <v-text-field v-model="county" :label="$t('county')" outlined />
+      </v-col>
+      <v-col cols="12">
+        <v-btn :loading="loading" block @click="validateAddress">
+          <v-icon class="mr-2" v-text="'mdi-check-circle'" />
+          Validate Address
         </v-btn>
+      </v-col>
+      <v-col v-if="validated" cols="12">
+        <v-alert v-if="postal_address_results.length === 0" type="error">
+          No addresses found
+        </v-alert>
+        <pre v-else>{{ postal_address_results }}</pre>
       </v-col>
     </v-row>
     <v-row>
