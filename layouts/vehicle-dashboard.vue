@@ -22,6 +22,7 @@ import VehicleDashboardBreadcrumbs from '@/components/vehicle-dashboard/VehicleD
 import EmkayFooter from '@/components/core/EmkayFooter'
 import { htmlLang } from '@/mixins/meta'
 export default {
+  name: 'Vehicle',
   components: {
     EmkayNavigation,
     VehicleDashboardBreadcrumbs,

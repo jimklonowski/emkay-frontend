@@ -447,6 +447,7 @@ export const getters = {
   getDocuments: state => state.documents,
   getDriverCityStateZip: state => [[state.driver_details.city, state.driver_details.state_province].filter(Boolean).join(', '), state.driver_details.postal_code].filter(Boolean).join(' '),
   getDriverDetails: state => state.driver_details,
+  getDriverEffectiveDate: state => state.driver_details.driver_effective_date,
   getDriverName: state => [state.driver_details.first_name, state.driver_details.last_name].filter(Boolean).join(' '),
   getDriverNumber: state => state.driver_number,
   getEvoucher: state => state.evoucher,

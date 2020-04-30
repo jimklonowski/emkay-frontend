@@ -8,7 +8,7 @@
               Edit Driver
             </v-btn>
           </template>
-          <add-or-edit-driver-form driver-number="271967" @close="dialog = false" />
+          <driver-details-form driver-number="271967" @close="dialog = false" />
         </v-dialog>
       </v-col>
     </v-row>
@@ -156,10 +156,10 @@
 </template>
 
 <script>
-import AddOrEditDriverForm from '@/components/driver/forms/AddOrEditDriverForm'
+import DriverDetailsForm from '@/components/driver/forms/DriverDetailsForm'
 export default {
   name: 'Test',
-  components: { AddOrEditDriverForm },
+  components: { DriverDetailsForm },
   data: () => ({
     country: 'USA',
     postal_code: '',

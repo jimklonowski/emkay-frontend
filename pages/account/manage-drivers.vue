@@ -27,8 +27,7 @@
               {{ $t('add_new_driver') }}
             </v-btn>
           </template>
-          <!-- <driver-details-form :driver-id="driverId" @close="driver_dialog = false" /> -->
-          <add-or-edit-driver-form :driver-number="driverId" @close="driver_dialog = false" />
+          <driver-details-form :driver-number="driverId" @close="driver_dialog = false" />
         </v-dialog>
       </client-only>
     </v-toolbar>
@@ -118,13 +117,12 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import { dialTo, emailTo } from '@/utility/helpers'
-// import DriverDetailsForm from '@/components/driver/forms/DriverDetailsForm'
-import AddOrEditDriverForm from '@/components/driver/forms/AddOrEditDriverForm'
+import DriverDetailsForm from '@/components/driver/forms/DriverDetailsForm'
+// import AddOrEditDriverForm from '@/components/driver/forms/AddOrEditDriverForm'
 export default {
   name: 'ManageDrivers',
   components: {
-    AddOrEditDriverForm,
-    // DriverDetailsForm,
+    DriverDetailsForm,
     'vehicle-number-button': () => import(/* webpackChunkName: "VehicleNumberButton" */ '@/components/vehicle-dashboard/VehicleNumberButton.vue')
   },
   async fetch () {

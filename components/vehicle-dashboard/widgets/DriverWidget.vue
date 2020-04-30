@@ -1,18 +1,18 @@
 <template>
   <v-card class="vehicle-dashboard-widget" outlined>
     <v-toolbar flat color="transparent">
-      <v-avatar color="mr-2" size="36">
+      <v-avatar class="mr-2" size="36">
         <v-icon color="grey" v-text="icon" />
       </v-avatar>
       <v-toolbar-title v-text="title" />
       <v-spacer />
       <v-dialog v-model="dialog" max-width="850" persistent scrollable>
         <template #activator="{ on }">
-          <v-btn icon :title="$t('edit_driver')" v-on="on">
+          <v-btn icon :title="$t('update_driver')" v-on="on">
             <v-icon v-text="'mdi-account-cog'" />
           </v-btn>
         </template>
-        <add-or-edit-driver-form
+        <driver-details-form
           ref="driverForm"
           :driver-number="driver_details.reference_number"
           @close="dialog = false"
@@ -52,12 +52,12 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import { dialTo, emailTo } from '@/utility/helpers'
-import AddOrEditDriverForm from '@/components/driver/forms/AddOrEditDriverForm'
+import DriverDetailsForm from '@/components/driver/forms/DriverDetailsForm'
 // import BaseWidget from '@/components/vehicle-dashboard/widgets/BaseWidget'
 export default {
   components: {
     // BaseWidget
-    AddOrEditDriverForm
+    DriverDetailsForm
   },
   data: vm => ({
     dialog: false,
@@ -72,18 +72,6 @@ export default {
       vehicle_number: 'vehicle-dashboard/getVehicleNumber'
     }),
     title: vm => vm.driver_name,
-    /**
-     * Dropdown Menu Actions
-     */
-    actions () {
-      return [
-        {
-          text: this.$i18n.t('edit_driver'),
-          icon: 'mdi-account-edit',
-          to: this.localePath({ path: '/vehicle/dashboard/edit-driver' })
-        }
-      ]
-    },
     /**
      * Data columns
      */
