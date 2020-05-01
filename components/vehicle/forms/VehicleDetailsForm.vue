@@ -39,10 +39,7 @@
                   {{ $t('assign_new_driver') }}
                 </v-btn>
               </template>
-              <v-card>
-                <v-card-title v-text="$t('assign_new_driver')" />
-                <v-card-text v-text="'TODO'" />
-              </v-card>
+              <assign-new-driver-form :vehicle-number="vehicleNumber" @saved="driverChanged" />
             </v-dialog>
             <!-- <v-dialog v-model="change_plate_dialog" max-width="750">
               <template #activator="{ on }">
@@ -114,9 +111,10 @@
                     </v-col>
                     <v-col cols="12">
                       <ValidationProvider v-slot="{ errors }" :name="$t('bill_sort')">
-                        <v-text-field
+                        <v-select
                           v-model="model.bill_sort"
                           :label="$t('bill_sort')"
+                          :items="bill_sorts"
                           :error-messages="errors"
                           dense
                           outlined
@@ -288,8 +286,9 @@ import { mapActions, mapGetters } from 'vuex'
 import { SnotifyPosition } from 'vue-snotify'
 import isEqual from 'lodash.isequal'
 import CenterPicker from '@/components/core/CenterPicker'
+import AssignNewDriverForm from '@/components/vehicle/forms/AssignNewDriverForm'
 export default {
-  components: { CenterPicker },
+  components: { AssignNewDriverForm, CenterPicker },
   props: {
     vehicleNumber: {
       type: String,
@@ -322,6 +321,7 @@ export default {
   }),
   computed: {
     ...mapGetters({
+      bill_sorts: 'account/getBillSorts',
       custom_labels: 'account/getCustomLabels',
       driver_effective_date: 'vehicle-dashboard/getDriverEffectiveDate',
       driver_name: 'vehicle-dashboard/getDriverName',
@@ -360,9 +360,22 @@ export default {
     ...mapActions({
       fetchVehicle: 'vehicle-dashboard/fetchVehicleDetails'
     }),
+    async assignNewDriver () {
+      try {
+        this.loading = true
+        await this.$axios.post('vehicle/reassign', { vehicle_number: this.vehicleNumber, driver_number: this.new_driver })
+      } catch (error) {
+        this.$snotify.error(error, this.$i18n.t('error'), { position: SnotifyPosition.centerBottom })
+      } finally {
+        this.loading = false
+      }
+    },
     close () {
       this.$refs.vehicleForm.reset()
       this.$emit('close')
+    },
+    async driverChanged () {
+      // todo: refresh driver store
     },
     selectCenter (center) {
       if (center && center[0]) {

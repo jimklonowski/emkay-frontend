@@ -2,6 +2,7 @@ import { assign, set, toggle } from '@/utility/vuex'
 import { flatten } from '@/utility/helpers'
 
 const getDefaultState = () => ({
+  bill_sorts: [],
   centers: [],
   center_levels: {
     level_01: 'level_01',
@@ -64,7 +65,8 @@ export const actions = {
       dispatch('fetchCenterLevels'),
       dispatch('fetchLoginMessages'),
       dispatch('fetchFleetMessages'),
-      dispatch('fetchCriticalAlerts')
+      dispatch('fetchCriticalAlerts'),
+      dispatch('fetchBillSorts')
     ]).finally(() => {
       commit('setInitialized', true)
     })
@@ -179,6 +181,18 @@ export const actions = {
     }
   },
   /**
+   * Fetch Bill Sorts
+   */
+  async fetchBillSorts ({ commit }) {
+    try {
+      const { data: { data, success, message } } = await this.$axios.get('/account/bill-sorts')
+      if (!success) { throw new Error(message) }
+      commit('setBillSorts', data)
+    } catch (error) {
+      console.error(`[vuex error][fetchBillSorts]: ${error.message}`)
+    }
+  },
+  /**
    * Logout Action
    */
   async logout ({ commit }) {
@@ -203,6 +217,7 @@ export const actions = {
 
 export const mutations = {
   reset: assign(getDefaultState()),
+  setBillSorts: set('bill_sorts'),
   setCenters: set('centers'),
   setCenterLevels: set('center_levels'),
   setCustomLabels (state, data) {
@@ -219,6 +234,7 @@ export const mutations = {
 }
 
 export const getters = {
+  getBillSorts: state => state.bill_sorts,
   getCenters: state => state.centers,
   getCenterLevels: state => state.center_levels,
   getClientLabels: state => Object.entries(state.custom_labels).map(([key, value]) => ({ key, value })).slice(0, 5),
