@@ -336,7 +336,29 @@ export default {
     if (this.driverNumber) {
       await this.fetchDriver({ driver: this.driverNumber })
       // copy fetched driver into form model
-      this.model = { ...this.driver }
+      // this.model = { ...this.driver }
+      this.model = {
+        reference_number: this.driver.reference_number,
+        first_name: this.driver.first_name,
+        last_name: this.driver.last_name,
+        address_1: this.driver.address_1,
+        address_2: this.driver.address_2,
+        city: this.driver.city,
+        state_province: this.driver.state_province,
+        county: this.driver.county,
+        postal_code: this.driver.postal_code,
+        phone: this.driver.phone,
+        email: this.driver.email,
+        geocode: null,
+        mobile: this.driver.mobile,
+        employee_id: this.driver.employee_id,
+        misc_1: this.driver.misc_1,
+        misc_2: this.driver.misc_2,
+        misc_3: this.driver.misc_3,
+        misc_4: this.driver.misc_4,
+        country: this.driver.driver_country
+      }
+
       await this.fetchVehicleHistory({ driver: this.driverNumber })
     } else {
       this.model = { ...this.defaultModel }
@@ -362,25 +384,25 @@ export default {
     }),
     defaultModel () {
       return {
-        tax_area_id: '',
-        employee_id: '',
         reference_number: '',
         first_name: '',
         last_name: '',
-        postal_code: '',
         address_1: '',
         address_2: '',
         city: '',
         state_province: '',
         county: '',
-        country: '',
-        email: '',
+        postal_code: '',
         phone: '',
+        email: '',
+        geocode: '',
         mobile: '',
+        employee_id: '',
         misc_1: '',
         misc_2: '',
         misc_3: '',
-        misc_4: ''
+        misc_4: '',
+        country: ''
       }
     },
     title: vm => vm.driverNumber ? vm.$i18n.t('update_driver') : vm.$i18n.t('add_driver'),
@@ -408,7 +430,7 @@ export default {
       this.fuzzy_addresses = []
     },
     replaceAddress (address) {
-      this.model.tax_area_id = address.taxAreaId
+      this.model.geocode = address.taxAreaId
       this.model.address_1 = address.streetAddress1
       this.model.address_2 = address.streetAddress2
       this.model.city = address.city

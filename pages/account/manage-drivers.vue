@@ -27,7 +27,11 @@
               {{ $t('add_new_driver') }}
             </v-btn>
           </template>
-          <driver-details-form :driver-number="driverId" @close="driver_dialog = false" />
+          <driver-details-form
+            :driver-number="driverId"
+            @close="driver_dialog = false"
+            @saved="saved"
+          />
         </v-dialog>
       </client-only>
     </v-toolbar>
@@ -311,6 +315,12 @@ export default {
     editDriver (item) {
       this.driverId = item.reference_number
       this.driver_dialog = true
+    },
+    async saved () {
+      console.log('saved!')
+      // the form fired the 'saved' event, so re-fetch the drivers
+      await this.$fetch()
+      this.driver_dialog = false
     }
   },
   /**
