@@ -442,52 +442,56 @@ export default {
       this.address_dialog = false
     },
     async validateAddress () {
-      const { data: { data } } = await this.$axios.post('/vertex/address', {
-        postalAddress: {
-          streetAddress1: this.model.address_1,
-          streetAddress2: this.model.address_2,
-          city: this.model.city,
-          mainDivision: this.model.state_province,
-          subDivision: this.model.county,
-          postalCode: this.model.postal_code,
-          country: this.model.driver_country
-        },
-        asOfDate: this.$moment().format('YYYY-MM-DD')
-      })
-      // iterate vertex results and populate array of validated addresses to present to user to choose from
-      const results = data.lookupResults.filter(x => x.confidenceIndicator >= 50)
-      results.forEach(result => {
-        const taxAreaId = result.taxAreaId
-        if (result.postalAddresses) {
-          // if there is a postalAddresses array, we are good
-          result.postalAddresses.forEach(address => {
-            // add the taxareaid to the address object then add to list
-            this.validated_addresses.push({
-              ...address,
-              taxAreaId
-            })
-          })
-        } else {
-          // vertex might have validated the city/state/country and given a taxareaid, but not validated the address.  create a fuzzy-result
-          // it turns out that this is the case for canada
-          const parts = result.jurisdictions.reduce((obj, item) => Object.assign(obj, { [item.jurisdictionLevel]: item.value }), {})
-          const usa = parts.COUNTRY === 'UNITED STATES'
-          const state_province = usa ? parts.STATE : parts.PROVINCE
-
-          // keep the user-inputted address lines and postal code, but use the city/state/county from vertex. add the taxAreaId and add to fuzzy list
-          this.fuzzy_addresses.push({
+      try {
+        const { data: { data } } = await this.$axios.post('/vertex/address', {
+          postalAddress: {
             streetAddress1: this.model.address_1,
             streetAddress2: this.model.address_2,
-            city: parts.CITY,
-            mainDivision: stateNameToAbbreviation(state_province),
-            subDivision: parts.COUNTY,
+            city: this.model.city,
+            mainDivision: this.model.state_province,
+            subDivision: this.model.county,
             postalCode: this.model.postal_code,
-            country: usa ? 'USA' : 'CAN',
-            taxAreaId
-          })
-        }
-      })
-      this.address_dialog = true
+            country: this.model.driver_country
+          },
+          asOfDate: this.$moment().format('YYYY-MM-DD')
+        })
+        // iterate vertex results and populate array of validated addresses to present to user to choose from
+        const results = data.lookupResults.filter(x => x.confidenceIndicator >= 50)
+        results.forEach(result => {
+          const taxAreaId = result.taxAreaId
+          if (result.postalAddresses) {
+            // if there is a postalAddresses array, we are good
+            result.postalAddresses.forEach(address => {
+              // add the taxareaid to the address object then add to list
+              this.validated_addresses.push({
+                ...address,
+                taxAreaId
+              })
+            })
+          } else {
+            // vertex might have validated the city/state/country and given a taxareaid, but not validated the address.  create a fuzzy-result
+            // it turns out that this is the case for canada
+            const parts = result.jurisdictions.reduce((obj, item) => Object.assign(obj, { [item.jurisdictionLevel]: item.value }), {})
+            const usa = parts.COUNTRY === 'UNITED STATES'
+            const state_province = usa ? parts.STATE : parts.PROVINCE
+
+            // keep the user-inputted address lines and postal code, but use the city/state/county from vertex. add the taxAreaId and add to fuzzy list
+            this.fuzzy_addresses.push({
+              streetAddress1: this.model.address_1,
+              streetAddress2: this.model.address_2,
+              city: parts.CITY,
+              mainDivision: stateNameToAbbreviation(state_province),
+              subDivision: parts.COUNTY,
+              postalCode: this.model.postal_code,
+              country: usa ? 'USA' : 'CAN',
+              taxAreaId
+            })
+          }
+        })
+        this.address_dialog = true
+      } catch (error) {
+        this.$snotify.error(this.$i18n.t('address_error'), this.$i18n.t('error'), { position: SnotifyPosition.centerBottom })
+      }
     },
     async submitDriver () {
       try {
