@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@nuxtjs/auth": "^4.9.1",
-    "@nuxtjs/axios": "^5.10.2",
+    "@nuxtjs/axios": "^5.10.3",
     "@nuxtjs/dotenv": "^1.4.0",
     "@nuxtjs/moment": "^1.6.0",
     "chart.js": "^2.9.3",
@@ -26,7 +26,7 @@
     "lodash.groupby": "^4.6.0",
     "lodash.isequal": "^4.5.0",
     "nuxt": "^2.12.2",
-    "nuxt-i18n": "^6.10.1",
+    "nuxt-i18n": "^6.11.0",
     "nuxt-webfontloader": "^1.1.0",
     "us-atlas": "^3.0.0",
     "vee-validate": "^3.3.0",
@@ -38,19 +38,19 @@
   "devDependencies": {
     "@aceforth/nuxt-optimized-images": "^1.0.0",
     "@nuxtjs/eslint-config": "^2.0.0",
-    "@nuxtjs/eslint-module": "^1.2.0",
+    "@nuxtjs/eslint-module": "^2.0.0",
     "@nuxtjs/google-analytics": "^2.2.3",
     "@nuxtjs/vuetify": "^1.11.2",
-    "@vue/test-utils": "^1.0.0-beta.33",
+    "@vue/test-utils": "^1.0.1",
     "babel-eslint": "^10.0.1",
-    "babel-jest": "^25.4.0",
+    "babel-jest": "^26.0.1",
     "cross-env": "^7.0.2",
     "eslint": "^6.8.0",
     "eslint-plugin-nuxt": "^0.5.2",
     "imagemin-mozjpeg": "^8.0.0",
     "imagemin-pngquant": "^8.0.0",
     "imagemin-svgo": "^7.1.0",
-    "jest": "^25.4.0",
+    "jest": "^26.0.1",
     "vue-jest": "^4.0.0-0"
   }
 }
