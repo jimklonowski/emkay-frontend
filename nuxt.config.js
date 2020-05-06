@@ -29,6 +29,9 @@ export default {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
   },
+  generate: {
+    dir: process.env.NODE_ENV === 'production' ? 'dist' : 'dist-test'
+  },
   server: {
     port: 3000,
     host: '127.0.0.1',
@@ -39,14 +42,16 @@ export default {
   },
   vue: {
     config: {
-      devtools: true, // turn this off for production
+      // devtools: true, // turn this off for production
+      devtools: process.env.NODE_ENV !== 'production',
       performance: true,
-      productionTip: true,
+      productionTip: process.env.NODE_ENV !== 'production',
       silent: false
     }
   },
   router: {
-    base: process.env.NODE_ENV === 'production' ? '/nuxt/' : '/'
+    // base: process.env.NODE_ENV === 'production' ? '/emkay/' : '/'
+    base: '/'
   },
   /*
   ** Customize the progress-bar color
@@ -88,7 +93,9 @@ export default {
     // Doc: https://github.com/nuxt-community/vuetify-module
     '@nuxtjs/vuetify',
     // Doc: https://github.com/nuxt-community/analytics-module
-    '@nuxtjs/google-analytics'
+    '@nuxtjs/google-analytics',
+    // Doc: https://github.com/aceforth/nuxt-optimized-images
+    '@aceforth/nuxt-optimized-images'
   ],
   /*
   ** Nuxt.js modules
@@ -112,8 +119,8 @@ export default {
   ** See https://axios.nuxtjs.org/options
   */
   axios: {
-    baseURL: process.env.BASE_URL,
-    browserBaseURL: process.env.BASE_URL,
+    baseURL: process.env.NODE_ENV === 'production' ? process.env.BASE_URL : process.env.BASE_URL_DEV,
+    browserBaseURL: process.env.NODE_ENV === 'production' ? process.env.BASE_URL : process.env.BASE_URL_DEV,
     credentials: true
   },
   /*
@@ -149,7 +156,9 @@ export default {
   */
   env: {
     BASE_URL: process.env.BASE_URL,
+    BASE_URL_DEV: process.env.BASE_URL_DEV,
     FLEET_DASHBOARD_URL: process.env.FLEET_DASHBOARD_URL,
+    FLEET_DASHBOARD_URL_DEV: process.env.FLEET_DASHBOARD_URL,
     GA_ID: process.env.GA_ID
   },
   /*
@@ -189,6 +198,13 @@ export default {
     // This doesn't work.  Setting $nuxt.$moment.suppressDeprecationWarnings = true does work.
     suppressDeprecationWarnings: true
   },
+  /**
+   * nuxt-optimized-images config
+   * See: https://github.com/aceforth/nuxt-optimized-images
+   */
+  optimizedImages: {
+    optimizeImages: true
+  },
   /*
   ** vuetify module configuration
   ** https://github.com/nuxt-community/vuetify-module
@@ -201,7 +217,7 @@ export default {
     customVariables: ['~/assets/variables.scss'],
     treeShake: true,
     theme: {
-      dark: true,
+      dark: false,
       themes: {
         light: {
           primary: colors.deepPurple,

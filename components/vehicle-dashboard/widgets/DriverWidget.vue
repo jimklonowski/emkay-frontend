@@ -1,11 +1,28 @@
 <template>
-  <base-widget
-    :title="title"
-    :icon="icon"
-    :actions="actions"
-  >
+  <v-card class="vehicle-dashboard-widget" outlined>
+    <v-toolbar flat color="transparent">
+      <v-avatar class="mr-2" size="36">
+        <v-icon color="grey" v-text="icon" />
+      </v-avatar>
+      <v-toolbar-title v-text="title" />
+      <v-spacer />
+      <v-dialog v-model="dialog" max-width="850" persistent scrollable>
+        <template #activator="{ on }">
+          <v-btn icon :title="$t('update_driver')" v-on="on">
+            <v-icon v-text="'mdi-account-cog'" />
+          </v-btn>
+        </template>
+        <driver-details-form
+          ref="driverForm"
+          :driver-number="driver_details.reference_number"
+          @close="dialog = false"
+          @saved="saved"
+        />
+      </v-dialog>
+    </v-toolbar>
+    <v-divider />
     <!-- Driver Data -->
-    <template #main>
+    <v-card-text>
       <v-container>
         <v-row no-gutters>
           <v-col v-for="(column, c) in columns" :key="`col-${c}`" cols="6">
@@ -28,19 +45,22 @@
           </v-col>
         </v-row>
       </v-container>
-    </template>
-  </base-widget>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { dialTo, emailTo } from '@/utility/helpers'
-import BaseWidget from '@/components/vehicle-dashboard/widgets/BaseWidget'
+import DriverDetailsForm from '@/components/driver/forms/DriverDetailsForm'
+// import BaseWidget from '@/components/vehicle-dashboard/widgets/BaseWidget'
 export default {
   components: {
-    BaseWidget
+    // BaseWidget
+    DriverDetailsForm
   },
   data: vm => ({
+    dialog: false,
     icon: 'mdi-account'
   }),
   computed: {
@@ -52,18 +72,6 @@ export default {
       vehicle_number: 'vehicle-dashboard/getVehicleNumber'
     }),
     title: vm => vm.driver_name,
-    /**
-     * Dropdown Menu Actions
-     */
-    actions () {
-      return [
-        {
-          text: this.$i18n.t('edit_driver'),
-          icon: 'mdi-account-edit',
-          to: this.localePath({ path: '/vehicle/dashboard/edit-driver' })
-        }
-      ]
-    },
     /**
      * Data columns
      */
@@ -139,6 +147,22 @@ export default {
           ]
         }
       ]
+    }
+  },
+  watch: {
+    dialog (val) {
+      val && this.$nextTick(async () => await this.$refs.driverForm.$fetch())
+    }
+  },
+  methods: {
+    ...mapActions({
+      fetchDriver: 'vehicle-dashboard/fetchDriverDetails'
+    }),
+    async saved () {
+      console.log('saved!')
+      // the form fired the 'saved' event, so re-fetch the driver to get updated details in vuex
+      await this.fetchDriver({ vehicle: this.vehicle_number })
+      this.dialog = false
     }
   }
 }

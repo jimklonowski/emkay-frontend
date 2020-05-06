@@ -20,6 +20,10 @@ export default {
     //   type: String,
     //   default: 'primary'
     // },
+    activatable: {
+      type: Boolean,
+      default: false
+    },
     dense: {
       type: Boolean,
       default: true
@@ -43,7 +47,7 @@ export default {
         // add a 'Select all' root node
         const root = {
           center_code: -1,
-          center_name: this.$i18n.t('select_all'),
+          center_name: this.$i18n.t('centers'),
           children: centers
         }
         return [root]

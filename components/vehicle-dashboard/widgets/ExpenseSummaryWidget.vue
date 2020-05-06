@@ -8,163 +8,13 @@
       <v-container>
         <v-row dense no-gutters>
           <v-col cols="12" lg="4">
-            <v-list dense subheader>
-              <v-subheader class="justify-end overline">
-                {{ $t('fixed_costs') }} / {{ $t('cpm') }}
-              </v-subheader>
-              <v-list-item>
-                <v-list-item-title>{{ $t('depreciation') }}</v-list-item-title>
-                <v-list-item-subtitle class="text-right font-roboto-condensed">
-                  {{ expense_summary.depreciation | currency }}
-                </v-list-item-subtitle>
-                <v-list-item-subtitle class="text-right font-roboto-condensed">
-                  {{ expense_summary.depreciation_cpm | currency(3, 3) }}
-                </v-list-item-subtitle>
-              </v-list-item>
-              <v-list-item>
-                <v-list-item-title>{{ $t('interest') }}</v-list-item-title>
-                <v-list-item-subtitle class="text-right font-roboto-condensed">
-                  {{ expense_summary.interest | currency }}
-                </v-list-item-subtitle>
-                <v-list-item-subtitle class="text-right font-roboto-condensed">
-                  {{ expense_summary.interest_cpm | currency(3, 3) }}
-                </v-list-item-subtitle>
-              </v-list-item>
-              <v-list-item>
-                <v-list-item-title>{{ $t('licensing') }}</v-list-item-title>
-                <v-list-item-subtitle class="text-right font-roboto-condensed">
-                  {{ expense_summary.licensing | currency }}
-                </v-list-item-subtitle>
-                <v-list-item-subtitle class="text-right font-roboto-condensed">
-                  {{ expense_summary.licensing_cpm | currency(3, 3) }}
-                </v-list-item-subtitle>
-              </v-list-item>
-              <v-list-item>
-                <v-list-item-title>{{ $t('tax') }}</v-list-item-title>
-                <v-list-item-subtitle class="text-right font-roboto-condensed">
-                  {{ expense_summary.tax | currency }}
-                </v-list-item-subtitle>
-                <v-list-item-subtitle class="text-right font-roboto-condensed">
-                  {{ expense_summary.tax_cpm | currency(3, 3) }}
-                </v-list-item-subtitle>
-              </v-list-item>
-              <v-list-item>
-                <v-list-item-title class="font-weight-bold">
-                  {{ $t('total_fixed') }}
-                </v-list-item-title>
-                <v-list-item-subtitle class="text-right font-weight-bold font-roboto-condensed">
-                  {{ total_fixed | currency }}
-                </v-list-item-subtitle>
-                <v-list-item-subtitle class="text-right font-weight-bold font-roboto-condensed">
-                  {{ total_fixed_cpm | currency(3, 3) }}
-                </v-list-item-subtitle>
-              </v-list-item>
-            </v-list>
+            <expense-summary-fixed-costs />
           </v-col>
           <v-col cols="12" lg="4">
-            <v-card flat>
-              <v-card-actions class="justify-center">
-                <v-btn-toggle
-                  v-model="mode"
-                  background-color="transparent"
-                  color="primary"
-                  mandatory
-                  rounded
-                  dense
-                >
-                  <v-btn :value="'fixed'" small text>
-                    {{ $t('fixed') }}
-                  </v-btn>
-                  <v-btn :value="'total'" small text>
-                    {{ $t('total') }}
-                  </v-btn>
-                  <v-btn :value="'variable'" small text>
-                    {{ $t('variable') }}
-                  </v-btn>
-                </v-btn-toggle>
-              </v-card-actions>
-              <v-card-text>
-                <pie-chart
-                  :data="chartData"
-                  :chart-data="chartData"
-                  :options="{
-                    legend: {
-                      align: 'center',
-                      display: true,
-                      position: 'bottom',
-                      labels: {
-                        boxWidth: 16,
-                        fontFamily: 'Roboto Condensed, sans-serif',
-                        fontSize: 13
-                      }
-                    },
-                    tooltips: {
-                      callbacks: {
-                        label: (tooltipItem, data) => {
-                          return `${data.labels[tooltipItem.index]}: ${$options.filters.currency(data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index])}`
-                        }
-                      }
-                    },
-                    maintainAspectRatio: false,
-                    responsive: true
-                  }"
-                  :styles="{
-                    height: '256px',
-                    position: 'relative'
-                  }"
-                />
-              </v-card-text>
-            </v-card>
+            <expense-summary-pie-chart />
           </v-col>
           <v-col cols="12" lg="4">
-            <v-list dense subheader>
-              <v-subheader class="justify-end overline">
-                {{ $t('variable_costs') }} / {{ $t('cpm') }}
-              </v-subheader>
-              <v-list-item>
-                <v-list-item-title>{{ $t('maintenance') }}</v-list-item-title>
-                <v-list-item-subtitle class="text-right font-roboto-condensed">
-                  {{ expense_summary.maintenance | currency }}
-                </v-list-item-subtitle>
-                <v-list-item-subtitle class="text-right font-roboto-condensed">
-                  {{ expense_summary.maintenance_cpm | currency(3, 3) }}
-                </v-list-item-subtitle>
-              </v-list-item>
-              <v-list-item>
-                <v-list-item-title>{{ $t('accident') }}</v-list-item-title>
-                <v-list-item-subtitle class="text-right font-roboto-condensed">
-                  {{ expense_summary.accident | currency }}
-                </v-list-item-subtitle>
-                <v-list-item-subtitle class="text-right font-roboto-condensed">
-                  {{ expense_summary.accident_cpm | currency(3, 3) }}
-                </v-list-item-subtitle>
-              </v-list-item>
-              <v-list-item>
-                <v-list-item-title>{{ $t('fuel') }}</v-list-item-title>
-                <v-list-item-subtitle class="text-right font-roboto-condensed">
-                  {{ expense_summary.fuel | currency }}
-                </v-list-item-subtitle>
-                <v-list-item-subtitle class="text-right font-roboto-condensed">
-                  {{ expense_summary.fuel_cpm | currency(3, 3) }}
-                </v-list-item-subtitle>
-              </v-list-item>
-              <v-list-item v-show="$vuetify.breakpoint.lgAndUp">
-                <v-list-item-title />
-                <v-list-item-subtitle class="text-right" />
-                <v-list-item-subtitle class="text-right" />
-              </v-list-item>
-              <v-list-item>
-                <v-list-item-title class="font-weight-bold">
-                  {{ $t('total_variable') }}
-                </v-list-item-title>
-                <v-list-item-subtitle class="text-right font-weight-bold font-roboto-condensed">
-                  {{ total_variable | currency }}
-                </v-list-item-subtitle>
-                <v-list-item-subtitle class="text-right font-weight-bold font-roboto-condensed">
-                  {{ total_variable_cpm | currency(3, 3) }}
-                </v-list-item-subtitle>
-              </v-list-item>
-            </v-list>
+            <expense-summary-variable-costs />
           </v-col>
         </v-row>
       </v-container>
@@ -173,11 +23,26 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import { interpolateColors } from '@/utility/color-generator'
 import BaseWidget from '@/components/vehicle-dashboard/widgets/BaseWidget'
+import ChartLoading from '@/components/charts/ChartLoading'
 export default {
   components: {
-    BaseWidget
+    BaseWidget,
+    'expense-summary-fixed-costs': () => ({
+      component: import(/* webpackChunkName: "ExpenseSummaryFixedCosts" */ '@/components/vehicle-dashboard/panels/ExpenseSummaryFixedCosts.vue'),
+      loading: ChartLoading,
+      delay: 0
+    }),
+    'expense-summary-variable-costs': () => ({
+      component: import(/* webpackChunkName: "ExpenseSummaryVariableCosts" */ '@/components/vehicle-dashboard/panels/ExpenseSummaryVariableCosts.vue'),
+      loading: ChartLoading,
+      delay: 0
+    }),
+    'expense-summary-pie-chart': () => ({
+      component: import(/* webpackChunkName: "ExpenseSummaryPieChart" */ '@/components/vehicle-dashboard/charts/ExpenseSummaryPieChart.vue'),
+      loading: ChartLoading,
+      delay: 0
+    })
   },
   async fetch () {
     await this.fetchExpenseSummary(this.query)
@@ -192,47 +57,8 @@ export default {
      * Vuex Getters
      */
     ...mapGetters({
-      expense_summary: 'vehicle-dashboard/getExpenseSummary',
-      total_costs: 'vehicle-dashboard/getTotalCosts',
-      total_cpm: 'vehicle-dashboard/getTotalCPM',
-      total_fixed: 'vehicle-dashboard/getTotalFixed',
-      total_fixed_cpm: 'vehicle-dashboard/getTotalFixedCPM',
-      total_variable: 'vehicle-dashboard/getTotalVariable',
-      total_variable_cpm: 'vehicle-dashboard/getTotalVariableCPM',
       vehicle_number: 'vehicle-dashboard/getVehicleNumber'
     }),
-    /**
-     * ChartJS data for three different pie charts
-     * Fixed Costs Pie Chart
-     * Variable Costs Pie Chart
-     * Fixed vs Variable Costs Pie Chart
-     */
-    chartData () {
-      let data = []
-      let labels = []
-
-      switch (this.mode) {
-        case 'fixed':
-          data = [this.expense_summary.depreciation, this.expense_summary.interest, this.expense_summary.licensing, this.expense_summary.tax]
-          labels = [this.$i18n.t('depreciation'), this.$i18n.t('interest'), this.$i18n.t('licensing'), this.$i18n.t('tax')]
-          break
-        case 'variable':
-          data = [this.expense_summary.accident, this.expense_summary.fuel, this.expense_summary.maintenance]
-          labels = [this.$i18n.t('accident'), this.$i18n.t('fuel'), this.$i18n.t('maintenance')]
-          break
-        default:
-          data = [this.total_fixed, this.total_variable]
-          labels = [this.$i18n.t('total_fixed'), this.$i18n.t('total_variable')]
-          break
-      }
-
-      const backgroundColor = interpolateColors(labels.length)
-
-      return {
-        datasets: [{ backgroundColor, borderWidth: 1, data }],
-        labels
-      }
-    },
     /**
      * Dropdown menu actions
      */
@@ -260,14 +86,7 @@ export default {
      */
     ...mapActions({
       fetchExpenseSummary: 'vehicle-dashboard/fetchExpenseSummary'
-    }),
-    getChartData (mode) {
-      switch (mode) {
-        case 'fixed': return this.fixedExpensesPieChartData
-        case 'variable': return this.variableExpensesPieChartData
-        default: return this.totalExpensesPieChartData
-      }
-    }
+    })
   }
 }
 </script>

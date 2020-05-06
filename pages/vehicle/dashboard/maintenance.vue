@@ -21,12 +21,12 @@
     </v-toolbar>
     <v-divider />
     <v-tabs-items v-model="tab">
-      <v-tab-item eager>
+      <v-tab-item>
         <maintenance-category-pie-chart />
         <v-divider />
         <maintenance-history-table />
       </v-tab-item>
-      <v-tab-item eager>
+      <v-tab-item>
         <evoucher />
       </v-tab-item>
     </v-tabs-items>

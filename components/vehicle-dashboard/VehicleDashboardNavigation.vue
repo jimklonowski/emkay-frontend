@@ -14,12 +14,12 @@
     <template #img="{ props }">
       <v-img
         v-bind="props"
-        gradient="to top right, rgba(100,115,201,.7), rgba(25,32,72,.7)"
+        gradient="to top, rgba(100,115,201,.8), rgba(25,32,72,.8)"
       />
     </template>
     <v-toolbar-title class="d-flex flex-column">
       <nuxt-link :to="localePath({ path: '/vehicle/dashboard' })" class="text-decoration-none white--text" v-text="$t('vehicle_dashboard')" />
-      <span class="font-weight-light caption" v-text="vehicle_number" />
+      <span class="font-weight-light caption" style="color: hsla(0,0%,100%,.5)!important;" v-text="vehicle_number" />
     </v-toolbar-title>
 
     <v-spacer />
