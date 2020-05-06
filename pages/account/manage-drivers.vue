@@ -20,14 +20,18 @@
       />
       <client-only>
         <v-divider vertical inset class="mx-3" />
-        <v-dialog v-model="driver_dialog" max-width="75vw" persistent scrollable>
+        <v-dialog v-model="driver_dialog" max-width="850" persistent scrollable>
           <template #activator="{ on }">
             <v-btn color="primary" rounded depressed v-on="on" @click="driverId = undefined">
               <v-icon class="mr-2" v-text="'mdi-account-plus'" />
               {{ $t('add_new_driver') }}
             </v-btn>
           </template>
-          <driver-details-form :driver-id="driverId" @close="driver_dialog = false" />
+          <driver-details-form
+            :driver-number="driverId"
+            @close="driver_dialog = false"
+            @saved="saved"
+          />
         </v-dialog>
       </client-only>
     </v-toolbar>
@@ -118,6 +122,7 @@
 import { mapActions, mapGetters } from 'vuex'
 import { dialTo, emailTo } from '@/utility/helpers'
 import DriverDetailsForm from '@/components/driver/forms/DriverDetailsForm'
+// import AddOrEditDriverForm from '@/components/driver/forms/AddOrEditDriverForm'
 export default {
   name: 'ManageDrivers',
   components: {
@@ -310,6 +315,12 @@ export default {
     editDriver (item) {
       this.driverId = item.reference_number
       this.driver_dialog = true
+    },
+    async saved () {
+      console.log('saved!')
+      // the form fired the 'saved' event, so re-fetch the drivers
+      await this.$fetch()
+      this.driver_dialog = false
     }
   },
   /**

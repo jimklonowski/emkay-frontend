@@ -89,6 +89,21 @@
   }
 }
 
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #e6e6e6;
+  // border-left: 1px solid #dadada;
+}
+::-webkit-scrollbar-thumb {
+  background: #b0b0b0;
+  // border: 3px solid #e6e6e6;
+  // border-radius: 6px;
+  &:hover {
+    background: #673ab7;
+  }
+}
 
 /* Scrollbars */
 .theme--light {
