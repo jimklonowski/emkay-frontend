@@ -111,10 +111,9 @@
                     </v-col>
                     <v-col cols="12">
                       <ValidationProvider v-slot="{ errors }" :name="$t('bill_sort')">
-                        <v-select
+                        <bill-sort-picker
                           v-model="model.bill_sort"
                           :label="$t('bill_sort')"
-                          :items="bill_sorts"
                           :error-messages="errors"
                           dense
                           outlined
@@ -285,10 +284,11 @@
 import { mapActions, mapGetters } from 'vuex'
 import { SnotifyPosition } from 'vue-snotify'
 import isEqual from 'lodash.isequal'
-import CenterPicker from '@/components/core/CenterPicker'
 import AssignNewDriverForm from '@/components/vehicle/forms/AssignNewDriverForm'
+import BillSortPicker from '@/components/core/BillSortPicker'
+import CenterPicker from '@/components/core/CenterPicker'
 export default {
-  components: { AssignNewDriverForm, CenterPicker },
+  components: { AssignNewDriverForm, BillSortPicker, CenterPicker },
   props: {
     vehicleNumber: {
       type: String,
@@ -321,7 +321,6 @@ export default {
   }),
   computed: {
     ...mapGetters({
-      bill_sorts: 'account/getBillSorts',
       custom_labels: 'account/getCustomLabels',
       driver_effective_date: 'vehicle-dashboard/getDriverEffectiveDate',
       driver_name: 'vehicle-dashboard/getDriverName',
