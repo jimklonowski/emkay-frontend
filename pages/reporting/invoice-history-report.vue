@@ -126,6 +126,25 @@
             {{ $t('no_search_results', { 'query': search }) }}
           </div>
         </template>
+        <!-- configure individual column rendering -->
+        <template #item.date="{ item }">
+          {{ item.date | date }}
+        </template>
+        <template #item.cycle="{ item }">
+          {{ cycleName(item.cycle) }}
+        </template>
+        <template #item.type="{ item }">
+          {{ typeName(item.type) }}
+        </template>
+        <template #item.download="{ item }">
+          <v-btn color="primary" small @click="pdfDownload(item)">
+            {{ 'PDF' }}
+          </v-btn>
+          <v-btn color="primary" small @click="csvDownload(item)">
+            {{ 'CSV' }}
+          </v-btn>
+          {{ item.download }}
+        </template>
       </v-data-table>
     </v-skeleton-loader>
   </v-card>
@@ -145,7 +164,7 @@ export default {
     end_dialog: false,
     title: vm.$i18n.t('invoice_history_report'),
 
-    start: vm.$route.query.start || vm.$moment().subtract(30, 'days').format('YYYY-MM-DD'),
+    start: vm.$route.query.start || vm.$moment().subtract(180, 'days').format('YYYY-MM-DD'),
     end: vm.$route.query.end || vm.$moment().format('YYYY-MM-DD')
   }),
   computed: {
@@ -156,17 +175,9 @@ export default {
       return [
         'date',
         'description',
-        'amount',
-        'level_01',
-        'level_02',
-        'level_03',
-        'level_04',
-        'level_05',
-        'level_06',
-        'level_07',
-        'level_08',
-        'level_09',
-        'level_10'
+        'cycle',
+        'type',
+        ''
       ]
     },
     /**
@@ -187,9 +198,22 @@ export default {
           divider: true
         },
         {
-          text: this.$i18n.t('amount'),
-          value: 'amount',
-          class: 'report-column'
+          text: this.$i18n.t('cycle'),
+          value: 'cycle',
+          class: 'report-column',
+          divider: true
+        },
+        {
+          text: this.$i18n.t('type'),
+          value: 'type',
+          class: 'report-column',
+          divider: true
+        },
+        {
+          text: this.$i18n.t('Download'),
+          value: 'download',
+          class: 'report-column',
+          align: 'center'
         }
       ]
     },
@@ -206,7 +230,28 @@ export default {
   methods: {
     ...mapActions({
       fetchReport: 'reports/fetchInvoiceHistoryReport'
-    })
+    }),
+    cycleName (cycle) {
+      switch (cycle) {
+        case '3': return 'Closeout'
+        case '4': return 'Rental'
+        case '8': return 'FMS'
+        default: return cycle
+      }
+    },
+    typeName (type) {
+      switch (type) {
+        case 'M': return 'Monthly'
+        case 'W': return 'Weekly'
+        default: return type
+      }
+    },
+    pdfDownload (item) {
+      alert('PDF clicked!' + item.date)
+    },
+    csvDownload (item) {
+      alert('CSV clicked!' + item.date)
+    }
   }
 }
 </script>
