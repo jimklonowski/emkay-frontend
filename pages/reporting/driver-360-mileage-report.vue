@@ -109,7 +109,7 @@
         :loading="$fetchState.pending"
         :mobile-breakpoint="0"
         :search="search"
-        :sort-by="['fullName']"
+        :sort-by="['full_name']"
         :sort-desc="[false]"
         class="striped"
       >
@@ -153,34 +153,30 @@ export default {
      */
     columns () {
       return [
-        'seqNum',
-        'driver_refNum',
-        'customer_num',
-        'vehicle_num',
+        'sequence_number',
+        'driver_reference_number',
+        'customer_number',
+        'vehicle_number',
         'trip_mode',
         'mileage_date',
-        'milesKilos',
+        'miles',
         'mileage_Type',
-        'from_comp_name',
+        'from_company_name',
         'from_address',
         'from_city',
-        'from_state_prov',
+        'from_state_province',
         'from_postal_code',
-        'to_comp_name',
+        'to_company_name',
         'to_address',
         'to_city',
-        'to_state_prov',
+        'to_state_province',
         'to_postal_code',
         'mileage_notes',
-        'created_on',
-        'created_by',
-        'modified_on',
-        'modified_by',
-        'lastName',
-        'firstName',
-        'fullName',
-        'fromAddr',
-        'toAddr'
+        'last_name',
+        'first_name',
+        'full_name',
+        'from_address_abbreviated',
+        'to_address_abbreviated'
       ]
     },
     /**
@@ -190,19 +186,19 @@ export default {
       return [
         {
           text: this.$i18n.t('driver_name'),
-          value: 'fullName',
+          value: 'full_name',
           class: 'report-column',
           divider: true
         },
         {
           text: this.$i18n.t('driver_id'),
-          value: 'driver_refNum',
+          value: 'driver_reference_number',
           class: 'report-column',
           divider: true
         },
         {
           text: this.$i18n.t('vehicle_number'),
-          value: 'vehicle_num',
+          value: 'vehicle_number',
           class: 'report-column',
           divider: true
         },
@@ -214,7 +210,7 @@ export default {
         },
         {
           text: this.$i18n.t('mileage'),
-          value: 'milesKilos',
+          value: 'miles',
           class: 'report-column',
           divider: true
         },
@@ -226,13 +222,13 @@ export default {
         },
         {
           text: this.$i18n.t('from'),
-          value: 'fromAddr',
+          value: 'from_address_abbreviated',
           class: 'report-column',
           divider: true
         },
         {
           text: this.$i18n.t('to'),
-          value: 'toAddr',
+          value: 'to_address_abbreviated',
           class: 'report-column',
           divider: true
         },
