@@ -126,6 +126,12 @@
             {{ $t('no_search_results', { 'query': search }) }}
           </div>
         </template>
+        <template #item.vehicle_number="{ item }">
+          <vehicle-number-button :vehicle-number="item.vehicle_number" />
+        </template>
+        <template #item.mileage_date="{ item }">
+          {{ item.mileage_date | date }}
+        </template>
       </v-data-table>
     </v-skeleton-loader>
   </v-card>
@@ -160,7 +166,7 @@ export default {
         'trip_mode',
         'mileage_date',
         'miles',
-        'mileage_Type',
+        'mileage_type',
         'from_company_name',
         'from_address',
         'from_city',
@@ -175,8 +181,8 @@ export default {
         'last_name',
         'first_name',
         'full_name',
-        'from_address_abbreviated',
-        'to_address_abbreviated'
+        'from_location',
+        'to_location'
       ]
     },
     /**
@@ -185,13 +191,14 @@ export default {
     headers () {
       return [
         {
-          text: this.$i18n.t('driver_name'),
+          text: this.$i18n.t('full_name'),
           value: 'full_name',
           class: 'report-column',
-          divider: true
+          divider: true,
+          width: 200
         },
         {
-          text: this.$i18n.t('driver_id'),
+          text: this.$i18n.t('driver_reference_number'),
           value: 'driver_reference_number',
           class: 'report-column',
           divider: true
@@ -203,39 +210,42 @@ export default {
           divider: true
         },
         {
-          text: this.$i18n.t('report_date'),
+          text: this.$i18n.t('mileage_date'),
           value: 'mileage_date',
           class: 'report-column',
           divider: true
         },
         {
-          text: this.$i18n.t('mileage'),
+          text: this.$i18n.t('miles'),
           value: 'miles',
           class: 'report-column',
           divider: true
         },
         {
-          text: this.$i18n.t('type'),
-          value: 'mileage_Type',
+          text: this.$i18n.t('mileage_type'),
+          value: 'mileage_type',
           class: 'report-column',
           divider: true
         },
         {
-          text: this.$i18n.t('from'),
-          value: 'from_address_abbreviated',
+          text: this.$i18n.t('from_location'),
+          value: 'from_location',
           class: 'report-column',
-          divider: true
+          divider: true,
+          width: 250
         },
         {
-          text: this.$i18n.t('to'),
-          value: 'to_address_abbreviated',
+          text: this.$i18n.t('to_location'),
+          value: 'to_location',
           class: 'report-column',
-          divider: true
+          divider: true,
+          width: 250
         },
         {
-          text: this.$i18n.t('notes'),
+          text: this.$i18n.t('mileage_notes'),
           value: 'mileage_notes',
-          class: 'report-column'
+          class: 'report-column',
+          width: 300
         }
       ]
     },
