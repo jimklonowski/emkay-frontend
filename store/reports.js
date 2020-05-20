@@ -210,7 +210,7 @@ export const actions = {
     try {
       commit('setError', null)
       commit('setLoading', true)
-      const { data: { success, message, data } } = await this.$axios.get('/reports/driver-360-mileage-report', { params: { start, end } })
+      const { data: { success, message, data } } = await this.$axios.get('/mobile-mileage/by-date', { params: { start, end } })
       if (!success) { throw new Error(message) }
       commit('setData', data)
     } catch (error) {
