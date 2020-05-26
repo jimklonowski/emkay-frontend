@@ -137,11 +137,11 @@
           {{ typeName(item.type) }}
         </template>
         <template #item.download="{ item }">
-          <v-btn color="primary" small @click="pdfDownload(item)">
-            {{ 'PDF' }}
+          <v-btn color="primary" small :href="`${$axios.defaults.baseURL}/reports/invoice-reprint?month=${item.month}&year=${item.year}&bill_date=${$moment(item.date).format('MM-DD-YYYY')}&cycle=${item.cycle}&billing_type=${item.type}&type=pdf&download=true`">
+            PDF
           </v-btn>
-          <v-btn color="primary" small @click="csvDownload(item)">
-            {{ 'CSV' }}
+          <v-btn color="primary" small :href="`${$axios.defaults.baseURL}/reports/invoice-reprint?month=${item.month}&year=${item.year}&bill_date=${$moment(item.date).format('MM-DD-YYYY')}&cycle=${item.cycle}&billing_type=${item.type}&type=csv&download=true`">
+            CSV
           </v-btn>
           {{ item.download }}
         </template>
@@ -176,8 +176,7 @@ export default {
         'date',
         'description',
         'cycle',
-        'type',
-        ''
+        'type'
       ]
     },
     /**
@@ -210,7 +209,7 @@ export default {
           divider: true
         },
         {
-          text: this.$i18n.t('Download'),
+          text: this.$i18n.t('download'),
           value: 'download',
           class: 'report-column',
           align: 'center'
@@ -241,16 +240,10 @@ export default {
     },
     typeName (type) {
       switch (type) {
-        case 'M': return 'Monthly'
-        case 'W': return 'Weekly'
+        case 'M': return this.$i18n.t('monthly')
+        case 'W': return this.$i18n.t('weekly')
         default: return type
       }
-    },
-    pdfDownload (item) {
-      alert('PDF clicked!' + item.date)
-    },
-    csvDownload (item) {
-      alert('CSV clicked!' + item.date)
     }
   }
 }
