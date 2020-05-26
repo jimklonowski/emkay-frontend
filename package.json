@@ -26,7 +26,7 @@
     "lodash.groupby": "^4.6.0",
     "lodash.isequal": "^4.5.0",
     "nuxt": "^2.12.2",
-    "nuxt-i18n": "^6.11.1",
+    "nuxt-i18n": "^6.12.0",
     "nuxt-webfontloader": "^1.1.0",
     "us-atlas": "^3.0.0",
     "vee-validate": "^3.3.0",
@@ -45,11 +45,11 @@
     "babel-eslint": "^10.0.1",
     "babel-jest": "^26.0.1",
     "cross-env": "^7.0.2",
-    "eslint": "^7.0.0",
+    "eslint": "^7.1.0",
     "eslint-plugin-nuxt": "^1.0.0",
     "imagemin-mozjpeg": "^8.0.0",
     "imagemin-pngquant": "^8.0.0",
-    "imagemin-svgo": "^7.1.0",
+    "imagemin-svgo": "^8.0.0",
     "jest": "^26.0.1",
     "vue-jest": "^4.0.0-0"
   }
