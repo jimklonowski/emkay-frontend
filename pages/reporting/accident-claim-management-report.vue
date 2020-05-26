@@ -211,7 +211,6 @@ export default {
   data: vm => ({
     start_dialog: false,
     end_dialog: false,
-    status_type: 3,
     title: vm.$i18n.t('accident_claim_management_report'),
 
     start: vm.$route.query.start || vm.$moment().subtract(30, 'days').format('YYYY-MM-DD'),
