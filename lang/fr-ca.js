@@ -29,7 +29,6 @@ export default {
   accident_claim: "Réclamation d'accident",
   accident_claim_inquiry: "Demande de réclamation pour accident",
   accident_claim_status: "Statut de réclamation d'accident",
-  accident_claim_status_report: "Rapport sur l'état d'avancement des réclamations en cas d'accident",
   accident_claim_management_report: "Rapport sur l'état d'avancement des réclamations en cas d'accident",
   accident_date: "Date de l'accident",
   accident_description: "Description de l'accident",

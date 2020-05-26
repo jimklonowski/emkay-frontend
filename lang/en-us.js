@@ -29,7 +29,6 @@ export default {
   accident_claim: "Accident Claim",
   accident_claim_inquiry: "Accident Claim Inquiry",
   accident_claim_status: "Accident Claim Status",
-  accident_claim_status_report: "Accident Claim Status Report",
   accident_claim_management_report: "Accident Claim Management Report",
   accident_date: "Accident Date",
   accident_description: "Accident Description",
