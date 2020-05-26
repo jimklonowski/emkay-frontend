@@ -183,15 +183,15 @@ export const actions = {
     }
   },
   /**
-   * Fetch ACCIDENT CLAIM STATUS REPORT data.
+   * Fetch ACCIDENT CLAIM MANAGEMENT REPORT data.
    * @param start (YYYY-MM-DD)
    * @param end (YYYY-MM-DD)
    */
-  async fetchAccidentClaimStatusReport ({ commit }, { start, end }) {
+  async fetchAccidentClaimManagementReport ({ commit }, { start, end }) {
     try {
       commit('setError', null)
       commit('setLoading', true)
-      const { data: { success, message, data } } = await this.$axios.get('/reports/accident-claim-status-report', { params: { start, end } })
+      const { data: { success, message, data } } = await this.$axios.get('/reports/accident-claim-management-report', { params: { start, end } })
       if (!success) { throw new Error(message) }
       commit('setData', data)
     } catch (error) {

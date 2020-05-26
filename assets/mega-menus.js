@@ -119,7 +119,7 @@ const reporting = {
       key: 'services',
       icon: '',
       items: [
-        { key: 'accident_claim_status_report', icon: 'mdi-car-traction-control', to: { path: '/reporting/accident-claim-status-report' } },
+        { key: 'accident_claim_management_report', icon: 'mdi-car-traction-control', to: { path: '/reporting/accident-claim-management-report' } },
         { key: 'driver_360_mileage_report', icon: 'mdi-cellphone-iphone', to: { path: '/reporting/driver-360-mileage-report' } },
         { key: 'evoucher_report', icon: 'mdi-ticket-percent', to: { path: '/reporting/evoucher-report' } },
         { key: 'license_renewal_report', icon: 'mdi-calendar-question', to: { path: '/reporting/license-renewal-report' } }

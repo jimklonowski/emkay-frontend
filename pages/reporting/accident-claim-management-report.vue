@@ -178,6 +178,22 @@
             {{ $t('no_search_results', { 'query': search }) }}
           </div>
         </template>
+
+        <template #item.vehicle_number="{ item }">
+          <vehicle-number-button :vehicle-number="item.vehicle_number" />
+        </template>
+
+        <template #item.date_reported="{ item }">
+          {{ item.date_reported | date }}
+        </template>
+
+        <template #item.loss_date="{ item }">
+          {{ item.loss_date | date }}
+        </template>
+
+        <template #item.total_cost="{ item }">
+          {{ item.total_cost | currency(2) }}
+        </template>
       </v-data-table>
     </v-skeleton-loader>
   </v-card>
@@ -187,15 +203,15 @@
 import { mapActions } from 'vuex'
 import { reportMixins } from '@/mixins/reports'
 /**
- * Accident Claim Status Report
+ * Accident Claim Management Report
  */
 export default {
-  name: 'AccidentClaimStatusReport',
+  name: 'AccidentClaimManagementReport',
   mixins: [reportMixins],
   data: vm => ({
     start_dialog: false,
     end_dialog: false,
-    title: vm.$i18n.t('accident_claim_status_report'),
+    title: vm.$i18n.t('accident_claim_management_report'),
 
     start: vm.$route.query.start || vm.$moment().subtract(30, 'days').format('YYYY-MM-DD'),
     end: vm.$route.query.end || vm.$moment().format('YYYY-MM-DD')
@@ -211,20 +227,49 @@ export default {
         'client_vehicle_number',
         'center_code',
         'center_name',
-        'driver_name',
-        'year_make_model',
-        'report_date',
-        'status',
-        'level_01',
-        'level_02',
-        'level_03',
-        'level_04',
-        'level_05',
-        'level_06',
-        'level_07',
-        'level_08',
-        'level_09',
-        'level_10'
+        'customer_name',
+        'vin',
+        'model_year',
+        'vehicle_make',
+        'vehicle_model',
+        'actual_driver_name',
+        'adjuster_name',
+        'loss_date',
+        'day_of_week',
+        'date_reported',
+        'claim_type',
+        'claim_category',
+        'point_of_impact',
+        'contributing_factors',
+        'drivable',
+        'total_loss',
+        'repair_in_date',
+        'repair_out_date',
+        'claim_closed_date',
+        'claim_status',
+        'days_to_process',
+        'repair_cost',
+        'days_in_rental',
+        'rental_amount',
+        'towing_cost',
+        'total_cost',
+        'purpose_of_use',
+        'injuries',
+        'preventable',
+        'percentage_of_fault',
+        'citation_issued',
+        'insurance_company',
+        'subrogation_amount_requested',
+        'subrogation_amount_received',
+        'rental_amount_requested',
+        'rental_amount_received',
+        'diminished_value_amount_requested',
+        'diminished_value_amount_received',
+        'subrogation_start_date',
+        'subrogation_end_date',
+        'subrogation_days',
+        'cost_savings',
+        'accident_description'
       ]
     },
     /**
@@ -271,27 +316,72 @@ export default {
           divider: true
         },
         {
-          text: this.$i18n.t('driver_name'),
-          value: 'driver_name',
+          text: this.$i18n.t('model_year'),
+          value: 'model_year',
           class: 'report-column',
           divider: true
         },
         {
-          text: this.$i18n.t('year_make_model'),
-          value: 'year_make_model',
+          text: this.$i18n.t('vehicle_make'),
+          value: 'vehicle_make',
           class: 'report-column',
           divider: true
         },
         {
-          text: this.$i18n.t('report_date'),
-          value: 'report_date',
+          text: this.$i18n.t('vehicle_model'),
+          value: 'vehicle_model',
+          class: 'report-column',
+          width: 200,
+          divider: true
+        },
+        {
+          text: this.$i18n.t('actual_driver_name'),
+          value: 'actual_driver_name',
+          class: 'report-column',
+          width: 200,
+          divider: true
+        },
+        {
+          text: this.$i18n.t('loss_date'),
+          value: 'loss_date',
+          class: 'report-column',
+          divider: true,
+          align: 'right',
+          width: 150
+        },
+        {
+          text: this.$i18n.t('date_reported'),
+          value: 'date_reported',
+          class: 'report-column',
+          divider: true,
+          align: 'right',
+          width: 150
+        },
+        {
+          text: this.$i18n.t('claim_type'),
+          value: 'claim_type',
+          class: 'report-column',
+          width: 150,
+          divider: true
+        },
+        {
+          text: this.$i18n.t('claim_category'),
+          value: 'claim_category',
+          class: 'report-column',
+          width: 200,
+          divider: true
+        },
+        {
+          text: this.$i18n.t('claim_status'),
+          value: 'claim_status',
           class: 'report-column',
           divider: true
         },
         {
-          text: this.$i18n.t('status'),
-          value: 'status',
-          class: 'report-column'
+          text: this.$i18n.t('total_cost'),
+          value: 'total_cost',
+          class: 'report-column',
+          align: 'right'
         }
       ]
     },
@@ -310,7 +400,7 @@ export default {
      * Vuex Actions
      */
     ...mapActions({
-      fetchReport: 'reports/fetchAccidentClaimStatusReport'
+      fetchReport: 'reports/fetchAccidentClaimManagementReport'
     })
   }
 }
