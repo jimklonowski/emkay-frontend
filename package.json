@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@nuxtjs/auth": "^4.9.1",
-    "@nuxtjs/axios": "^5.10.3",
+    "@nuxtjs/axios": "^5.11.0",
     "@nuxtjs/dotenv": "^1.4.0",
     "@nuxtjs/moment": "^1.6.1",
     "chart.js": "^2.9.3",
@@ -26,10 +26,10 @@
     "lodash.groupby": "^4.6.0",
     "lodash.isequal": "^4.5.0",
     "nuxt": "^2.12.2",
-    "nuxt-i18n": "^6.12.0",
+    "nuxt-i18n": "^6.12.2",
     "nuxt-webfontloader": "^1.1.0",
     "us-atlas": "^3.0.0",
-    "vee-validate": "^3.3.0",
+    "vee-validate": "^3.3.3",
     "vue-chartjs": "^3.5.0",
     "vue-json-excel": "^0.2.98",
     "vue-snotify": "^3.2.1",
@@ -45,12 +45,12 @@
     "babel-eslint": "^10.0.1",
     "babel-jest": "^26.0.1",
     "cross-env": "^7.0.2",
-    "eslint": "^7.1.0",
+    "eslint": "^7.2.0",
     "eslint-plugin-nuxt": "^1.0.0",
-    "imagemin-mozjpeg": "^8.0.0",
-    "imagemin-pngquant": "^8.0.0",
+    "imagemin-mozjpeg": "^9.0.0",
+    "imagemin-pngquant": "^9.0.0",
     "imagemin-svgo": "^8.0.0",
     "jest": "^26.0.1",
-    "vue-jest": "^4.0.0-0"
+    "vue-jest": "^4.0.0-beta.3"
   }
 }
